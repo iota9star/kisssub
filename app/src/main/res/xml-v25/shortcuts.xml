@@ -1,0 +1,28 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_about"
+        android:shortcutDisabledMessage="@string/menu_about"
+        android:shortcutId="menu_about"
+        android:shortcutLongLabel="@string/menu_about"
+        android:shortcutShortLabel="@string/menu_about">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="star.iota.kisssub.ui.about.AboutActivity"
+            android:targetPackage="star.iota.kisssub" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_menu_settings"
+        android:shortcutDisabledMessage="@string/menu_settings"
+        android:shortcutId="menu_settings"
+        android:shortcutLongLabel="@string/menu_settings"
+        android:shortcutShortLabel="@string/menu_settings">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="star.iota.kisssub.ui.settings.SettingsActivity"
+            android:targetPackage="star.iota.kisssub" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+</shortcuts>

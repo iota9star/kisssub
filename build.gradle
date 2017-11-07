@@ -1,0 +1,39 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        google()
+        maven { url 'https://maven.google.com' }
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url = 'https://dl.bintray.com/yuancloud/maven/' }
+        mavenCentral()
+        maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        google()
+        maven { url 'https://maven.google.com' }
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url = 'https://dl.bintray.com/yuancloud/maven/' }
+        mavenCentral()
+        maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

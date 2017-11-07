@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="cookieTitleColor">?android:textColorPrimary</item>
+        <item name="cookieMessageColor">?android:textColorSecondary</item>
+        <item name="cookieActionColor">?android:textColorPrimary</item>
+        <item name="cookieBackgroundColor">?android:windowBackground</item>
+    </style>
+
+    <style name="AppThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="cookieTitleColor">?android:textColorPrimary</item>
+        <item name="cookieMessageColor">?android:textColorSecondary</item>
+        <item name="cookieActionColor">?android:textColorPrimary</item>
+        <item name="cookieBackgroundColor">?android:windowBackground</item>
+    </style>
+</resources>

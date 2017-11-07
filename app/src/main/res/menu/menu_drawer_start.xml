@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_play"
+            android:icon="@drawable/ic_menu_play"
+            android:title="@string/menu_play" />
+        <item
+            android:id="@+id/menu_history"
+            android:icon="@drawable/ic_menu_history"
+            android:title="@string/menu_history" />
+        <item
+            android:id="@+id/menu_fans"
+            android:icon="@drawable/ic_menu_fans"
+            android:title="@string/menu_fans" />
+        <item
+            android:id="@+id/menu_member"
+            android:icon="@drawable/ic_menu_member"
+            android:title="@string/menu_member" />
+        <item
+            android:id="@+id/menu_tags"
+            android:icon="@drawable/ic_menu_tags"
+            android:title="@string/menu_tags" />
+        <item
+            android:id="@+id/menu_rss"
+            android:icon="@drawable/ic_menu_rss"
+            android:title="@string/menu_rss" />
+        <item
+            android:id="@+id/menu_favorite"
+            android:icon="@drawable/ic_menu_favorite"
+            android:title="@string/menu_favorite" />
+
+    </group>
+
+    <item android:title="@string/menu_more">
+        <menu>
+            <item
+                android:id="@+id/menu_settings"
+                android:checkable="false"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/menu_settings" />
+            <item
+                android:id="@+id/menu_about"
+                android:checkable="false"
+                android:icon="@drawable/ic_menu_about"
+                android:title="@string/menu_about" />
+        </menu>
+    </item>
+
+</menu>

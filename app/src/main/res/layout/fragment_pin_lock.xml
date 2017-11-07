@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/bg_pin_lock_view"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/indicatorDots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:tag="@string/ignore_view" />
+
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pinLockView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tag="@string/ignore_view"
+        app:indicatorType="fillWithAnimation"
+        app:keypadShowDeleteButton="true"
+        app:pinLength="4" />
+</LinearLayout>
