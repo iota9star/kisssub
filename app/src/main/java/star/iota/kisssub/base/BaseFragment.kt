@@ -28,7 +28,7 @@ import android.widget.ImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import star.iota.kisssub.eventbus.ChangeEvent
+import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.exit
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.ui.settings.ThemeHelper
@@ -79,7 +79,7 @@ abstract class BaseFragment : Fragment() {
     abstract fun getMaskView(): View?
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onBackgroundChange(event: ChangeEvent) {
+    fun onContentBackgroundChange(event: ChangeContentBackgroundEvent) {
         setContentBackground()
     }
 

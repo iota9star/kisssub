@@ -18,4 +18,4 @@
 
 package star.iota.kisssub.eventbus
 
-class ChangeEvent
+class ChangeDynamicBackgroundEvent

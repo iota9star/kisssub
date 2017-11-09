@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.eventbus.ChangeEvent
+import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.ui.lock.SecurityHelper
 import star.iota.kisssub.ui.lock.SetPinLockActivity
@@ -151,7 +151,7 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
                         .textColorSecondary(ThemeHelper.getSecondaryTextColor(context!!))
                         .apply()
             }
-            EventBus.getDefault().post(ChangeEvent())
+            EventBus.getDefault().post(ChangeContentBackgroundEvent())
         }
     }
 }

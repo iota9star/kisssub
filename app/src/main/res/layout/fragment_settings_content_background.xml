@@ -305,28 +305,28 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="默认" />
+                    android:text="@string/action_default" />
 
                 <Button
                     android:id="@+id/buttonLocal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="本地" />
+                    android:text="@string/action_local" />
 
                 <Button
                     android:id="@+id/buttonPreview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="预览" />
+                    android:text="@string/action_preview" />
 
                 <Button
                     android:id="@+id/buttonSetting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="设置" />
+                    android:text="@string/action_setting" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.fragment_settings_content_background.*
 import org.greenrobot.eventbus.EventBus
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.eventbus.ChangeEvent
+import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.utils.ToastUtils
@@ -57,6 +57,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener {
             }
             R.id.buttonReset -> {
                 ThemeHelper.setContentBanner(context!!, null)
+                EventBus.getDefault().post(ChangeContentBackgroundEvent())
                 finish()
             }
             R.id.buttonPreview -> {
@@ -75,6 +76,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener {
                     ToastUtils.short(context!!, "路径不能为空")
                 } else {
                     ThemeHelper.setContentBanner(context!!, path)
+                    EventBus.getDefault().post(ChangeContentBackgroundEvent())
                     finish()
                 }
             }
@@ -116,7 +118,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener {
                 .setOnColorSelectedListener {
                     imageViewMaskColor.setColorFilter(it)
                     ThemeHelper.setContentMaskColor(context!!, it)
-                    EventBus.getDefault().post(ChangeEvent())
+                    EventBus.getDefault().post(ChangeContentBackgroundEvent())
                 }
                 .build()
                 .show()
@@ -131,7 +133,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener {
                 .setOnColorSelectedListener {
                     imageViewMaskColorDark.setColorFilter(it)
                     ThemeHelper.setContentMaskColorDark(context!!, it)
-                    EventBus.getDefault().post(ChangeEvent())
+                    EventBus.getDefault().post(ChangeContentBackgroundEvent())
                 }
                 .build()
                 .show()
@@ -147,7 +149,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 viewMask.alpha = (p1 / 100f)
                 ThemeHelper.setContentMaskAlpha(context!!, p1 / 100f)
-                EventBus.getDefault().post(ChangeEvent())
+                EventBus.getDefault().post(ChangeContentBackgroundEvent())
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {

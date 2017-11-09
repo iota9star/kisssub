@@ -35,9 +35,13 @@ import com.liuguangqiang.cookie.OnActionClickListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main_content.*
 import kotlinx.android.synthetic.main.activity_main_drawer.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
+import star.iota.kisssub.eventbus.ChangeDynamicBackgroundEvent
 import star.iota.kisssub.ext.exit
 import star.iota.kisssub.ext.removeFragmentsFromView
 import star.iota.kisssub.ext.replaceFragmentInActivity
@@ -68,6 +72,15 @@ class MainActivity : BaseActivity() {
         checkPermission()
     }
 
+    override fun onStart() {
+        EventBus.getDefault().register(this)
+        super.onStart()
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
+    }
 
     private fun checkPermission() {
         RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -122,22 +135,30 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDynamicBackgroundChange(event: ChangeDynamicBackgroundEvent) {
+        setDynamicBackground()
+        println("ext;;;;;;;")
+    }
+
+    private fun setDynamicBackground() {
+        GlideApp.with(this)
+                .load(ThemeHelper.getDynamicBanner(this))
+                .into(navigationViewStart.getHeaderView(0).findViewById<KenBurnsView>(R.id.kenBurnsView))
+        GlideApp.with(this)
+                .load(ThemeHelper.getDynamicBanner(this))
+                .into(navigationViewEnd.getHeaderView(0).findViewById<KenBurnsView>(R.id.kenBurnsView))
+    }
+
     private fun initNavigationView() {
+        setDynamicBackground()
         val typedValue = TypedValue()
         this@MainActivity.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val colors = intArrayOf(0x00000000, typedValue.data)
         val startMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
         val endMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
-        val headerViewStart = navigationViewStart.getHeaderView(0)
-        GlideApp.with(this)
-                .load(ThemeHelper.getDynamicBanner(this))
-                .into(headerViewStart.findViewById<KenBurnsView>(R.id.kenBurnsView))
-        headerViewStart.findViewById<View>(R.id.viewMask).background = startMask
-        val headerViewEnd = navigationViewEnd.getHeaderView(0)
-        GlideApp.with(this)
-                .load(ThemeHelper.getDynamicBanner(this))
-                .into(headerViewEnd.findViewById<KenBurnsView>(R.id.kenBurnsView))
-        headerViewEnd.findViewById<View>(R.id.viewMask).background = endMask
+        navigationViewStart.getHeaderView(0).findViewById<View>(R.id.viewMask).background = startMask
+        navigationViewEnd.getHeaderView(0).findViewById<View>(R.id.viewMask).background = endMask
         navigationViewStart.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_play -> {

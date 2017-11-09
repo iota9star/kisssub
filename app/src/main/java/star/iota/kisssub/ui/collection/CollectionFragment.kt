@@ -44,7 +44,7 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     override fun noData() {
         end()
-        MessageBar.create(context!!, "没有获得数据")
+        MessageBar.create(context!!, "您还没有收藏哦...")
     }
 
     companion object {

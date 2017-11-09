@@ -24,7 +24,6 @@
 
     <string name="ignore_view">:aesthetic_ignore</string>
 
-    <!-- menus -->
     <string name="menu_play">连载</string>
     <string name="menu_fans">片库</string>
     <string name="menu_tags">标签</string>
@@ -48,7 +47,6 @@
     <string name="menu_pan">网盘</string>
     <string name="menu_search">搜索</string>
 
-    <!-- settings -->
     <string name="settings_security_main">安全</string>
     <string name="settings_security_pin">PIN码</string>
     <string name="settings_security_fingerprint">指纹支持</string>
@@ -60,7 +58,6 @@
     <string name="please_input_right_path">请输入正确的路径 - 网址、文件路径等</string>
 
 
-    <!-- lock about -->
     <string name="lock_input_pin">请输入PIN</string>
     <string name="lock_cancel">取消</string>
     <string name="lock_continue">继续</string>
@@ -68,22 +65,14 @@
     <string name="lock_reinput">重新输入</string>
     <string name="lock_finish">完成</string>
 
-    <!-- other string -->
     <string name="kisssub">KISSSUB.ORG</string>
-    <string name="action_collection">收藏</string>
-    <string name="action_share">分享</string>
     <string name="please_choose_photo">请选择图片</string>
     <string name="ok">确认</string>
     <string name="clear_selected_photos">清空选中图片</string>
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
     <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/HVithgAzMJKkNhythhOzHG3YTuidAmHQ5Rp3lrxD.Q4!/r/dIUBAAAAAAAA</string>
-    <string name="thanks">1. 感谢爱恋BT及其所有发布组，如果可能的话，请到<a href="https://kisssub.org/">@爱恋BT</a>点击广告支持其发展\n2. 感谢本应用中所用到库的作者，感谢你们无私的开源精神\n3. 感谢开源世界</string>
-
-    <!-- donation -->
-    <string name="alipay_code">FKX08696X3YPOJFGWKD92E</string>
-    <string name="qq_pay_code">http://r.photo.store.qq.com/psb?/a97e084f-86ae-45db-a2e4-e63a3cb987b3/6wuOxikFvnHSM6rPTGtGM3U5WQBtTwiLW99WmaLsuPQ!/r/dGsBAAAAAAAA</string>
-    <string name="wechat_pay_code">http://r.photo.store.qq.com/psb?/a97e084f-86ae-45db-a2e4-e63a3cb987b3/EWJsk3GK9MggfSSVklZb9mqNNK7oGcFry4EEYuAx.HM!/r/dGkBAAAAAAAA</string>
+    <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所用到库的作者，感谢你们无私的开源精神\n3. 再次感谢所有对此作出贡献的大家</string>
 
     <string name="about_source">来源</string>
     <string name="about_kisssub">爱恋BT</string>
@@ -97,15 +86,18 @@
     <string name="details_torrent">种子下载</string>
     <string name="details_share_link">分享链接</string>
     <string name="details_details">详情</string>
+
     <string name="about_is_good">觉得不错</string>
     <string name="about_grade_me">给我评分</string>
     <string name="about_version">版本</string>
+
+    <string name="action_collection">收藏</string>
+    <string name="action_share">分享</string>
     <string name="action_download">下载</string>
-    <string name="settings_theme_content_background">内容背景</string>
-    <string name="settings_theme_color_main">主要</string>
-
-
-    <string name="settings_theme_color_personal">个性化</string>
+    <string name="action_default">默认</string>
+    <string name="action_local">本地</string>
+    <string name="action_preview">预览</string>
+    <string name="action_setting">设置</string>
 
     <string name="settings_theme_color_custom">自定义</string>
     <string name="settings_theme_color_primary_color">主颜色</string>
@@ -120,4 +112,6 @@
     <string name="settings_content_background_demo">演示</string>
     <string name="settings_content_background_settings">设置</string>
     <string name="settings_content_background_mask_color_dark">遮罩颜色 - 夜间</string>
+    <string name="settings_theme_content_background">内容背景</string>
+
 </resources>

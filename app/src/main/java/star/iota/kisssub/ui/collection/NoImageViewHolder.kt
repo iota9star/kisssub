@@ -33,6 +33,7 @@ import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
 
@@ -53,6 +54,11 @@ class NoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                 if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
                 }
+            }
+            buttonDownload.setOnClickListener {
+                SendUtils.copy(context!!, bean.title, bean.magnet)
+                SendUtils.open(context!!, bean.magnet)
+                MessageBar.create(context!!, "已复制到剪切板，并尝试打开本地应用")
             }
             frameLayoutContainer.setOnLongClickListener {
                 AlertDialog.Builder(context)

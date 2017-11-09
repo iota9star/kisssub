@@ -23,6 +23,7 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
 import star.iota.kisssub.ext.addFragmentToActivity
 
+
 class SettingsActivity : BaseActivity() {
 
     override fun getContentViewId(): Int = R.layout.activity_settings
@@ -41,8 +42,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        println("count: ${supportFragmentManager.backStackEntryCount}")
-        if (supportFragmentManager.backStackEntryCount > 0) {
+        if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
         } else {
             finish()
