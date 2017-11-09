@@ -1,12 +1,32 @@
+/*
+ *
+ *  *    Copyright 2017. iota9star
+ *  *
+ *  *    Licensed under the Apache License, Version 2.0 (the "License");
+ *  *    you may not use this file except in compliance with the License.
+ *  *    You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  *    Unless required by applicable law or agreed to in writing, software
+ *  *    distributed under the License is distributed on an "AS IS" BASIS,
+ *  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *    See the License for the specific language governing permissions and
+ *  *    limitations under the License.
+ *
+ */
+
 package star.iota.kisssub.ui.details
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
@@ -17,10 +37,13 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.ui.selector.PhotoSelectorActivity
+import star.iota.kisssub.ui.selector.PhotoSelectorPreviewActivity
 import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ShareUtils
 import star.iota.kisssub.widget.MessageBar
+import java.util.*
 
 class DetailsFragment : BaseFragment(), DetailsContract.View {
     override fun success(bean: DetailsBean) {
@@ -42,12 +65,19 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
         RichText.from(bean.details).imageGetter(DefaultImageGetter()).urlClick {
             SendUtils.open(context!!, it)
             true
+        }.imageClick { urls, pos ->
+            val intent = Intent(activity!!, PhotoSelectorPreviewActivity::class.java)
+            intent.putExtra(PhotoSelectorActivity.PHOTOS_CAN_BE_REMOVE, false)
+            intent.putExtra(PhotoSelectorActivity.FIRST_PHOTO_INDEX, pos)
+            intent.putStringArrayListExtra(PhotoSelectorActivity.SELECTED_STRING_ARRAY_LIST_PHOTOS, urls as ArrayList<String>?)
+            intent.putExtra(PhotoSelectorActivity.SOURCE_ACTIVITY, activity!!::class.java.canonicalName)
+            startActivity(intent)
         }.into(textViewDetails)
         RichText.from(bean.tree).imageGetter(DefaultImageGetter()).into(textViewList)
         textViewDesc.text = bean.desc?.replace("，", "\n")
         bean.tags?.forEach { str ->
             val drawable = ContextCompat.getDrawable(context!!, R.drawable.bg_border) as GradientDrawable
-            drawable.setColor(ThemeHelper.getColor(context!!))
+            drawable.setColor(ThemeHelper.getAccentColor(context!!))
             drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
             val tag = LayoutInflater.from(context!!).inflate(R.layout.item_details_tag, null) as TextView
             tag.text = str
@@ -102,6 +132,8 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
         refreshLayout.finishRefreshing()
     }
 
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
 
     override fun getContainerViewId(): Int = R.layout.fragment_details
 

@@ -1,3 +1,21 @@
+<!--
+  ~ /*
+  ~  *    Copyright 2017. iota9star
+  ~  *
+  ~  *    Licensed under the Apache License, Version 2.0 (the "License");
+  ~  *    you may not use this file except in compliance with the License.
+  ~  *    You may obtain a copy of the License at
+  ~  *
+  ~  *        http://www.apache.org/licenses/LICENSE-2.0
+  ~  *
+  ~  *    Unless required by applicable law or agreed to in writing, software
+  ~  *    distributed under the License is distributed on an "AS IS" BASIS,
+  ~  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  *    See the License for the specific language governing permissions and
+  ~  *    limitations under the License.
+  ~  */
+  -->
+
 <resources>
     <string name="app_name">爱恋</string>
 
@@ -7,11 +25,12 @@
     <string name="ignore_view">:aesthetic_ignore</string>
 
     <!-- menus -->
-    <string name="menu_play">放送</string>
-    <string name="menu_fans">番组</string>
+    <string name="menu_play">连载</string>
+    <string name="menu_fans">片库</string>
     <string name="menu_tags">标签</string>
     <string name="menu_rss">订阅</string>
-    <string name="menu_member">联萌</string>
+    <string name="menu_history">完结</string>
+    <string name="menu_member">组织</string>
     <string name="menu_favorite">收藏</string>
     <string name="menu_more">更多</string>
     <string name="menu_settings">设置</string>
@@ -34,11 +53,11 @@
     <string name="settings_security_pin">PIN码</string>
     <string name="settings_security_fingerprint">指纹支持</string>
     <string name="settings_theme_nightly">夜间模式</string>
-    <string name="settings_theme_tint_toolbar">标题栏随主题变色</string>
-    <string name="settings_theme_diy_theme_color">自定义主题色</string>
+    <string name="settings_theme_color_tint_toolbar">标题栏随主题变色</string>
+    <string name="settings_theme_custom_color">自定义主题色</string>
     <string name="settings_theme_personal">个性化</string>
     <string name="settings_theme_dynamic_background">动态背景</string>
-    <string name="please_input_right_path">请输入正确的路径</string>
+    <string name="please_input_right_path">请输入正确的路径 - 网址、文件路径等</string>
 
 
     <!-- lock about -->
@@ -51,7 +70,6 @@
 
     <!-- other string -->
     <string name="kisssub">KISSSUB.ORG</string>
-    <string name="menu_history">历史</string>
     <string name="action_collection">收藏</string>
     <string name="action_share">分享</string>
     <string name="please_choose_photo">请选择图片</string>
@@ -59,7 +77,7 @@
     <string name="clear_selected_photos">清空选中图片</string>
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
-    <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/pGNP8OJwjiavySYi7qtwxs4nK7NkFi9MWO8kv4bN7wo!/r/dPMAAAAAAAAA</string>
+    <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/HVithgAzMJKkNhythhOzHG3YTuidAmHQ5Rp3lrxD.Q4!/r/dIUBAAAAAAAA</string>
     <string name="thanks">1. 感谢爱恋BT及其所有发布组，如果可能的话，请到<a href="https://kisssub.org/">@爱恋BT</a>点击广告支持其发展\n2. 感谢本应用中所用到库的作者，感谢你们无私的开源精神\n3. 感谢开源世界</string>
 
     <!-- donation -->
@@ -79,4 +97,27 @@
     <string name="details_torrent">种子下载</string>
     <string name="details_share_link">分享链接</string>
     <string name="details_details">详情</string>
+    <string name="about_is_good">觉得不错</string>
+    <string name="about_grade_me">给我评分</string>
+    <string name="about_version">版本</string>
+    <string name="action_download">下载</string>
+    <string name="settings_theme_content_background">内容背景</string>
+    <string name="settings_theme_color_main">主要</string>
+
+
+    <string name="settings_theme_color_personal">个性化</string>
+
+    <string name="settings_theme_color_custom">自定义</string>
+    <string name="settings_theme_color_primary_color">主颜色</string>
+    <string name="settings_theme_color_accent_color">强调色</string>
+    <string name="settings_theme_color_primary_text_color">主文本颜色</string>
+    <string name="settings_theme_color_primary_text_color_dark">主文本颜色 - 夜间</string>
+    <string name="settings_theme_color_secondary_text_color">次文本颜色</string>
+    <string name="settings_theme_color_secondary_text_color_dark">次文本颜色 - 夜间</string>
+    <string name="settings_theme_color_default">默认 - 重置所有颜色为默认</string>
+    <string name="settings_content_background_mask_alpha">遮罩透明度</string>
+    <string name="settings_content_background_mask_color">遮罩颜色</string>
+    <string name="settings_content_background_demo">演示</string>
+    <string name="settings_content_background_settings">设置</string>
+    <string name="settings_content_background_mask_color_dark">遮罩颜色 - 夜间</string>
 </resources>

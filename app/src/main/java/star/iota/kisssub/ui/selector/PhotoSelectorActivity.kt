@@ -1,3 +1,21 @@
+/*
+ *
+ *  *    Copyright 2017. iota9star
+ *  *
+ *  *    Licensed under the Apache License, Version 2.0 (the "License");
+ *  *    you may not use this file except in compliance with the License.
+ *  *    You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  *    Unless required by applicable law or agreed to in writing, software
+ *  *    distributed under the License is distributed on an "AS IS" BASIS,
+ *  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *    See the License for the specific language governing permissions and
+ *  *    limitations under the License.
+ *
+ */
+
 package star.iota.kisssub.ui.selector
 
 
@@ -231,7 +249,7 @@ class PhotoSelectorActivity : BaseActivity() {
             finish()
         }
 
-        imageButtonPreview.setColorFilter(ThemeHelper.getColor(this))
+        imageButtonPreview.setColorFilter(ThemeHelper.getAccentColor(this))
         imageButtonPreview.setOnClickListener {
             val photos = selectorPhotoAdapter.getSelectedPhotos()
             if (photos.isNotEmpty()) {
@@ -310,6 +328,7 @@ class PhotoSelectorActivity : BaseActivity() {
         val LIMIT_SELECT_PHOTO_COUNT: String = "limit_select_photo_count"
         val SOURCE_ACTIVITY: String = "source_activity"
         val FIRST_PHOTO_INDEX: String = "first_photo_index"
+        val PHOTOS_CAN_BE_REMOVE: String = "photos_can_be_remove"
         val SELECTED_STRING_ARRAY_LIST_PHOTOS: String = "selected_string_array_list_photos"
     }
 }

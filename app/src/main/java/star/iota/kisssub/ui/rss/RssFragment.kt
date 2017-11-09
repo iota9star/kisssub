@@ -1,7 +1,27 @@
+/*
+ *
+ *  *    Copyright 2017. iota9star
+ *  *
+ *  *    Licensed under the Apache License, Version 2.0 (the "License");
+ *  *    you may not use this file except in compliance with the License.
+ *  *    You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  *    Unless required by applicable law or agreed to in writing, software
+ *  *    distributed under the License is distributed on an "AS IS" BASIS,
+ *  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *    See the License for the specific language governing permissions and
+ *  *    limitations under the License.
+ *
+ */
+
 package star.iota.kisssub.ui.rss
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import jp.wasabeef.recyclerview.animators.LandingAnimator
@@ -14,17 +34,17 @@ import star.iota.kisssub.widget.MessageBar
 
 class RssFragment : BaseFragment(), RssContract.View {
     override fun success(items: ArrayList<Record>) {
-        end(false)
+        end()
         adapter.addAll(items)
     }
 
     override fun error(e: String?) {
-        end(true)
+        end()
         MessageBar.create(context!!, e)
     }
 
     override fun noData() {
-        end(true)
+        end()
         MessageBar.create(context!!, "没有获得数据")
     }
 
@@ -35,7 +55,7 @@ class RssFragment : BaseFragment(), RssContract.View {
         fun newInstance(title: String, url: String): RssFragment {
             val fragment = RssFragment()
             val bundle = Bundle()
-            bundle.putString(URL, url.replace(".xml", "-"))
+            bundle.putString(URL, url.replace(".xml", ""))
             bundle.putString(SUFFIX, ".xml")
             bundle.putString(TITLE, title)
             fragment.arguments = bundle
@@ -43,17 +63,13 @@ class RssFragment : BaseFragment(), RssContract.View {
         }
     }
 
-    private fun end(error: Boolean) {
+    private fun end() {
         isLoading = false
-        if (isRefresh) {
-            page = 1
-            refreshLayout.finishRefreshing()
-        } else {
-            if (!error) page++
-            refreshLayout.finishLoadmore()
-        }
+        refreshLayout.finishRefreshing()
     }
 
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
 
     override fun getContainerViewId(): Int = R.layout.fragment_default
 
@@ -66,7 +82,6 @@ class RssFragment : BaseFragment(), RssContract.View {
 
     private lateinit var url: String
     private lateinit var suffix: String
-    private var page = 0
 
     private fun initBase() {
         setToolbarTitle(arguments!!.getString(TITLE, getString(R.string.app_name)))
@@ -80,25 +95,15 @@ class RssFragment : BaseFragment(), RssContract.View {
     }
 
     private var isLoading = false
-    private var isRefresh = false
     private fun initRefreshLayout() {
         refreshLayout.startRefresh()
-        refreshLayout.setAutoLoadMore(true)
+        refreshLayout.setEnableLoadmore(false)
         refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                if (!isLoading()) {
-                    isRefresh = false
-                    isLoading = true
-                    presenter.get(url + page + suffix)
-                }
-            }
-
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
                 if (!isLoading()) {
-                    isRefresh = true
                     isLoading = true
                     adapter.clear()
-                    presenter.get(url + "0" + suffix)
+                    presenter.get(url + suffix)
                 }
             }
         })
