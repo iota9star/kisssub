@@ -57,7 +57,6 @@
     <string name="settings_theme_dynamic_background">动态背景</string>
     <string name="please_input_right_path">请输入正确的路径 - 网址、文件路径等</string>
 
-
     <string name="lock_input_pin">请输入PIN</string>
     <string name="lock_cancel">取消</string>
     <string name="lock_continue">继续</string>
@@ -74,11 +73,6 @@
     <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/HVithgAzMJKkNhythhOzHG3YTuidAmHQ5Rp3lrxD.Q4!/r/dIUBAAAAAAAA</string>
     <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所用到库的作者，感谢你们的开源精神\n3. 再次感谢所有对此作出贡献的大家（鞠躬）</string>
 
-    <string name="about_source">来源</string>
-    <string name="about_kisssub">爱恋BT</string>
-    <string name="about_kisssub_url">https://kisssub.org/</string>
-    <string name="about_thanks">感谢</string>
-
     <string name="details_tags">标签</string>
     <string name="details_list">清单</string>
     <string name="details_download">下载</string>
@@ -87,9 +81,14 @@
     <string name="details_share_link">分享链接</string>
     <string name="details_details">详情</string>
 
+    <string name="about_source">来源</string>
+    <string name="about_kisssub">爱恋BT</string>
+    <string name="about_kisssub_url">https://kisssub.org/</string>
+    <string name="about_thanks">感谢</string>
     <string name="about_is_good">觉得不错</string>
     <string name="about_grade_me">给我评分</string>
     <string name="about_version">版本</string>
+    <string name="about_check_update">检查更新</string>
 
     <string name="action_collection">收藏</string>
     <string name="action_share">分享</string>
@@ -113,6 +112,5 @@
     <string name="settings_content_background_settings">设置</string>
     <string name="settings_content_background_mask_color_dark">遮罩颜色 - 夜间</string>
     <string name="settings_theme_content_background">内容背景</string>
-    <string name="about_check_update">检查更新</string>
 
 </resources>

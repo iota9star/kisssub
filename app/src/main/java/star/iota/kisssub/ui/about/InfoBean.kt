@@ -20,30 +20,30 @@ package star.iota.kisssub.ui.about
 
 import com.google.gson.annotations.SerializedName
 
-class InfoBean {
-    @SerializedName("type")
-    var type: Int = 0
-    @SerializedName("versionCode")
-    var versionCode: Int = 0
+data class InfoBean(
+        @SerializedName("type")
+        val type: Int,
+        @SerializedName("versionCode")
+        val versionCode: Int,
 
-    @SerializedName("versionName")
-    var versionName: String? = null
+        @SerializedName("versionName")
+        val versionName: String?,
 
-    @SerializedName("date")
-    var date: String? = null
+        @SerializedName("date")
+        val date: String?,
 
-    @SerializedName("changeLog")
-    var changeLog: String? = null
+        @SerializedName("changeLog")
+        val changeLog: String?,
 
-    @SerializedName("url")
-    var url: String? = null
+        @SerializedName("url")
+        val url: String?,
 
-    @SerializedName("star")
-    var star: Int = 0
+        @SerializedName("star")
+        val star: Int,
 
-    @SerializedName("info")
-    var info: String? = null
-
+        @SerializedName("msg")
+        val msg: String?
+) {
     companion object {
         val TYPE_UPDATE = 0
         val TYPE_INFO = 1

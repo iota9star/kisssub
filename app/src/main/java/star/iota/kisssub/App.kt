@@ -27,10 +27,12 @@ import com.lzy.okgo.cache.CacheMode
 import com.lzy.okgo.cookie.CookieJarImpl
 import com.lzy.okgo.cookie.store.DBCookieStore
 import com.lzy.okgo.https.HttpsUtils
+import com.lzy.okgo.interceptor.HttpLoggingInterceptor
 import com.lzy.okgo.model.HttpHeaders
 import com.zzhoujay.richtext.RichText
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
+import java.util.logging.Level
 
 
 class App : Application() {
@@ -39,10 +41,10 @@ class App : Application() {
     companion object {
         fun makeOkHttpClient(context: Context): OkHttpClient {
             val builder = OkHttpClient.Builder()
-//            val loggingInterceptor = HttpLoggingInterceptor("OkGo")
-//            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY)
-//            loggingInterceptor.setColorLevel(Level.INFO)
-//            builder.addInterceptor(loggingInterceptor)
+            val loggingInterceptor = HttpLoggingInterceptor("OkGo")
+            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY)
+            loggingInterceptor.setColorLevel(Level.INFO)
+            builder.addInterceptor(loggingInterceptor)
             builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)

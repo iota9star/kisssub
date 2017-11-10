@@ -48,6 +48,9 @@ import star.iota.kisssub.ext.removeFragmentsFromView
 import star.iota.kisssub.ext.replaceFragmentInActivity
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.ui.about.AboutActivity
+import star.iota.kisssub.ui.about.InfoBean
+import star.iota.kisssub.ui.about.InfoContract
+import star.iota.kisssub.ui.about.InfoPresenter
 import star.iota.kisssub.ui.anime.AnimeFragment
 import star.iota.kisssub.ui.collection.CollectionFragment
 import star.iota.kisssub.ui.history.HistoryFragment
@@ -58,19 +61,34 @@ import star.iota.kisssub.ui.settings.SettingsActivity
 import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.ui.subs.SubsFragment
 import star.iota.kisssub.ui.tags.TagsFragment
+import star.iota.kisssub.utils.UpdateUtils
 import star.iota.kisssub.widget.MessageBar
 import star.iota.kisssub.widget.ken.KenBurnsView
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), InfoContract.View {
+    override fun success(info: InfoBean) {
+        UpdateUtils.show(this, info)
+    }
+
+    override fun error(e: String?) {
+
+    }
+
+    override fun noData() {
+
+    }
+
     override fun getContentViewId(): Int = R.layout.activity_main_drawer
 
+    private lateinit var presenter: InfoPresenter
     override fun doSome() {
         setSupportActionBar(toolbar)
         initDrawer()
         initNavigationView()
         setFirstFragment()
         checkPermission()
+        presenter.get(KisssubUrl.UPDATE_URL)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +99,7 @@ class MainActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
+        presenter.unsubscribe()
     }
 
     private fun checkPermission() {

@@ -29,12 +29,13 @@ import io.reactivex.schedulers.Schedulers
 
 class InfoPresenter(private val view: InfoContract.View) : InfoContract.Presenter {
     override fun get(url: String) {
+        println(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
                         .adapt(ObservableResponse<String>())
                         .subscribeOn(Schedulers.io())
-                        .map { Gson().fromJson(url, InfoBean::class.java) }
+                        .map { Gson().fromJson(it.body(), InfoBean::class.java) }
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (it == null) {

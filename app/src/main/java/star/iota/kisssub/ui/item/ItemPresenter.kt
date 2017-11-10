@@ -32,7 +32,6 @@ import star.iota.kisssub.room.Record
 
 class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presenter {
     override fun get(url: String) {
-        println(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
