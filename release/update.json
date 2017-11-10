@@ -5,6 +5,6 @@
   "date": "2017-11-10",
   "changeLog": "1. 添加网盘与合集筛选\n2. 添加检查更新\n3. 修复订阅时间显示问题\n4. 细节调整、代码优化",
   "star": 5,
-  "msg": "",
+  "msg": "破解迅雷限制法\n以管理员身份运行记事本等文本编辑器，添加以下记录到文件末端：\n127.0.0.1 hub5btmain.sandai.net\n127.0.0.1 hub5emu.sandai.net\n127.0.0.1 upgrade.xl9.xunlei.com\n保存后即可绕过迅雷限制",
   "url": "https://raw.githubusercontent.com/iota9star/KISSSUB/master/release/app-release_signed_7zip_aligned.apk"
 }
