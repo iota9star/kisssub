@@ -18,34 +18,16 @@
 
 package star.iota.kisssub.ui.about
 
-import com.google.gson.annotations.SerializedName
+import star.iota.kisssub.base.BasePresenter
 
-class InfoBean {
-    @SerializedName("type")
-    var type: Int = 0
-    @SerializedName("versionCode")
-    var versionCode: Int = 0
+interface InfoContract {
+    interface View {
+        fun success(info: InfoBean)
+        fun error(e: String?)
+        fun noData()
+    }
 
-    @SerializedName("versionName")
-    var versionName: String? = null
-
-    @SerializedName("date")
-    var date: String? = null
-
-    @SerializedName("changeLog")
-    var changeLog: String? = null
-
-    @SerializedName("url")
-    var url: String? = null
-
-    @SerializedName("star")
-    var star: Int = 0
-
-    @SerializedName("info")
-    var info: String? = null
-
-    companion object {
-        val TYPE_UPDATE = 0
-        val TYPE_INFO = 1
+    interface Presenter : BasePresenter {
+        fun get(url: String)
     }
 }

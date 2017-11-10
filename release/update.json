@@ -1,9 +1,10 @@
 {
-  "type": 2,
-  "versionCode": 5,
-  "versionName": "hello max",
-  "changeLog": "1.你好吗？",
+  "type": 0,
+  "versionCode": 3,
+  "versionName": "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！",
+  "date": "2017-11-10",
+  "changeLog": "1. 添加网盘与合集筛选\n2. 添加检查更新\n3. 修复订阅时间显示问题\n4. 细节调整、代码优化",
   "star": 5,
-  "info": "hdjkhs",
-  "url": "dsadsadas"
+  "info": "",
+  "url": "https://raw.githubusercontent.com/iota9star/KISSSUB/master/release/app-release_signed_7zip_aligned.apk"
 }

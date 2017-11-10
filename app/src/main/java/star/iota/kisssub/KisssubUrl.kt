@@ -39,4 +39,6 @@ object KisssubUrl {
     val COLLECTION = "https://www.kisssub.org/complete-1.html"
     val DISCUSS = "https://www.kisssub.org/discuss-1.html"
     val PAN = "https://www.kisssub.org/cloudfile-1.html"
+
+    val UPDATE_URL = "https://raw.githubusercontent.com/iota9star/KISSSUB/master/release/update.json"
 }
