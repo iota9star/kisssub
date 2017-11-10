@@ -35,22 +35,21 @@ import star.iota.kisssub.widget.MessageBar
 class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
     override fun success(info: InfoBean) {
         finishLoad()
-        UpdateUtils.show(this, info)
+        UpdateUtils.show(this, info, true)
     }
 
     override fun error(e: String?) {
         finishLoad()
-        progressBar.visibility = View.GONE
     }
 
     override fun noData() {
         finishLoad()
-        progressBar.visibility = View.GONE
+        MessageBar.create(this, "没有获得版本信息")
     }
 
     private fun finishLoad() {
-        MessageBar.create(this, "没有获得版本信息")
         isLoading = false
+        progressBar.visibility = View.GONE
     }
 
     override fun getContentViewId(): Int = R.layout.activity_about

@@ -31,17 +31,20 @@ import star.iota.kisssub.widget.MessageBar
 
 object UpdateUtils {
     fun show(context: Context, info: InfoBean, isCheck: Boolean) {
-        if (info.type == InfoBean.TYPE_INFO) {
-            AlertDialog.Builder(context)
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setTitle("哔、有一条新消息")
-                    .setMessage(info.msg)
-                    .setNegativeButton("好的", { dialog, _ ->
-                        dialog.dismiss()
-                    })
-                    .show()
-        } else if (info.type == InfoBean.TYPE_UPDATE) {
-            if (info.versionCode == context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_CONFIGURATIONS).versionCode) {
+        when (info.type) {
+            InfoBean.TYPE_INFO -> {
+                if (!isCheck) {
+                    AlertDialog.Builder(context)
+                            .setIcon(R.mipmap.ic_launcher)
+                            .setTitle("哔、有一条新消息")
+                            .setMessage(info.msg)
+                            .setNegativeButton("好的", { dialog, _ ->
+                                dialog.dismiss()
+                            })
+                            .show()
+                }
+            }
+            InfoBean.TYPE_UPDATE -> if (info.versionCode <= context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_CONFIGURATIONS).versionCode) {
                 if (isCheck) MessageBar.create(context, "当前已是最新版，无需更新")
             } else {
                 val view = LayoutInflater.from(context).inflate(R.layout.dialog_update, null)

@@ -68,7 +68,7 @@ import star.iota.kisssub.widget.ken.KenBurnsView
 
 class MainActivity : BaseActivity(), InfoContract.View {
     override fun success(info: InfoBean) {
-        UpdateUtils.show(this, info)
+        UpdateUtils.show(this, info, false)
     }
 
     override fun error(e: String?) {
@@ -88,6 +88,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
         initNavigationView()
         setFirstFragment()
         checkPermission()
+        presenter = InfoPresenter(this)
         presenter.get(KisssubUrl.UPDATE_URL)
     }
 
