@@ -20,7 +20,7 @@ package star.iota.kisssub.ui.about
 
 import com.google.gson.annotations.SerializedName
 
-data class InfoBean(
+class InfoBean(
         @SerializedName("type")
         val type: Int,
         @SerializedName("versionCode")

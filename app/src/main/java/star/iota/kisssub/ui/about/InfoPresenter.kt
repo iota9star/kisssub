@@ -29,7 +29,6 @@ import io.reactivex.schedulers.Schedulers
 
 class InfoPresenter(private val view: InfoContract.View) : InfoContract.Presenter {
     override fun get(url: String) {
-        println(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
