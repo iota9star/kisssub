@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
@@ -44,7 +43,7 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     override fun noData() {
         end()
-        MessageBar.create(context!!, "您还没有收藏哦...")
+        MessageBar.create(context!!, "您还没有收藏哦")
     }
 
     companion object {
@@ -100,7 +99,7 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
     private lateinit var adapter: CollectionAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         adapter = CollectionAdapter()
         recyclerView.adapter = adapter
     }

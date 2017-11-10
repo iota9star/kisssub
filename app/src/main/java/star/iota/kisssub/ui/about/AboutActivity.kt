@@ -22,6 +22,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.View
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_about.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
@@ -60,6 +61,15 @@ class AboutActivity : BaseActivity(), View.OnClickListener {
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
+        val up = InfoBean()
+        up.changeLog = "1.你好吗？"
+        up.versionCode = 5
+        up.versionName = "hello max"
+        up.info = "hdjkhs"
+        up.star = 5
+        up.url = "dsadsadas"
+        up.type = 2
+        println(Gson().toJson(up))
     }
 
     companion object {

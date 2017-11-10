@@ -48,6 +48,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
         preTitle = (this.activity!! as BaseActivity).supportActionBar?.title?.toString()
     }
 
@@ -90,17 +91,12 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
     protected fun finish() {
         (activity!! as AppCompatActivity).exit()
-    }
-
-    override fun onStart() {
-        EventBus.getDefault().register(this)
-        super.onStart()
-    }
-
-    override fun onStop() {
-        EventBus.getDefault().unregister(this)
-        super.onStop()
     }
 }

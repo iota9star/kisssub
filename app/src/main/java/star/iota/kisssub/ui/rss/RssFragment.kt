@@ -24,7 +24,6 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
@@ -119,7 +118,7 @@ class RssFragment : BaseFragment(), RssContract.View {
     private lateinit var adapter: RssAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         adapter = RssAdapter()
         recyclerView.adapter = adapter
     }

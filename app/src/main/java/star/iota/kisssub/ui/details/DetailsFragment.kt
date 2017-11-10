@@ -37,6 +37,7 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.ui.main.SearchHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.ui.selector.PhotoSelectorPreviewActivity
 import star.iota.kisssub.ui.settings.ThemeHelper
@@ -83,7 +84,7 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
             tag.text = str
             tag.setCompoundDrawables(drawable, null, null, null)
             tag.setOnClickListener {
-                (context!! as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance("标签：$str", str), R.id.frameLayoutContainer)
+                (context!! as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance("标签：$str", str, SearchHelper.getParam(context!!)), R.id.frameLayoutContainer)
             }
             flexLayoutTags.addView(tag)
         }

@@ -29,7 +29,7 @@ android {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 2
+        versionCode 3
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"
@@ -99,7 +99,7 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:latest.release'
 
     // recyclerview-animators
-    implementation 'jp.wasabeef:recyclerview-animators:latest.release'
+//    implementation 'jp.wasabeef:recyclerview-animators:latest.release'
 
     // cookie bar
     implementation 'com.liuguangqiang.cookie:library:latest.release'
@@ -146,4 +146,7 @@ dependencies {
 
     // eventbus
     implementation 'org.greenrobot:eventbus:latest.release'
+
+    // gson
+    implementation 'com.google.code.gson:gson:latest.release'
 }

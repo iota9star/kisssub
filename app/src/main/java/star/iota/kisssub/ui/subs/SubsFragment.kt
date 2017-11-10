@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_recycler_view_p4.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -102,7 +101,7 @@ class SubsFragment : BaseFragment(), SubsContract.View {
     private lateinit var adapter: SubsAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         recyclerView.addItemDecoration(SGSpacingItemDecoration(2, DisplayUtils.dp2px(context!!, 16f)))
         adapter = SubsAdapter()
         recyclerView.adapter = adapter

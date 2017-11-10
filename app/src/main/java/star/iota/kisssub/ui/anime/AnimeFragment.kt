@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_recycler_view_p4.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -105,7 +104,7 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
     private lateinit var adapter: AnimeAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         adapter = AnimeAdapter()
         recyclerView.adapter = adapter
     }

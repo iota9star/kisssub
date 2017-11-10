@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -72,14 +73,14 @@ class MainActivity : BaseActivity() {
         checkPermission()
     }
 
-    override fun onStart() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-        super.onStart()
     }
 
-    override fun onStop() {
+    override fun onDestroy() {
+        super.onDestroy()
         EventBus.getDefault().unregister(this)
-        super.onStop()
     }
 
     private fun checkPermission() {
@@ -102,6 +103,20 @@ class MainActivity : BaseActivity() {
         val searchView = menu.findItem(R.id.menu_search).actionView as SearchView
         searchView.queryHint = "请输入关键字..."
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        val pan = menu.findItem(R.id.menu_pan)
+        val collection = menu.findItem(R.id.menu_collection)
+        pan.isChecked = SearchHelper.getPan(this)
+        collection.isChecked = SearchHelper.getCollection(this)
+        pan.setOnMenuItemClickListener {
+            pan.isChecked = !pan.isChecked
+            SearchHelper.setPan(this@MainActivity, pan.isChecked)
+            true
+        }
+        collection.setOnMenuItemClickListener {
+            collection.isChecked = !collection.isChecked
+            SearchHelper.setCollection(this@MainActivity, collection.isChecked)
+            true
+        }
         return true
     }
 
@@ -111,7 +126,7 @@ class MainActivity : BaseActivity() {
         }
         val keywords = intent.getStringExtra(SearchManager.QUERY)
         removeFragmentsFromView(R.id.frameLayoutContainer)
-        replaceFragmentInActivity(ItemFragment.newSearchInstance("搜索：$keywords", keywords), R.id.frameLayoutContainer)
+        replaceFragmentInActivity(ItemFragment.newSearchInstance("搜索：$keywords", keywords, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
     }
 
     private fun setFirstFragment() {
@@ -138,7 +153,6 @@ class MainActivity : BaseActivity() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onDynamicBackgroundChange(event: ChangeDynamicBackgroundEvent) {
         setDynamicBackground()
-        println("ext;;;;;;;")
     }
 
     private fun setDynamicBackground() {
@@ -231,7 +245,7 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.menu_ova -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
-                    replaceFragmentInActivity(ItemFragment.newSearchInstance(getString(R.string.menu_ova), KisssubUrl.OVA), R.id.frameLayoutContainer)
+                    replaceFragmentInActivity(ItemFragment.newSearchInstance(getString(R.string.menu_ova), KisssubUrl.OVA, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
                 }
                 R.id.menu_raw -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)

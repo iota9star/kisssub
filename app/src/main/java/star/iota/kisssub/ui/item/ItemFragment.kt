@@ -25,7 +25,6 @@ import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -54,11 +53,11 @@ class ItemFragment : BaseFragment(), ItemContract.View {
         val TITLE = "title"
         val URL = "url"
         val SUFFIX = "suffix"
-        fun newSearchInstance(title: String, keywords: String): ItemFragment {
+        fun newSearchInstance(title: String, keywords: String, suffix: String): ItemFragment {
             val fragment = ItemFragment()
             val bundle = Bundle()
             bundle.putString(URL, KisssubUrl.SEARCH + keywords + "&page=")
-            bundle.putString(SUFFIX, "")
+            bundle.putString(SUFFIX, suffix)
             bundle.putString(TITLE, title)
             fragment.arguments = bundle
             return fragment
@@ -151,7 +150,7 @@ class ItemFragment : BaseFragment(), ItemContract.View {
     private lateinit var adapter: ItemAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = FadeInUpAnimator()
         adapter = ItemAdapter()
         recyclerView.adapter = adapter
     }

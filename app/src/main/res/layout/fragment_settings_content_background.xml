@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:alpha="0.24"
+                        android:alpha="0.36"
                         android:gravity="end"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"

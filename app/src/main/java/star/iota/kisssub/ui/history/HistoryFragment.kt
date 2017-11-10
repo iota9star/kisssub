@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -103,7 +102,7 @@ class HistoryFragment : BaseFragment(), HistoryContract.View {
     private lateinit var adapter: HistoryAdapter
     private fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         adapter = HistoryAdapter()
         recyclerView.adapter = adapter
     }

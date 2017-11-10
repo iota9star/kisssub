@@ -33,6 +33,7 @@ import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.ui.main.SearchHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
@@ -47,7 +48,7 @@ class NoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
             textViewSub.text = bean.sub
             textViewSub.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.sub!!, bean.sub!!), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.sub!!, bean.sub!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
             textViewTitle.setOnClickListener {

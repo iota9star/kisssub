@@ -27,6 +27,7 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.ui.main.SearchHelper
 import star.iota.kisssub.ui.settings.ThemeHelper
 
 class SubsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
@@ -39,7 +40,7 @@ class SubsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
             drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
             textViewSub.setCompoundDrawables(drawable, null, null, null)
             textViewSub.setOnClickListener {
-                (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean, bean), R.id.frameLayoutContainer)
+                (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean, bean, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
             }
         }
     }

@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.fragment_settings_dynamic_background.*
 import org.greenrobot.eventbus.EventBus
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.eventbus.ChangeDynamicBackgroundEvent
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
@@ -60,7 +59,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
             }
             R.id.buttonReset -> {
                 ThemeHelper.setDynamicBanner(context!!, null)
-                EventBus.getDefault().post(ChangeContentBackgroundEvent())
+                EventBus.getDefault().post(ChangeDynamicBackgroundEvent())
                 finish()
             }
             R.id.buttonPreview -> {
@@ -107,6 +106,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        kenBurnsView.setImageDrawable(resource)
                         return true
                     }
                 })
