@@ -71,7 +71,7 @@
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
     <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/HVithgAzMJKkNhythhOzHG3YTuidAmHQ5Rp3lrxD.Q4!/r/dIUBAAAAAAAA</string>
-    <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所用到库的作者，感谢你们的开源精神\n3. 再次感谢所有对此作出贡献的大家（鞠躬）</string>
+    <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所使用开源库的作者\n3. 感谢所有对此作出贡献的大家（鞠躬）</string>
 
     <string name="details_tags">标签</string>
     <string name="details_list">清单</string>

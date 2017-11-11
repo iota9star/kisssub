@@ -29,7 +29,7 @@ android {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 3
+        versionCode 4
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"

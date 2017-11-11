@@ -31,43 +31,43 @@ import star.iota.kisssub.widget.MessageBar
 
 object UpdateUtils {
     fun show(context: Context, info: InfoBean, isCheck: Boolean) {
-        when (info.type) {
-            InfoBean.TYPE_INFO -> {
-                if (!isCheck) {
-                    AlertDialog.Builder(context)
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setTitle("哔、有一条新消息")
-                            .setMessage(info.msg)
-                            .setNegativeButton("好的", { dialog, _ ->
-                                dialog.dismiss()
-                            })
-                            .show()
-                }
-            }
-            InfoBean.TYPE_UPDATE -> if (info.versionCode <= context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_CONFIGURATIONS).versionCode) {
-                if (isCheck) MessageBar.create(context, "当前已是最新版，无需更新")
-            } else {
-                val view = LayoutInflater.from(context).inflate(R.layout.dialog_update, null)
-                val ver = view.findViewById<TextView>(R.id.textViewVersion)
-                val date = view.findViewById<TextView>(R.id.textViewDate)
-                val star = view.findViewById<TextView>(R.id.textViewStar)
-                val log = view.findViewById<TextView>(R.id.textViewChangeLog)
-                ver.text = ("版本号：${info.versionName}")
-                log.text = ("更新日志：\n" + info.changeLog)
-                star.text = ("推荐指数：${info.star}星")
-                date.text = ("更新日期：${info.date}")
+        if (info.type == InfoBean.TYPE_INFO) {
+            if (!isCheck) {
                 AlertDialog.Builder(context)
                         .setIcon(R.mipmap.ic_launcher)
-                        .setTitle("叮咚、有一个新的更新")
-                        .setView(view)
-                        .setNegativeButton("直接下载", { _, _ ->
-                            SendUtils.open(context, info.url)
-                        })
-                        .setPositiveButton("应用市场下载", { _, _ ->
-                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.packageName)))
+                        .setTitle("哔、有一条新消息")
+                        .setMessage(info.msg)
+                        .setNegativeButton("好的", { dialog, _ ->
+                            dialog.dismiss()
                         })
                         .show()
             }
+        }
+        if (info.versionCode <= context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_CONFIGURATIONS).versionCode) {
+            if (isCheck) {
+                MessageBar.create(context, "当前已是最新版，无需更新")
+            }
+        } else {
+            val view = LayoutInflater.from(context).inflate(R.layout.dialog_update, null)
+            val ver = view.findViewById<TextView>(R.id.textViewVersion)
+            val date = view.findViewById<TextView>(R.id.textViewDate)
+            val star = view.findViewById<TextView>(R.id.textViewStar)
+            val log = view.findViewById<TextView>(R.id.textViewChangeLog)
+            ver.text = ("版本号：${info.versionName}")
+            log.text = ("更新日志：\n" + info.changeLog)
+            star.text = ("推荐指数：${info.star}星")
+            date.text = ("更新日期：${info.date}")
+            AlertDialog.Builder(context)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("叮咚、有一个新更新")
+                    .setView(view)
+                    .setNegativeButton("直接下载", { _, _ ->
+                        SendUtils.open(context, info.url)
+                    })
+                    .setPositiveButton("应用市场下载", { _, _ ->
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.packageName)))
+                    })
+                    .show()
         }
     }
 }
