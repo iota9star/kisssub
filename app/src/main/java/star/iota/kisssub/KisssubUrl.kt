@@ -19,6 +19,7 @@
 package star.iota.kisssub
 
 object KisssubUrl {
+
     val BASE = "https://www.kisssub.org/"
     val BGMLIST = "https://www.kisssub.org/addon.php?r=bgmlist"
     val TAGS = "https://www.kisssub.org/addon.php?r=tagcloud"
