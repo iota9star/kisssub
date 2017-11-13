@@ -35,8 +35,8 @@ import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.glide.GlideOptions
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.ui.item.ItemFragment
-import star.iota.kisssub.ui.main.SearchHelper
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.utils.ToastUtils
 
 class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
@@ -54,7 +54,7 @@ class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
             textViewTitle.text = bean.title
             linearLayoutContainer.setOnClickListener {
                 if (!bean.title.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
             linearLayoutContainer.setOnLongClickListener {
@@ -64,7 +64,7 @@ class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         .setMessage("o(*≧▽≦)ツ\n收藏当前番组？")
                         .setPositiveButton("收藏", { _, _ ->
                             Single.just(AppDatabaseHelper.getInstance(context))
-                                    .map { it.add(bean) }
+                                    .map { it.addRecord(bean) }
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({

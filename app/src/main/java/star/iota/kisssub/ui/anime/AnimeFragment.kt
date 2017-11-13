@@ -103,7 +103,7 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
 
     private lateinit var adapter: AnimeAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
 //        recyclerView.itemAnimator = LandingAnimator()
         adapter = AnimeAdapter()
         recyclerView.adapter = adapter

@@ -26,7 +26,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import kotlinx.android.synthetic.main.fragment_default.*
-import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.room.Record
@@ -53,15 +52,6 @@ class ItemFragment : BaseFragment(), ItemContract.View {
         val TITLE = "title"
         val URL = "url"
         val SUFFIX = "suffix"
-        fun newSearchInstance(title: String, keywords: String, suffix: String): ItemFragment {
-            val fragment = ItemFragment()
-            val bundle = Bundle()
-            bundle.putString(URL, KisssubUrl.SEARCH + keywords + "&page=")
-            bundle.putString(SUFFIX, suffix)
-            bundle.putString(TITLE, title)
-            fragment.arguments = bundle
-            return fragment
-        }
 
         fun newInstance(title: String, url: String): ItemFragment {
             val fragment = ItemFragment()

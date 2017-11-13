@@ -16,7 +16,7 @@
  *
  */
 
-package star.iota.kisssub.ui.main
+package star.iota.kisssub.ui.item.search
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -71,7 +71,7 @@
                     android:paddingTop="12dp"
                     app:alignContent="flex_start"
                     app:alignItems="flex_start"
-                    app:dividerDrawable="@drawable/bg_divider"
+                    app:dividerDrawable="@drawable/bg_divider_8dp"
                     app:flexWrap="wrap"
                     app:showDivider="middle" />
 

@@ -16,20 +16,11 @@
  *
  */
 
-package star.iota.kisssub.ui.rss
+package star.iota.kisssub.ui.item.search
 
-import star.iota.kisssub.base.BasePresenter
 import star.iota.kisssub.room.Record
 
-interface RssContract {
-
-    interface View {
-        fun success(items: ArrayList<Record>)
-        fun error(e: String?)
-        fun noData()
-    }
-
-    interface Presenter : BasePresenter {
-        fun get(url: String)
-    }
+class SearchBean {
+    var filters: ArrayList<FilterBean>? = null
+    var records: ArrayList<Record>? = null
 }

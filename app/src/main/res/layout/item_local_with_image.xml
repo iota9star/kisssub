@@ -90,7 +90,7 @@
                     android:id="@+id/buttonDownload"
                     android:layout_width="48dp"
                     android:layout_height="36dp"
-                    android:text="下载"
+                    android:text="@string/action_download"
                     android:textSize="12sp" />
             </LinearLayout>
 

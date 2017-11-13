@@ -81,7 +81,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_pin"
+                    app:srcCompat="@drawable/ic_action_pin"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
@@ -111,7 +111,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_fingerprint"
+                    app:srcCompat="@drawable/ic_action_fingerprint"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 

@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -33,7 +34,7 @@ import star.iota.kisssub.ext.exit
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.ui.settings.ThemeHelper
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), View.OnTouchListener {
 
 
     protected abstract fun getContainerViewId(): Int
@@ -57,8 +58,13 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.setOnTouchListener(this)
         doSome()
         setContentBackground()
+    }
+
+    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+        return true
     }
 
     private fun setContentBackground() {

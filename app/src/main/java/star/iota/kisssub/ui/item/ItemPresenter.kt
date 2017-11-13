@@ -52,10 +52,10 @@ class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presente
         )
     }
 
-    private fun deal(resp: Response<String>): ArrayList<Record> {
-        val items = Jsoup.parse(resp.body())?.select("#data_list > tr")
-        val list = ArrayList<Record>()
-        items?.forEach {
+    private fun deal(resp: Response<String>): ArrayList<Record>? {
+        val records = Jsoup.parse(resp.body())?.select("#data_list > tr")
+        val rs = ArrayList<Record>()
+        records?.forEach {
             val bean = Record()
             bean.type = Record.NO_IMAGE
             bean.date = it?.select("td:nth-child(1)")?.text()
@@ -67,9 +67,9 @@ class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presente
             bean.url = KisssubUrl.BASE + tUrl
             bean.size = it?.select("td:nth-child(4)")?.text()
             bean.sub = it?.select("td:nth-child(8) > a")?.text()
-            list.add(bean)
+            rs.add(bean)
         }
-        return list
+        return rs
     }
 
 

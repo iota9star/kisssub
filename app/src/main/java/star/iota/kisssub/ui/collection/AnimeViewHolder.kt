@@ -38,8 +38,8 @@ import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.glide.GlideOptions
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.ui.item.ItemFragment
-import star.iota.kisssub.ui.main.SearchHelper
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.utils.ToastUtils
@@ -64,7 +64,7 @@ class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
             textViewTitle.setCompoundDrawables(drawable, null, null, null)
             linearLayoutContainer.setOnClickListener {
                 if (!bean.title.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
             linearLayoutContainer.setOnLongClickListener {
@@ -74,7 +74,7 @@ class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         .setMessage("o(*≧▽≦)ツ\n从收藏移除？")
                         .setNegativeButton("移除", { _, _ ->
                             Single.just(AppDatabaseHelper.getInstance(context))
-                                    .map { it.delete(bean) }
+                                    .map { it.deleteRecord(bean) }
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({

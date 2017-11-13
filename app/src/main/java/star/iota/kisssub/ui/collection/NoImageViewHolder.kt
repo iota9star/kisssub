@@ -32,8 +32,8 @@ import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
-import star.iota.kisssub.ui.item.ItemFragment
-import star.iota.kisssub.ui.main.SearchHelper
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
@@ -48,7 +48,7 @@ class NoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
             textViewSub.text = bean.sub
             textViewSub.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.sub!!, bean.sub!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.sub!!, bean.sub!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
             textViewTitle.setOnClickListener {
@@ -68,7 +68,7 @@ class NoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         .setMessage("o(*≧▽≦)ツ\n从收藏移除？")
                         .setNegativeButton("移除", { _, _ ->
                             Single.just(AppDatabaseHelper.getInstance(context))
-                                    .map { it.delete(bean) }
+                                    .map { it.deleteRecord(bean) }
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({

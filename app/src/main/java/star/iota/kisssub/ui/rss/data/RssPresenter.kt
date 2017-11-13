@@ -16,7 +16,7 @@
  *
  */
 
-package star.iota.kisssub.ui.rss
+package star.iota.kisssub.ui.rss.data
 
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.convert.StringConvert

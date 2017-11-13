@@ -49,7 +49,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
 
     private fun finishLoad() {
         isLoading = false
-        progressBar.visibility = View.GONE
+//        progressBar.visibility = View.GONE
     }
 
     override fun getContentViewId(): Int = R.layout.activity_about
@@ -65,7 +65,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
             R.id.linearLayoutCheckUpdate -> {
                 if (!isLoading) {
                     isLoading = true
-                    progressBar.visibility = View.VISIBLE
+//                    progressBar.visibility = View.VISIBLE
                     presenter.get(KisssubUrl.UPDATE_URL)
                 } else {
                     MessageBar.create(this, "正在加载版本信息中，请等待")

@@ -1,9 +1,9 @@
 {
   "type": 0,
-  "versionCode": 4,
+  "versionCode": 5,
   "versionName": "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！",
   "date": "2017-11-10",
-  "changeLog": "1. 修复更新的逻辑问题\n2. 优化逻辑体验",
+  "changeLog": "1. 添加搜索详细过滤\n2. 优化逻辑体验\n3. 添加订阅关键字、及管理\n4. 片库列表从四列换成三列",
   "star": 5,
   "msg": "破解迅雷限制法\n\n以管理员身份运行记事本等文本编辑器打开Hosts文件，添加以下记录到文件末端：\n\n127.0.0.1 hub5btmain.sandai.net\n127.0.0.1 hub5emu.sandai.net\n127.0.0.1 upgrade.xl9.xunlei.com\n\n保存后即可绕过迅雷限制",
   "url": "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/app-release_signed_7zip_aligned.apk"

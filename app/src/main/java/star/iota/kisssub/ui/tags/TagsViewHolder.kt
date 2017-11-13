@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.item_tag.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.ui.item.ItemFragment
-import star.iota.kisssub.ui.main.SearchHelper
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.settings.ThemeHelper
 
 class TagsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
@@ -40,7 +40,7 @@ class TagsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
             drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
             textViewTag.setCompoundDrawables(drawable, null, null, null)
             textViewTag.setOnClickListener {
-                (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance("标签：$bean", bean, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance("标签：$bean", bean, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
             }
         }
     }

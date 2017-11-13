@@ -55,8 +55,10 @@ import star.iota.kisssub.ui.anime.AnimeFragment
 import star.iota.kisssub.ui.collection.CollectionFragment
 import star.iota.kisssub.ui.history.HistoryFragment
 import star.iota.kisssub.ui.item.ItemFragment
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.play.PlayFragment
-import star.iota.kisssub.ui.rss.RssFragment
+import star.iota.kisssub.ui.rss.main.RssTagFragment
 import star.iota.kisssub.ui.settings.SettingsActivity
 import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.ui.subs.SubsFragment
@@ -146,7 +148,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
         }
         val keywords = intent.getStringExtra(SearchManager.QUERY)
         removeFragmentsFromView(R.id.frameLayoutContainer)
-        replaceFragmentInActivity(ItemFragment.newSearchInstance("搜索：$keywords", keywords, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
+        replaceFragmentInActivity(SearchFragment.newInstance("搜索：$keywords", keywords, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
     }
 
     private fun setFirstFragment() {
@@ -217,7 +219,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 }
                 R.id.menu_rss -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
-                    replaceFragmentInActivity(RssFragment.newInstance(getString(R.string.menu_rss), KisssubUrl.RSS), R.id.frameLayoutContainer)
+                    replaceFragmentInActivity(RssTagFragment.newInstance(), R.id.frameLayoutContainer)
                 }
                 R.id.menu_favorite -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
@@ -265,7 +267,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 }
                 R.id.menu_ova -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
-                    replaceFragmentInActivity(ItemFragment.newSearchInstance(getString(R.string.menu_ova), KisssubUrl.OVA, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
+                    replaceFragmentInActivity(SearchFragment.newInstance(getString(R.string.menu_ova), KisssubUrl.OVA, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
                 }
                 R.id.menu_raw -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)

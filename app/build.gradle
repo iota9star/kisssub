@@ -29,11 +29,12 @@ android {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 4
+        versionCode 5
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation":
@@ -69,6 +70,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.0.0'
     implementation 'com.android.support:cardview-v7:27.0.0'
     implementation 'com.android.support:palette-v7:27.0.0'
+    implementation 'com.android.support:multidex:latest.release'
 
     // kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
@@ -78,7 +80,6 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:latest.release'
     kapt 'android.arch.persistence.room:compiler:latest.release'
     testImplementation 'android.arch.persistence.room:testing:latest.release'
-    implementation 'android.arch.persistence.room:rxjava2:latest.release'
 
     // okio
     implementation 'com.squareup.okio:okio:latest.release'

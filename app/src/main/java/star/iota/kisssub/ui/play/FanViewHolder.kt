@@ -26,8 +26,8 @@ import kotlinx.android.synthetic.main.item_fan.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.ui.item.ItemFragment
-import star.iota.kisssub.ui.main.SearchHelper
+import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
@@ -37,7 +37,7 @@ class FanViewHolder(itemView: View) : BaseViewHolder<FanBean>(itemView) {
             textViewFan.text = bean.title
             textViewFan.setOnClickListener {
                 if (!bean.title.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(ItemFragment.newSearchInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
             if (bean.tip.isNullOrBlank()) {

@@ -28,7 +28,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.glide.transformations.CropSquareTransformation
 import kotlinx.android.synthetic.main.item_local_with_image.view.*
-import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.base.Callback
@@ -38,7 +37,7 @@ import star.iota.kisssub.glide.GlideOptions
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
-import star.iota.kisssub.ui.rss.RssFragment
+import star.iota.kisssub.ui.rss.data.RssFragment
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
@@ -59,7 +58,7 @@ class WithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
             textViewSub.text = bean.sub
             textViewSub.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!, KisssubUrl.RSS_BASE + bean.sub!! + ".xml"), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!), R.id.frameLayoutContainer)
                 }
             }
             textViewTitle.setOnClickListener {
@@ -79,7 +78,7 @@ class WithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         .setMessage("o(*≧▽≦)ツ\n从收藏移除？")
                         .setNegativeButton("移除", { _, _ ->
                             Single.just(AppDatabaseHelper.getInstance(context))
-                                    .map { it.delete(bean) }
+                                    .map { it.deleteRecord(bean) }
                                     .subscribeOn(Schedulers.io())
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({

@@ -16,23 +16,17 @@
  *
  */
 
-package star.iota.kisssub.ui.rss
+package star.iota.kisssub.ui.rss.data
 
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import jp.wasabeef.glide.transformations.CropSquareTransformation
-import kotlinx.android.synthetic.main.item_rss_with_image.view.*
-import star.iota.kisssub.KisssubUrl
+import kotlinx.android.synthetic.main.item_rss_no_image.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.glide.GlideOptions
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
@@ -41,24 +35,16 @@ import star.iota.kisssub.utils.ShareUtils
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
 
-class RssWithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
+class RssNoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
     override fun bindView(bean: Record) {
         itemView.apply {
-            GlideApp.with(itemView)
-                    .load(bean.cover)
-                    .listener(GlidePalette.with(bean.cover)
-                            .use(BitmapPalette.Profile.VIBRANT_LIGHT)
-                            .intoBackground(imageViewCover, BitmapPalette.Swatch.RGB)
-                            .crossfade(true))
-                    .apply(GlideOptions.bitmapTransform(CropSquareTransformation()))
-                    .into(imageViewCover)
             textViewTitle.text = bean.title
             textViewDate.text = bean.date
             textViewCategory.text = bean.category
             textViewSub.text = bean.sub
             textViewSub.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!, KisssubUrl.RSS_BASE + bean.sub!! + ".xml"), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!), R.id.frameLayoutContainer)
                 }
             }
             textViewTitle.setOnClickListener {
@@ -76,13 +62,13 @@ class RssWithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) 
                         "分类：${bean.category}\n\n" +
                         "发布时间：${bean.date}\n\n" +
                         "字幕组：${bean.sub}\n\n" +
-                        "种子地址：${bean.magnet}\n\n" +
+                        "磁链：${bean.magnet}\n\n" +
                         "详细地址：${bean.url}\n"
                 ShareUtils.share(context, content)
             }
             textViewCollection.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))
-                        .map { it.add(bean) }
+                        .map { it.addRecord(bean) }
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

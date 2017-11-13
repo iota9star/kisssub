@@ -25,8 +25,7 @@ object KisssubUrl {
     val SUBS = "https://www.kisssub.org/addon.php?r=sublist/group"
     val PLAY = "https://www.kisssub.org/addon.php?r=bangumi/table"
     val SEARCH = "https://www.kisssub.org/search.php?keyword="
-    val RSS = "https://www.kisssub.org/rss.xml"
-    val RSS_BASE = "https://www.kisssub.org/rss-"
+    val RSS_BASE = "https://www.kisssub.org/rss"
 
     val NEW = "https://www.kisssub.org/1.html"
     val ANIME = "https://www.kisssub.org/sort-1-1.html"
@@ -40,5 +39,5 @@ object KisssubUrl {
     val DISCUSS = "https://www.kisssub.org/discuss-1.html"
     val PAN = "https://www.kisssub.org/cloudfile-1.html"
 
-    val UPDATE_URL = "https://raw.githubusercontent.com/iota9star/KISSSUB/master/release/update.json"
+    val UPDATE_URL = "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/update.json"
 }

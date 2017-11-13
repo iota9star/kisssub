@@ -16,7 +16,7 @@
  *
  */
 
-package star.iota.kisssub.ui.rss
+package star.iota.kisssub.ui.rss.data
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -25,13 +25,14 @@ import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
+import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
-import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.ui.rss.main.LazyLoadFragment
+import star.iota.kisssub.utils.ToastUtils
 
 
-class RssFragment : BaseFragment(), RssContract.View {
+class RssFragment : LazyLoadFragment(), RssContract.View {
     override fun success(items: ArrayList<Record>) {
         end()
         adapter.addAll(items)
@@ -39,30 +40,34 @@ class RssFragment : BaseFragment(), RssContract.View {
 
     override fun error(e: String?) {
         end()
-        MessageBar.create(context!!, e)
+        ToastUtils.short(context!!, e)
     }
 
     override fun noData() {
         end()
-        MessageBar.create(context!!, "没有获得数据")
+        ToastUtils.short(context!!, "没有获得数据")
     }
 
     companion object {
-        val TITLE = "title"
         val URL = "url"
         val SUFFIX = "suffix"
-        fun newInstance(title: String, url: String): RssFragment {
+        fun newInstance(param: String?): RssFragment {
             val fragment = RssFragment()
             val bundle = Bundle()
-            bundle.putString(URL, url.replace(".xml", ""))
+            val url = if (param == null) {
+                KisssubUrl.RSS_BASE
+            } else {
+                KisssubUrl.RSS_BASE + "-" + param
+            }
+            bundle.putString(URL, url)
             bundle.putString(SUFFIX, ".xml")
-            bundle.putString(TITLE, title)
             fragment.arguments = bundle
             return fragment
         }
     }
 
     private fun end() {
+        isLoaded = true
         isLoading = false
         refreshLayout.finishRefreshing()
     }
@@ -73,6 +78,7 @@ class RssFragment : BaseFragment(), RssContract.View {
     override fun getContainerViewId(): Int = R.layout.fragment_default
 
     override fun doSome() {
+        isInitialized = true
         initBase()
         initPresenter()
         initRecyclerView()
@@ -83,7 +89,6 @@ class RssFragment : BaseFragment(), RssContract.View {
     private lateinit var suffix: String
 
     private fun initBase() {
-        setToolbarTitle(arguments!!.getString(TITLE, getString(R.string.app_name)))
         url = arguments!!.getString(URL)
         suffix = arguments!!.getString(SUFFIX, "")
     }
@@ -93,9 +98,19 @@ class RssFragment : BaseFragment(), RssContract.View {
         presenter = RssPresenter(this)
     }
 
+    private var isInitialized: Boolean = false
+    private var isLoaded: Boolean = false
+    override fun onVisible() {
+        if (isInitialized && !isLoaded) {
+            refreshLayout.startRefresh()
+        }
+    }
+
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
+        if (isShow()) {
+            refreshLayout.startRefresh()
+        }
         refreshLayout.setEnableLoadmore(false)
         refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
             override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
@@ -109,7 +124,7 @@ class RssFragment : BaseFragment(), RssContract.View {
     }
 
     private fun isLoading(): Boolean = if (isLoading) {
-        MessageBar.create(context!!, "数据正在加载中，请等待...")
+        ToastUtils.short(context!!, "数据正在加载中，请等待...")
         true
     } else {
         false
