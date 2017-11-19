@@ -24,7 +24,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_item.view.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.room.AppDatabaseHelper
@@ -68,8 +67,11 @@ class ItemViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         "文件大小：${bean.size}\n\n" +
                         "发布时间：${bean.date}\n\n" +
                         "字幕组：${bean.sub}\n\n" +
-                        "详细地址：${bean.url}\n"
+                        "磁链：${bean.magnet}\n\n" +
+                        "详情：${bean.url}\n"
                 ShareUtils.share(context, content)
+                SendUtils.copy(context!!, bean.title, bean.magnet)
+                ToastUtils.short(context, "磁链已复制到剪切板")
             }
             textViewCollection.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))

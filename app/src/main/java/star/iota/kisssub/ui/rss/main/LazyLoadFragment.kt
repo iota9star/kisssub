@@ -36,9 +36,7 @@ abstract class LazyLoadFragment : BaseFragment() {
         }
     }
 
-    protected open fun isShow(): Boolean {
-        return visible
-    }
+    protected open fun isShow(): Boolean = visible
 
     protected open fun onVisible() {}
 

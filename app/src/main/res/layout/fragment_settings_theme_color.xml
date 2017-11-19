@@ -26,7 +26,8 @@
         android:id="@+id/imageViewContentBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/viewMask"

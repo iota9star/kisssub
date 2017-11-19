@@ -23,27 +23,28 @@ import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.ImageView
 import com.afollestad.aesthetic.Aesthetic
 import com.liuguangqiang.cookie.OnActionClickListener
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.ui.lock.SecurityHelper
+import star.iota.kisssub.helper.OfficialHelper
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.lock.SetPinLockActivity
 import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.widget.MessageBar
 
-class SettingsMainFragment : BaseFragment(), View.OnClickListener {
+class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+
 
     companion object {
-        fun newInstance(): SettingsMainFragment {
-            return SettingsMainFragment()
-        }
+        fun newInstance(): SettingsMainFragment = SettingsMainFragment()
     }
 
     override fun doSome() {
@@ -68,6 +69,36 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
             }
             R.id.textViewContentBackground -> {
                 (activity!! as AppCompatActivity).addFragmentToActivity(SettingsContentBackgroundFragment.newInstance(getString(R.string.settings_theme_content_background)), R.id.frameLayoutContainer)
+            }
+        }
+    }
+
+    override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
+        when (button?.id) {
+            R.id.switchCompatNightly -> {
+                ThemeHelper.isDark(context!!, isChecked)
+                if (isChecked) {
+                    Aesthetic.get()
+                            .activityTheme(R.style.AppThemeDark)
+                            .isDark(true)
+                            .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
+                            .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
+                            .apply()
+                } else {
+                    Aesthetic.get()
+                            .activityTheme(R.style.AppTheme)
+                            .isDark(false)
+                            .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
+                            .textColorSecondary(ThemeHelper.getSecondaryTextColor(context!!))
+                            .apply()
+                }
+                EventBus.getDefault().post(ChangeContentBackgroundEvent())
+            }
+            R.id.switchCompatAcceptOfficialContentBackground -> {
+                OfficialHelper.acceptOfficialContentBackground(context!!, isChecked)
+            }
+            R.id.switchCompatAcceptOfficialDynamicBackground -> {
+                OfficialHelper.acceptOfficialDynamicBackground(context!!, isChecked)
             }
         }
     }
@@ -134,24 +165,10 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
 
     private fun initSwitchCompat() {
         switchCompatNightly.isChecked = ThemeHelper.isDark(context!!)
-        switchCompatNightly.setOnCheckedChangeListener { _, isChecked ->
-            ThemeHelper.isDark(context!!, isChecked)
-            if (isChecked) {
-                Aesthetic.get()
-                        .activityTheme(R.style.AppThemeDark)
-                        .isDark(true)
-                        .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
-                        .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
-                        .apply()
-            } else {
-                Aesthetic.get()
-                        .activityTheme(R.style.AppTheme)
-                        .isDark(false)
-                        .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
-                        .textColorSecondary(ThemeHelper.getSecondaryTextColor(context!!))
-                        .apply()
-            }
-            EventBus.getDefault().post(ChangeContentBackgroundEvent())
-        }
+        switchCompatNightly.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialContentBackground.isChecked = OfficialHelper.acceptOfficialContentBackground(context!!)
+        switchCompatAcceptOfficialContentBackground.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialDynamicBackground.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
+        switchCompatAcceptOfficialDynamicBackground.setOnCheckedChangeListener(this)
     }
 }

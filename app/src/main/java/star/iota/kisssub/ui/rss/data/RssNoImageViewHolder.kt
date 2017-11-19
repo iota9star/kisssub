@@ -24,7 +24,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_rss_no_image.view.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.room.AppDatabaseHelper
@@ -65,6 +64,8 @@ class RssNoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         "磁链：${bean.magnet}\n\n" +
                         "详细地址：${bean.url}\n"
                 ShareUtils.share(context, content)
+                SendUtils.copy(context!!, bean.title, bean.magnet)
+                ToastUtils.short(context, "磁链已复制到剪切板")
             }
             textViewCollection.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))

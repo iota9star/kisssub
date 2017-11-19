@@ -24,12 +24,12 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.0"
+    buildToolsVersion '27.0.0'
     defaultConfig {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 5
+        versionCode 6
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"
@@ -54,22 +54,36 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    dexOptions {
+        incremental true
+    }
 }
 kapt {
     generateStubs = true
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     //support libs
+    //noinspection GradleDependency
     implementation 'com.android.support:appcompat-v7:27.0.0'
+
+    //noinspection GradleDependency
     implementation 'com.android.support:design:27.0.0'
+
+    //noinspection GradleDependency
     implementation 'com.android.support:recyclerview-v7:27.0.0'
+
+    //noinspection GradleDependency
     implementation 'com.android.support:cardview-v7:27.0.0'
+
+    //noinspection GradleDependency
     implementation 'com.android.support:palette-v7:27.0.0'
+
+    //noinspection GradleDependency
     implementation 'com.android.support:multidex:latest.release'
 
     // kotlin
@@ -77,78 +91,109 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Architecture Components
+    //noinspection GradleDependency
     implementation 'android.arch.persistence.room:runtime:latest.release'
+
+    //noinspection GradleDependency
     kapt 'android.arch.persistence.room:compiler:latest.release'
+
+    //noinspection GradleDependency
     testImplementation 'android.arch.persistence.room:testing:latest.release'
 
     // okio
+    //noinspection GradleDependency
     implementation 'com.squareup.okio:okio:latest.release'
 
     // okhttp3
+    //noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
 
     // glide
+    //noinspection GradleDependency
     implementation 'com.github.bumptech.glide:glide:latest.release'
+
+    //noinspection GradleDependency
     kapt 'com.github.bumptech.glide:compiler:latest.release'
 
     // RxJava
+    //noinspection GradleDependency
     implementation 'io.reactivex.rxjava2:rxjava:latest.release'
 
     // RxAndroid
+    //noinspection GradleDependency
     implementation 'io.reactivex.rxjava2:rxandroid:latest.release'
 
     // RxPermission
+    //noinspection GradleDependency
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:latest.release'
 
     // recyclerview-animators
-//    implementation 'jp.wasabeef:recyclerview-animators:latest.release'
+
+    //    implementation 'jp.wasabeef:recyclerview-animators:latest.release'
 
     // cookie bar
+    //noinspection GradleDependency
     implementation 'com.liuguangqiang.cookie:library:latest.release'
 
     // aesthetic
+    //noinspection GradleDependency
     implementation 'com.afollestad:aesthetic:latest.release'
 
     // glide palette
+    //noinspection GradleDependency
     implementation 'com.github.florent37:glidepalette:latest.release'
 
     // color picker
+    //noinspection GradleDependency
     implementation 'com.github.QuadFlask:colorpicker:latest.release'
 
     // glide-transformations
+    //noinspection GradleDependency
     implementation 'jp.wasabeef:glide-transformations:latest.release'
 
     // rclayout
+    //noinspection GradleDependency
     implementation 'com.gcssloop.widget:rclayout:latest.release'
 
     // pinlockview
+    //noinspection GradleDependency
     implementation 'com.andrognito.pinlockview:pinlockview:latest.release'
 
     // fingerprint identify
+    //noinspection GradleDependency
     implementation 'com.wei.android.lib:fingerprintidentify:latest.release'
 
     // okgo
+    //noinspection GradleDependency
     implementation 'com.lzy.net:okgo:latest.release'
+    //noinspection GradleDependency
     implementation 'com.lzy.net:okrx2:latest.release'
 
     // jsoup
+    //noinspection GradleDependency
     implementation 'org.jsoup:jsoup:latest.release'
 
     // flexbox
+    //noinspection GradleDependency
     implementation 'com.google.android:flexbox:latest.release'
 
     // tkrefreshlayout
+    //noinspection GradleDependency
     implementation 'com.lcodecorex:tkrefreshlayout:latest.release'
 
     // Photo View
+    //noinspection GradleDependency
     implementation 'com.github.chrisbanes:PhotoView:latest.release'
 
     // richtext
+    //noinspection GradleDependency
     implementation 'com.zzhoujay.richtext:richtext:2.5.4'
 
     // eventbus
+    //noinspection GradleDependency
     implementation 'org.greenrobot:eventbus:latest.release'
 
     // gson
+    //noinspection GradleDependency
     implementation 'com.google.code.gson:gson:latest.release'
 }

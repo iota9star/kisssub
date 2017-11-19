@@ -24,10 +24,8 @@ import android.net.Uri
 import android.view.View
 import kotlinx.android.synthetic.main.activity_about.*
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
-import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.UpdateUtils
 import star.iota.kisssub.widget.MessageBar
@@ -49,7 +47,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
 
     private fun finishLoad() {
         isLoading = false
-//        progressBar.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     override fun getContentViewId(): Int = R.layout.activity_about
@@ -65,7 +63,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
             R.id.linearLayoutCheckUpdate -> {
                 if (!isLoading) {
                     isLoading = true
-//                    progressBar.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
                     presenter.get(KisssubUrl.UPDATE_URL)
                 } else {
                     MessageBar.create(this, "正在加载版本信息中，请等待")
@@ -103,8 +101,6 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
     }
 
     companion object {
-        fun newInstance(): AboutActivity {
-            return AboutActivity()
-        }
+        fun newInstance(): AboutActivity = AboutActivity()
     }
 }

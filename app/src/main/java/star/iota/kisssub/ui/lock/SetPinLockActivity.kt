@@ -23,10 +23,9 @@ import android.widget.Toast
 import com.andrognito.pinlockview.IndicatorDots
 import com.andrognito.pinlockview.PinLockListener
 import kotlinx.android.synthetic.main.activity_set_pin_lock.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
-import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
 

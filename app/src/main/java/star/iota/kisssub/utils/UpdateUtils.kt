@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.utils
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -25,11 +26,11 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.TextView
-import star.iota.kisssub.R
 import star.iota.kisssub.ui.about.InfoBean
 import star.iota.kisssub.widget.MessageBar
 
 object UpdateUtils {
+    @SuppressLint("InflateParams")
     fun show(context: Context, info: InfoBean, isCheck: Boolean) {
         if (info.type == InfoBean.TYPE_INFO) {
             if (!isCheck) {

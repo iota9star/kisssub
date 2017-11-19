@@ -27,10 +27,10 @@ import com.andrognito.pinlockview.PinLockListener
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.fragment_pin_lock.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.main.MainActivity
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
 class PinLockFragment : BaseFragment() {
@@ -39,9 +39,7 @@ class PinLockFragment : BaseFragment() {
     override fun getMaskView(): View? = null
 
     companion object {
-        fun newInstance(): PinLockFragment {
-            return PinLockFragment()
-        }
+        fun newInstance(): PinLockFragment = PinLockFragment()
     }
 
     override fun getContainerViewId(): Int = R.layout.fragment_pin_lock

@@ -30,10 +30,9 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import kotlinx.android.synthetic.main.fragment_search.*
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.item.ItemAdapter
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
 class SearchFragment : BaseFragment(), SearchContract.View {

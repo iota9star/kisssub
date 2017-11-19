@@ -27,9 +27,7 @@ object SearchHelper {
     private val PARAM_COLLECTION = "param_collection"
     private val PREFERENCE_NAME = "search_param"
 
-    private fun getSharePreference(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-    }
+    private fun getSharePreference(context: Context): SharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
     fun setPan(context: Context, enable: Boolean) {
         getSharePreference(context).edit()
@@ -37,10 +35,7 @@ object SearchHelper {
                 .apply()
     }
 
-    fun getPan(context: Context): Boolean {
-        return getSharePreference(context).getBoolean(PARAM_PAN, false)
-
-    }
+    fun getPan(context: Context): Boolean = getSharePreference(context).getBoolean(PARAM_PAN, false)
 
     fun setCollection(context: Context, enable: Boolean) {
         getSharePreference(context).edit()
@@ -48,10 +43,7 @@ object SearchHelper {
                 .apply()
     }
 
-    fun getCollection(context: Context): Boolean {
-        return getSharePreference(context).getBoolean(PARAM_COLLECTION, false)
-
-    }
+    fun getCollection(context: Context): Boolean = getSharePreference(context).getBoolean(PARAM_COLLECTION, false)
 
     fun getParam(context: Context): String {
         val pan = if (getPan(context)) {

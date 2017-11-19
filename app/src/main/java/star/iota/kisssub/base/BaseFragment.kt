@@ -31,8 +31,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.exit
-import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.ThemeHelper
 
 abstract class BaseFragment : Fragment(), View.OnTouchListener {
 
@@ -53,9 +52,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         preTitle = (this.activity!! as BaseActivity).supportActionBar?.title?.toString()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getContainerViewId(), container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(getContainerViewId(), container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.setOnTouchListener(this)
@@ -63,9 +60,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         setContentBackground()
     }
 
-    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-        return true
-    }
+    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean = true
 
     private fun setContentBackground() {
         val bg = getBackgroundView()

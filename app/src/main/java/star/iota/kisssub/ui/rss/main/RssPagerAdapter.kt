@@ -31,13 +31,9 @@ class RssPagerAdapter(fm: FragmentManager, private val titles: ArrayList<String>
 
     override fun getItemPosition(`object`: Any): Int = PagerAdapter.POSITION_NONE
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return titles[position]
-    }
+    override fun getPageTitle(position: Int): CharSequence? = titles[position]
 
-    override fun getItemId(position: Int): Long {
-        return fragments[position].hashCode().toLong()
-    }
+    override fun getItemId(position: Int): Long = fragments[position].hashCode().toLong()
 
     fun addAll(titles: ArrayList<String>, fragments: ArrayList<Fragment>) {
         this.titles.addAll(titles)

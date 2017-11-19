@@ -33,14 +33,13 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import com.zzhoujay.richtext.RichText
 import com.zzhoujay.richtext.ig.DefaultImageGetter
 import kotlinx.android.synthetic.main.fragment_details.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.item.search.SearchFragment
 import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.ui.selector.PhotoSelectorPreviewActivity
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ShareUtils
 import star.iota.kisssub.widget.MessageBar

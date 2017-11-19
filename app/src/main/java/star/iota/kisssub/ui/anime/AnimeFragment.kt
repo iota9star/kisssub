@@ -25,7 +25,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_recycler_view_p4.*
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.widget.MessageBar
@@ -53,9 +52,7 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
     }
 
     companion object {
-        fun newInstance(): AnimeFragment {
-            return AnimeFragment()
-        }
+        fun newInstance(): AnimeFragment = AnimeFragment()
     }
 
     private fun end() {
@@ -103,7 +100,7 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
 
     private lateinit var adapter: AnimeAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
 //        recyclerView.itemAnimator = LandingAnimator()
         adapter = AnimeAdapter()
         recyclerView.adapter = adapter

@@ -16,12 +16,11 @@
  *
  */
 
-package star.iota.kisssub.ui.settings
+package star.iota.kisssub.helper
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v4.content.ContextCompat
-import star.iota.kisssub.R
 
 object ThemeHelper {
 
@@ -40,9 +39,8 @@ object ThemeHelper {
     private val THEME_CONTENT_MASK_COLOR_DARK = "theme_content_mask_color_dark"
     private val PREFERENCE_NAME = "multiple_theme"
 
-    private fun getSharePreference(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-    }
+    private fun getSharePreference(context: Context): SharedPreferences =
+            context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 
     fun setContentMaskAlpha(context: Context, alpha: Float) {
         getSharePreference(context).edit()
@@ -50,9 +48,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getContentMaskAlpha(context: Context): Float {
-        return getSharePreference(context).getFloat(THEME_CONTENT_MASK_ALPHA, 1f)
-    }
+    fun getContentMaskAlpha(context: Context): Float =
+            getSharePreference(context).getFloat(THEME_CONTENT_MASK_ALPHA, 1f)
 
     fun setContentMaskColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -60,9 +57,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getContentMaskColor(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR, ContextCompat.getColor(context, R.color.white))
-    }
+    fun getContentMaskColor(context: Context): Int =
+            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR, ContextCompat.getColor(context, R.color.white))
 
     fun setContentMaskColorDark(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -70,9 +66,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getContentMaskColorDark(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR_DARK, ContextCompat.getColor(context, R.color.black))
-    }
+    fun getContentMaskColorDark(context: Context): Int =
+            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR_DARK, ContextCompat.getColor(context, R.color.black))
 
     fun setAccentColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -80,9 +75,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getAccentColor(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.blue))
-    }
+    fun getAccentColor(context: Context): Int =
+            getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.blue))
 
     fun setPrimaryColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -90,9 +84,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getPrimaryColor(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.white))
-    }
+    fun getPrimaryColor(context: Context): Int =
+            getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.white))
 
     fun setPrimaryTextColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -100,9 +93,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getPrimaryTextColor(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_PRIMARY_TEXT_COLOR, ContextCompat.getColor(context, R.color.text_color_primary))
-    }
+    fun getPrimaryTextColor(context: Context): Int =
+            getSharePreference(context).getInt(THEME_PRIMARY_TEXT_COLOR, ContextCompat.getColor(context, R.color.text_color_primary))
 
     fun setSecondaryTextColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -110,9 +102,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getSecondaryTextColor(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_SECONDARY_TEXT_COLOR, ContextCompat.getColor(context, R.color.text_color_secondary))
-    }
+    fun getSecondaryTextColor(context: Context): Int =
+            getSharePreference(context).getInt(THEME_SECONDARY_TEXT_COLOR, ContextCompat.getColor(context, R.color.text_color_secondary))
 
     fun setPrimaryTextColorDark(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -120,9 +111,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getPrimaryTextColorDark(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_PRIMARY_TEXT_COLOR_DARK, ContextCompat.getColor(context, R.color.text_color_primary_dark))
-    }
+    fun getPrimaryTextColorDark(context: Context): Int =
+            getSharePreference(context).getInt(THEME_PRIMARY_TEXT_COLOR_DARK, ContextCompat.getColor(context, R.color.text_color_primary_dark))
 
     fun setSecondaryTextColorDark(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -130,9 +120,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getSecondaryTextColorDark(context: Context): Int {
-        return getSharePreference(context).getInt(THEME_SECONDARY_TEXT_COLOR_DARK, ContextCompat.getColor(context, R.color.text_color_secondary_dark))
-    }
+    fun getSecondaryTextColorDark(context: Context): Int =
+            getSharePreference(context).getInt(THEME_SECONDARY_TEXT_COLOR_DARK, ContextCompat.getColor(context, R.color.text_color_secondary_dark))
 
     fun isTint(context: Context, isTint: Boolean) {
         getSharePreference(context).edit()
@@ -140,9 +129,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun isTint(context: Context): Boolean {
-        return getSharePreference(context).getBoolean(THEME_TINT, false)
-    }
+    fun isTint(context: Context): Boolean =
+            getSharePreference(context).getBoolean(THEME_TINT, false)
 
     fun isDark(context: Context, isDark: Boolean) {
         getSharePreference(context).edit()
@@ -150,9 +138,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun isDark(context: Context): Boolean {
-        return getSharePreference(context).getBoolean(THEME_DARK, false)
-    }
+    fun isDark(context: Context): Boolean =
+            getSharePreference(context).getBoolean(THEME_DARK, false)
 
     fun setDynamicBanner(context: Context, path: String?) {
         if (path == null) getSharePreference(context).edit().remove(THEME_DYNAMIC_BANNER).apply()
@@ -161,9 +148,8 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getDynamicBanner(context: Context): String {
-        return getSharePreference(context).getString(THEME_DYNAMIC_BANNER, context.getString(R.string.banner))
-    }
+    fun getDynamicBanner(context: Context): String =
+            getSharePreference(context).getString(THEME_DYNAMIC_BANNER, context.getString(R.string.dynamic_banner))
 
     fun setContentBanner(context: Context, path: String?) {
         if (path == null) getSharePreference(context).edit().remove(THEME_CONTENT_BANNER).apply()
@@ -172,7 +158,6 @@ object ThemeHelper {
                 .apply()
     }
 
-    fun getContentBanner(context: Context): String {
-        return getSharePreference(context).getString(THEME_CONTENT_BANNER, context.getString(R.string.banner))
-    }
+    fun getContentBanner(context: Context): String =
+            getSharePreference(context).getString(THEME_CONTENT_BANNER, context.getString(R.string.content_banner))
 }

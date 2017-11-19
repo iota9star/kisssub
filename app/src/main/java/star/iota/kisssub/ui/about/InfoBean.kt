@@ -35,9 +35,14 @@ class InfoBean(
         @SerializedName("changeLog")
         val changeLog: String?,
 
+        @SerializedName("dynamic")
+        val dynamic: String?,
+
+        @SerializedName("content")
+        val content: String?,
+
         @SerializedName("url")
         val url: String?,
-
         @SerializedName("star")
         val star: Int,
 

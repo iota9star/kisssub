@@ -26,8 +26,6 @@ class RssTag {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var tag: String? = null
-    override fun toString(): String {
-        return "RssTag(id=$id, tag=$tag)"
-    }
+    override fun toString(): String = "RssTag(id=$id, tag=$tag)"
 
 }

@@ -55,7 +55,6 @@
     <string name="settings_theme_custom_color">自定义主题色</string>
     <string name="settings_theme_personal">个性化</string>
     <string name="settings_theme_dynamic_background">动态背景</string>
-    <string name="please_input_right_path">请输入正确的路径 - 网址、文件路径等</string>
 
     <string name="lock_input_pin">请输入PIN</string>
     <string name="lock_cancel">取消</string>
@@ -70,9 +69,14 @@
     <string name="clear_selected_photos">清空选中图片</string>
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
-    <string name="banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/5GydroGqPBKPbzrZORDHtYJAaPQGcBPTLC6PsyEU0ok!/r/dD0BAAAAAAAA</string>
+    <string name="dynamic_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/ge1tLONj8DKyQlGWERaPthxZBl5efuhZN*V.0A0rnak!/r/dA0BAAAAAAAA</string>
+    <string name="content_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/IjEBnyaJ1IJwyqmSeZ6bFqPdyDeH5DAOl.xLC0QKa1E!/r/dIUBAAAAAAAA</string>
     <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所使用开源库的作者\n3. 感谢所有对此作出贡献的大家（鞠躬）</string>
     <string name="filter">过滤</string>
+    <string name="please_input_rss_tag">请输入订阅关键字</string>
+    <string name="add_rss_tag">添加订阅</string>
+    <string name="please_input_right_path">请输入正确的路径 - 网址、文件路径等</string>
+
 
     <string name="details_tags">标签</string>
     <string name="details_list">清单</string>
@@ -113,7 +117,8 @@
     <string name="settings_content_background_settings">设置</string>
     <string name="settings_content_background_mask_color_dark">遮罩颜色 - 夜间</string>
     <string name="settings_theme_content_background">内容背景</string>
-    <string name="please_input_rss_tag">请输入订阅关键字</string>
-    <string name="add_rss_tag">添加订阅</string>
+    <string name="settings_more">更多</string>
+    <string name="settings_accept_official_dynamic_background">接受推送的动态壁纸</string>
+    <string name="settings_accept_official_content_background">接受推送的内容壁纸</string>
 
 </resources>

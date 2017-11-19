@@ -198,6 +198,42 @@
                 android:text="@string/settings_theme_content_background"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_more"
+                android:textColor="?colorAccent"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchCompatAcceptOfficialDynamicBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_accept_official_dynamic_background"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchCompatAcceptOfficialContentBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="128dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_accept_official_content_background"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

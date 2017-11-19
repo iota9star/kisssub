@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.ui.rss.tag
 
+import android.annotation.SuppressLint
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
@@ -29,12 +30,11 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_rss_tag_manage.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
 
@@ -57,7 +57,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     override fun noData() {
         end()
-        ToastUtils.short(context!!, "没有获得数据")
+        ToastUtils.short(context!!, "您还没有添加订阅关键字")
     }
 
     companion object {
@@ -98,6 +98,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showAddDialog() {
         val view = LayoutInflater.from(context!!).inflate(R.layout.dialog_add_rss_tag, null)
         val editText = view.findViewById<TextInputEditText>(R.id.textInputEditTextRssTag)

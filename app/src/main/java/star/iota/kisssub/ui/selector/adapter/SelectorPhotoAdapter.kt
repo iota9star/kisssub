@@ -28,10 +28,7 @@ import android.widget.Toast
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import jp.wasabeef.glide.transformations.CropSquareTransformation
-import star.iota.kisssub.R
-import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.glide.GlideOptions.bitmapTransform
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.ThemeHelper
 
 
 class SelectorPhotoAdapter(val context: Context, private val limit: Int) : RecyclerView.Adapter<SelectorPhotoAdapter.ViewHolder>() {
@@ -47,9 +44,7 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(inflater.inflate(R.layout.item_photo_selector_photo, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(inflater.inflate(R.layout.item_photo_selector_photo, parent, false))
 
     private var onPhotoSelected: OnPhotoSelected? = null
 

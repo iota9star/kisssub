@@ -23,12 +23,9 @@ import android.view.View
 import android.widget.ImageView
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import kotlinx.android.synthetic.main.fragment_recycler_view_p4.*
+import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.base.SGSpacingItemDecoration
-import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.widget.MessageBar
 
 class SubsFragment : BaseFragment(), SubsContract.View {
@@ -48,9 +45,7 @@ class SubsFragment : BaseFragment(), SubsContract.View {
     }
 
     companion object {
-        fun newInstance(): SubsFragment {
-            return SubsFragment()
-        }
+        fun newInstance(): SubsFragment = SubsFragment()
     }
 
     private fun end() {
@@ -61,7 +56,7 @@ class SubsFragment : BaseFragment(), SubsContract.View {
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
 
-    override fun getContainerViewId(): Int = R.layout.fragment_recycler_view_p4
+    override fun getContainerViewId(): Int = R.layout.fragment_recycler_view_p8
 
     override fun doSome() {
         setToolbarTitle(context!!.getString(R.string.menu_member))
@@ -102,7 +97,6 @@ class SubsFragment : BaseFragment(), SubsContract.View {
     private fun initRecyclerView() {
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 //        recyclerView.itemAnimator = LandingAnimator()
-        recyclerView.addItemDecoration(SGSpacingItemDecoration(2, DisplayUtils.dp2px(context!!, 16f)))
         adapter = SubsAdapter()
         recyclerView.adapter = adapter
     }

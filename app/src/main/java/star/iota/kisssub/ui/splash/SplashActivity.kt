@@ -25,22 +25,18 @@ import android.util.TypedValue
 import com.afollestad.aesthetic.Aesthetic
 import com.afollestad.aesthetic.NavigationViewMode
 import kotlinx.android.synthetic.main.activity_splash.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
 import star.iota.kisssub.ext.removeFragmentsFromView
 import star.iota.kisssub.ext.replaceFragmentInActivity
-import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.lock.PinLockFragment
-import star.iota.kisssub.ui.lock.SecurityHelper
 import star.iota.kisssub.ui.main.MainActivity
-import star.iota.kisssub.ui.settings.ThemeHelper
 
 class SplashActivity : BaseActivity() {
     override fun getContentViewId(): Int = R.layout.activity_splash
 
-    override fun isFullScreen(): Boolean {
-        return true
-    }
+    override fun isFullScreen(): Boolean = true
 
     private val countDownTimer = object : CountDownTimer(4800, 1000) {
         override fun onTick(l: Long) {

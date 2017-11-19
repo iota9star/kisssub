@@ -29,10 +29,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.fragment_settings_dynamic_background.*
 import org.greenrobot.eventbus.EventBus
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeDynamicBackgroundEvent
-import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.utils.ToastUtils
 

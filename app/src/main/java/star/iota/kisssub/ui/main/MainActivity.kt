@@ -40,13 +40,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
+import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.eventbus.ChangeDynamicBackgroundEvent
 import star.iota.kisssub.ext.exit
 import star.iota.kisssub.ext.removeFragmentsFromView
 import star.iota.kisssub.ext.replaceFragmentInActivity
-import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.helper.OfficialHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.about.AboutActivity
 import star.iota.kisssub.ui.about.InfoBean
 import star.iota.kisssub.ui.about.InfoContract
@@ -60,7 +61,6 @@ import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.play.PlayFragment
 import star.iota.kisssub.ui.rss.main.RssTagFragment
 import star.iota.kisssub.ui.settings.SettingsActivity
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.ui.subs.SubsFragment
 import star.iota.kisssub.ui.tags.TagsFragment
 import star.iota.kisssub.utils.UpdateUtils
@@ -71,6 +71,14 @@ import star.iota.kisssub.widget.ken.KenBurnsView
 class MainActivity : BaseActivity(), InfoContract.View {
     override fun success(info: InfoBean) {
         UpdateUtils.show(this, info, false)
+        if (OfficialHelper.acceptOfficialDynamicBackground(this)) {
+            ThemeHelper.setDynamicBanner(this, info.dynamic)
+            EventBus.getDefault().post(ChangeDynamicBackgroundEvent())
+        }
+        if (OfficialHelper.acceptOfficialContentBackground(this)) {
+            ThemeHelper.setContentBanner(this, info.dynamic)
+            EventBus.getDefault().post(ChangeContentBackgroundEvent())
+        }
     }
 
     override fun error(e: String?) {

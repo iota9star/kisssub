@@ -27,7 +27,6 @@ import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.widget.MessageBar
 
@@ -49,9 +48,7 @@ class TagsFragment : BaseFragment(), TagsContract.View {
     }
 
     companion object {
-        fun newInstance(): TagsFragment {
-            return TagsFragment()
-        }
+        fun newInstance(): TagsFragment = TagsFragment()
     }
 
     private fun end() {

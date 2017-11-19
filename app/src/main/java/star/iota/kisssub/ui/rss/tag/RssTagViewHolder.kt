@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.ui.rss.tag
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
@@ -30,12 +31,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_rss_tag.view.*
 import org.greenrobot.eventbus.EventBus
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.utils.ToastUtils
 
@@ -83,6 +83,7 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
         listPopupWindow.show()
     }
 
+    @SuppressLint("InflateParams")
     private fun showModifyDialog(context: Context, bean: RssTag) {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_rss_tag, null)
         val editText = view.findViewById<TextInputEditText>(R.id.textInputEditTextRssTag)

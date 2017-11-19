@@ -33,14 +33,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_photo_selector.*
-import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
-
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.adapter.DirAdapter
 import star.iota.kisssub.ui.selector.adapter.SelectorPhotoAdapter
 import star.iota.kisssub.ui.selector.bean.FolderBean
-import star.iota.kisssub.ui.settings.ThemeHelper
-
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
