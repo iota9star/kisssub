@@ -94,7 +94,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View {
                 .into(kenBurnsView)
         try {
             val packageInfo = this.packageManager.getPackageInfo(this.packageName, PackageManager.GET_CONFIGURATIONS)
-            textViewVersion.text = ("${packageInfo.versionName} : ${packageInfo.versionCode}")
+            textViewVersion.text = ("${packageInfo.versionName}  『 ${packageInfo.versionCode} 』")
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }

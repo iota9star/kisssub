@@ -22,6 +22,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.multidex.MultiDex
+import com.crashlytics.android.Crashlytics
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.cache.CacheEntity
 import com.lzy.okgo.cache.CacheMode
@@ -30,6 +31,7 @@ import com.lzy.okgo.cookie.store.DBCookieStore
 import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.model.HttpHeaders
 import com.zzhoujay.richtext.RichText
+import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
@@ -40,6 +42,7 @@ class App : Application() {
         super.attachBaseContext(base)
         MultiDex.install(this)
     }
+
     companion object {
         fun makeOkHttpClient(context: Context): OkHttpClient {
             val builder = OkHttpClient.Builder()
@@ -59,6 +62,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Fabric.with(this, Crashlytics())
         RichText.initCacheDir(this)
         initOkGo()
     }

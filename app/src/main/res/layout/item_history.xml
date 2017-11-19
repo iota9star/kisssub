@@ -35,8 +35,8 @@
         android:id="@+id/imageViewLabel"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:srcCompat="@drawable/ic_label"
         tools:ignore="ContentDescription" />
 

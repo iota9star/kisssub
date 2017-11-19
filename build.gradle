@@ -29,13 +29,13 @@ buildscript {
         maven { url = 'https://dl.bintray.com/yuancloud/maven/' }
         mavenCentral()
         maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        //noinspection GradleDependency
+        classpath 'io.fabric.tools:gradle:latest.integration'
     }
 }
 
@@ -49,6 +49,7 @@ allprojects {
         maven { url = 'https://dl.bintray.com/yuancloud/maven/' }
         mavenCentral()
         maven { url "http://lib.gcssloop.com/repository/gcssloop-central/" }
+        maven { url 'https://maven.fabric.io/public' }
     }
 }
 

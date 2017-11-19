@@ -76,7 +76,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
             EventBus.getDefault().post(ChangeDynamicBackgroundEvent())
         }
         if (OfficialHelper.acceptOfficialContentBackground(this)) {
-            ThemeHelper.setContentBanner(this, info.dynamic)
+            ThemeHelper.setContentBanner(this, info.content)
             EventBus.getDefault().post(ChangeContentBackgroundEvent())
         }
     }
