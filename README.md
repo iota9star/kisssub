@@ -26,7 +26,7 @@
 </table>
 
 ## 下载
-+ 酷市场 - [ACG.RIP](https://www.coolapk.com/apk/star.iota.acgrip)
++ 酷市场 - [爱恋](https://www.coolapk.com/apk/star.iota.kisssub)
 
 ## Licenses
 ```
