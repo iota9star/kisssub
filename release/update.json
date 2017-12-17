@@ -1,12 +1,12 @@
 {
   "type": 0,
-  "versionCode": 7,
+  "versionCode": 8,
   "versionName": "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！",
-  "date": "2017-11-19",
+  "date": "2017-12-17",
   "changeLog": "1. 优化逻辑体验\n2. 一些界面的调整\n3. 修复一些细节上的问题",
   "star": 5,
-  "dynamic": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/ge1tLONj8DKyQlGWERaPthxZBl5efuhZN*V.0A0rnak!/r/dA0BAAAAAAAA",
-  "content": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/IjEBnyaJ1IJwyqmSeZ6bFqPdyDeH5DAOl.xLC0QKa1E!/r/dIUBAAAAAAAA",
+  "dynamic": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/I8ViNgmSuj6SaKeWQvsTJ0E5TA*qrr158*uJ3i1*SzU!/r/dPcAAAAAAAAA",
+  "content": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/QZctZAxZA09MQ73EWsiBciNau0fRI7k2zorHu.2uDm0!/r/dKwAAAAAAAAA",
   "msg": "破解迅雷限制法\n\n以管理员身份运行记事本等文本编辑器打开Hosts文件，添加以下记录到文件末端：\n\n127.0.0.1 hub5btmain.sandai.net\n127.0.0.1 hub5emu.sandai.net\n127.0.0.1 upgrade.xl9.xunlei.com\n\n保存后即可绕过迅雷限制",
   "url": "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/app-release_signed_7zip_aligned.apk"
 }
