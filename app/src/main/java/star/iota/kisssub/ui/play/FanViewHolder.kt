@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.item_fan.view.*
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.helper.ThemeHelper

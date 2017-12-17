@@ -24,7 +24,9 @@ import android.net.Uri
 import android.view.View
 import kotlinx.android.synthetic.main.activity_about.*
 import star.iota.kisssub.KisssubUrl
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
+import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.UpdateUtils

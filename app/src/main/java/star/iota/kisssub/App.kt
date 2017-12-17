@@ -30,6 +30,9 @@ import com.lzy.okgo.cookie.CookieJarImpl
 import com.lzy.okgo.cookie.store.DBCookieStore
 import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.model.HttpHeaders
+import com.scwang.smartrefresh.header.DropboxHeader
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.zzhoujay.richtext.RichText
 import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
@@ -57,6 +60,15 @@ class App : Application() {
             val sslParams = HttpsUtils.getSslSocketFactory()
             builder.sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
             return builder.build()
+        }
+
+        init {
+            SmartRefreshLayout.setDefaultRefreshHeaderCreater { context, _ ->
+                val header = DropboxHeader(context)
+                header.setBackgroundColor(0x00000000)
+                header
+            }
+            SmartRefreshLayout.setDefaultRefreshFooterCreater { context, _ -> ClassicsFooter(context) }
         }
     }
 

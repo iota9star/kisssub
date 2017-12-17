@@ -61,7 +61,7 @@
                 android:alpha="0.36"
                 android:gravity="end"
                 android:textColor="?colorAccent"
-                android:textSize="48sp"
+                android:textSize="36sp"
                 android:textStyle="italic|bold" />
 
             <LinearLayout

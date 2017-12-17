@@ -31,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.item_rss_tag.view.*
 import org.greenrobot.eventbus.EventBus
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.helper.ThemeHelper

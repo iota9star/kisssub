@@ -25,11 +25,9 @@ import android.widget.ImageView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import com.lcodecore.tkrefreshlayout.footer.BallPulseView
 import kotlinx.android.synthetic.main.fragment_search.*
 import star.iota.kisssub.KisssubUrl
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.item.ItemAdapter
@@ -83,7 +81,7 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         isLoading = false
         if (isRefresh) {
             page = 2
-            refreshLayout.finishRefreshing()
+            refreshLayout.finishRefresh()
         } else {
             if (!error) page++
             refreshLayout.finishLoadmore()
@@ -147,32 +145,24 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     private var isLoading = false
     private var isRefresh = false
     private fun initRefreshLayout() {
-        val footer = BallPulseView(context!!)
-        footer.setNormalColor(ThemeHelper.getAccentColor(context!!))
-        footer.setAnimatingColor(ThemeHelper.getAccentColor(context!!))
-        refreshLayout.setBottomView(footer)
-        refreshLayout.startRefresh()
-        refreshLayout.setAutoLoadMore(true)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isRefresh = false
-                    isLoading = true
-                    filterAdapter.clear()
-                    presenter.get(url + page + suffix)
-                }
+        refreshLayout.autoRefresh()
+        refreshLayout.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isRefresh = true
+                isLoading = true
+                recordAdapter.clear()
+                filterAdapter.clear()
+                presenter.get(url + "1" + suffix)
             }
-
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isRefresh = true
-                    isLoading = true
-                    recordAdapter.clear()
-                    filterAdapter.clear()
-                    presenter.get(url + "1" + suffix)
-                }
+        }
+        refreshLayout.setOnLoadmoreListener {
+            if (!checkIsLoading()) {
+                isRefresh = false
+                isLoading = true
+                filterAdapter.clear()
+                presenter.get(url + page + suffix)
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean = if (isLoading) {

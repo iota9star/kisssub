@@ -27,8 +27,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.glide.transformations.CropSquareTransformation
 import kotlinx.android.synthetic.main.item_rss_with_image.view.*
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
+import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.glide.GlideOptions
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment

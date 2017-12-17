@@ -28,6 +28,9 @@ import android.widget.Toast
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import jp.wasabeef.glide.transformations.CropSquareTransformation
+import star.iota.kisssub.R
+import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.glide.GlideOptions.bitmapTransform
 import star.iota.kisssub.helper.ThemeHelper
 
 

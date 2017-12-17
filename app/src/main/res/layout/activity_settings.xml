@@ -29,6 +29,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?android:attr/homeAsUpIndicator"
             app:title="@string/menu_settings" />
 
     </android.support.design.widget.AppBarLayout>

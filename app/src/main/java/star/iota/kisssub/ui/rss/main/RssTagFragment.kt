@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_rss.*
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.helper.ThemeHelper

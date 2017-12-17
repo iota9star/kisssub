@@ -165,7 +165,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_item_theme_checked"
+                    app:srcCompat="@drawable/ic_item_theme_uncheck"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
@@ -226,7 +226,7 @@
                 android:id="@+id/switchCompatAcceptOfficialContentBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="128dp"
+                android:layout_marginBottom="96dp"
                 android:paddingBottom="12dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"

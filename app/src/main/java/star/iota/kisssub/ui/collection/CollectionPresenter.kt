@@ -38,7 +38,9 @@ class CollectionPresenter(private val view: CollectionContract.View) : Collectio
                             } else {
                                 view.success(it as ArrayList<Record>)
                             }
-                        }, { view.error(it?.message) })
+                        }, {
+                            view.error(it?.message)
+                        })
         )
     }
 

@@ -21,10 +21,9 @@ package star.iota.kisssub.ui.subs
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.widget.MessageBar
 
@@ -50,7 +49,7 @@ class SubsFragment : BaseFragment(), SubsContract.View {
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -72,17 +71,15 @@ class SubsFragment : BaseFragment(), SubsContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(KisssubUrl.SUBS)
-                }
+        refreshLayout.autoRefresh()
+        refreshLayout.isEnableLoadmore = false
+        refreshLayout.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(KisssubUrl.SUBS)
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean {

@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.exit
+import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 
 abstract class BaseFragment : Fragment(), View.OnTouchListener {

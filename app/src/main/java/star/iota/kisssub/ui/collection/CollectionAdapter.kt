@@ -21,6 +21,7 @@ package star.iota.kisssub.ui.collection
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.base.Callback
 import star.iota.kisssub.room.Record
@@ -30,8 +31,6 @@ class CollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = list.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? = when (viewType) {
-        Record.FAN -> AnimeViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_local_anime, parent, false))
         Record.NO_IMAGE -> NoImageViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_local_no_image, parent, false))
         Record.WITH_IMAGE -> WithImageViewHolder(LayoutInflater.from(parent.context)

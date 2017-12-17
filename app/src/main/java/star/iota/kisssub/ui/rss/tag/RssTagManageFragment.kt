@@ -25,11 +25,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_rss_tag_manage.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.helper.ThemeHelper
@@ -66,7 +65,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -93,7 +92,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
         when (event.type) {
             ChangeAdapterEvent.DELETE -> adapter.remove(event.pos)
             ChangeAdapterEvent.MODIFY -> {
-                if (!isLoading) refreshLayout.startRefresh()
+                if (!isLoading) refreshLayout.autoRefresh()
             }
         }
     }
@@ -133,17 +132,15 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(AppDatabaseHelper.getInstance(context!!))
-                }
+        refreshLayout.autoRefresh()
+        refreshLayout.isEnableLoadmore = false
+        refreshLayout.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(AppDatabaseHelper.getInstance(context!!))
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean = if (isLoading) {

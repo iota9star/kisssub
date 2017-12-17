@@ -27,6 +27,9 @@ import android.widget.ImageView
 import com.github.florent37.glidepalette.BitmapPalette
 import com.github.florent37.glidepalette.GlidePalette
 import jp.wasabeef.glide.transformations.CropSquareTransformation
+import star.iota.kisssub.R
+import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.glide.GlideOptions
 
 
 class PhotoAdapter(val context: Context, private val photos: ArrayList<String>) : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {

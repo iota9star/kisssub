@@ -22,8 +22,6 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -69,7 +67,7 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     private fun end() {
         isLoaded = true
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -102,25 +100,23 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     private var isLoaded: Boolean = false
     override fun onVisible() {
         if (isInitialized && !isLoaded) {
-            refreshLayout.startRefresh()
+            refreshLayout.autoRefresh()
         }
     }
 
     private var isLoading = false
     private fun initRefreshLayout() {
         if (isShow()) {
-            refreshLayout.startRefresh()
+            refreshLayout.autoRefresh()
         }
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!isLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(url + suffix)
-                }
+        refreshLayout.isEnableLoadmore = false
+        refreshLayout.setOnRefreshListener {
+            if (!isLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(url + suffix)
             }
-        })
+        }
     }
 
     private fun isLoading(): Boolean = if (isLoading) {

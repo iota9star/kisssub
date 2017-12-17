@@ -27,8 +27,10 @@ import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings_content_background.*
 import org.greenrobot.eventbus.EventBus
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
+import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.utils.ToastUtils

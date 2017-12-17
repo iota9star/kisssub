@@ -21,9 +21,8 @@ package star.iota.kisssub.ui.collection
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
@@ -51,7 +50,7 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout.finishRefresh()
     }
 
 
@@ -72,17 +71,15 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(AppDatabaseHelper.getInstance(context!!))
-                }
+        refreshLayout.autoRefresh()
+        refreshLayout.isEnableLoadmore = false
+        refreshLayout.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(AppDatabaseHelper.getInstance(context!!))
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean {

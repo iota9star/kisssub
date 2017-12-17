@@ -26,6 +26,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.TextView
+import star.iota.kisssub.R
 import star.iota.kisssub.ui.about.InfoBean
 import star.iota.kisssub.widget.MessageBar
 

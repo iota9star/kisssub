@@ -39,6 +39,5 @@ class Record {
     companion object {
         val NO_IMAGE = 0
         val WITH_IMAGE = 1
-        val FAN = 2
     }
 }

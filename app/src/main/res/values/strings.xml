@@ -69,9 +69,9 @@
     <string name="clear_selected_photos">清空选中图片</string>
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
-    <string name="dynamic_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/ge1tLONj8DKyQlGWERaPthxZBl5efuhZN*V.0A0rnak!/r/dA0BAAAAAAAA</string>
-    <string name="content_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/IjEBnyaJ1IJwyqmSeZ6bFqPdyDeH5DAOl.xLC0QKa1E!/r/dIUBAAAAAAAA</string>
-    <string name="thanks">1. 感谢爱恋BT及其所有发布组，感谢大家的辛苦付出\n2. 感谢本应用中所使用开源库的作者\n3. 感谢所有对此作出贡献的大家（鞠躬）</string>
+    <string name="dynamic_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/I8ViNgmSuj6SaKeWQvsTJ0E5TA*qrr158*uJ3i1*SzU!/r/dPcAAAAAAAAA</string>
+    <string name="content_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/QZctZAxZA09MQ73EWsiBciNau0fRI7k2zorHu.2uDm0!/r/dKwAAAAAAAAA</string>
+    <string name="thanks">>> 感谢爱恋BT及其所有发布组\n>> 感谢本应用中所使用开源库的作者\n再次感谢所有对此作出贡献的大家（90°鞠躬）</string>
     <string name="filter">过滤</string>
     <string name="please_input_rss_tag">请输入订阅关键字</string>
     <string name="add_rss_tag">添加订阅</string>
@@ -120,5 +120,6 @@
     <string name="settings_more">更多</string>
     <string name="settings_accept_official_dynamic_background">接受推送的动态壁纸</string>
     <string name="settings_accept_official_content_background">接受推送的内容壁纸</string>
+    <string name="settings_theme_color_base">基础</string>
 
 </resources>

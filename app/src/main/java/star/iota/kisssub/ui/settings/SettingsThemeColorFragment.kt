@@ -27,6 +27,7 @@ import com.afollestad.aesthetic.Aesthetic
 import com.flask.colorpicker.ColorPickerView
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 import kotlinx.android.synthetic.main.fragment_settings_theme_color.*
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.helper.ThemeHelper
 

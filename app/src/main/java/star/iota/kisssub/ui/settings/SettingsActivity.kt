@@ -39,6 +39,9 @@ class SettingsActivity : BaseActivity() {
 
     private fun initToolbar() {
         setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     override fun onBackPressed() {

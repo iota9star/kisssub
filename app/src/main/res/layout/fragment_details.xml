@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
@@ -173,5 +173,5 @@
                     android:paddingRight="16dp" />
             </LinearLayout>
         </ScrollView>
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </FrameLayout>

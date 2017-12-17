@@ -21,6 +21,7 @@ package star.iota.kisssub.helper
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.v4.content.ContextCompat
+import star.iota.kisssub.R
 
 object ThemeHelper {
 
@@ -67,7 +68,7 @@ object ThemeHelper {
     }
 
     fun getContentMaskColorDark(context: Context): Int =
-            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR_DARK, ContextCompat.getColor(context, R.color.black))
+            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR_DARK, ContextCompat.getColor(context, R.color.dark_black))
 
     fun setAccentColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -76,7 +77,7 @@ object ThemeHelper {
     }
 
     fun getAccentColor(context: Context): Int =
-            getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.blue))
+            getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.deep_purple))
 
     fun setPrimaryColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -85,7 +86,7 @@ object ThemeHelper {
     }
 
     fun getPrimaryColor(context: Context): Int =
-            getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.white))
+            getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.deep_purple))
 
     fun setPrimaryTextColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -130,7 +131,7 @@ object ThemeHelper {
     }
 
     fun isTint(context: Context): Boolean =
-            getSharePreference(context).getBoolean(THEME_TINT, false)
+            getSharePreference(context).getBoolean(THEME_TINT, true)
 
     fun isDark(context: Context, isDark: Boolean) {
         getSharePreference(context).edit()

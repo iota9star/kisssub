@@ -30,6 +30,7 @@ import com.liuguangqiang.cookie.OnActionClickListener
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
+import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.addFragmentToActivity
@@ -170,5 +171,10 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
         switchCompatAcceptOfficialContentBackground.setOnCheckedChangeListener(this)
         switchCompatAcceptOfficialDynamicBackground.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
         switchCompatAcceptOfficialDynamicBackground.setOnCheckedChangeListener(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        DisplayUtils.tintImageView(linearLayoutContainer, ThemeHelper.getAccentColor(context!!))
     }
 }

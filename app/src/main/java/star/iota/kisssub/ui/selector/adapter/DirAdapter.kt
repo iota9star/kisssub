@@ -29,6 +29,9 @@ import android.widget.TextView
 import com.bumptech.glide.load.MultiTransformation
 import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.CropCircleTransformation
+import star.iota.kisssub.R
+import star.iota.kisssub.glide.GlideApp
+import star.iota.kisssub.glide.GlideOptions.bitmapTransform
 import star.iota.kisssub.ui.selector.bean.FolderBean
 
 

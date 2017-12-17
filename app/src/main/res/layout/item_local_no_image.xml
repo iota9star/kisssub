@@ -36,7 +36,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:textColor="?colorAccent"
-        android:textSize="48sp"
+        android:textSize="36sp"
         android:textStyle="italic|bold" />
 
     <LinearLayout
@@ -53,22 +53,23 @@
 
             <TextView
                 android:id="@+id/textViewSub"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:textColor="?colorAccent"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/buttonDownload"
                 android:layout_width="48dp"
-                android:layout_height="36dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:text="@string/action_download"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
         </LinearLayout>
 
 
