@@ -1,10 +1,13 @@
 ![](https://github.com/kisssub/kisssub-app-android/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
-## 爱恋BT 第三方客户端
+# 爱恋BT 第三方客户端
 
-## 感谢
 \>> 感谢爱恋BT及其所有发布组  
 \>> 感谢本应用中所使用开源库的作者  
 再次感谢所有对此作出贡献的大家（90°鞠躬）
+
+## 下载
++ 酷市场 - [爱恋](https://www.coolapk.com/apk/star.iota.kisssub)
+
 ## 截图
 <table>
     <tr>
@@ -24,9 +27,6 @@
         <td><img src="https://github.com/kisssub/kisssub-app-android/blob/master/screenshots/Screenshot_20171217-202844.jpg" alt=""></td>
     </tr>
 </table>
-
-## 下载
-+ 酷市场 - [爱恋](https://www.coolapk.com/apk/star.iota.kisssub)
 
 ## Licenses
 ```
