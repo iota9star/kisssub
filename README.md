@@ -1,7 +1,7 @@
 ![](https://github.com/kisssub/kisssub-app-android/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 # 爱恋BT 第三方客户端
 
-![](https://github.com/kisssub/kisssub-app-android/blob/master/screenshots/yande.re 432825 bodysuit darling_in_the_franxx ic.jpg)
+![](https://github.com/kisssub/kisssub-app-android/blob/master/screenshots/yande.re%20432825%20bodysuit%20darling_in_the_franxx%20ic.jpg)
 
 + 感谢爱恋BT及其所有发布组
 + 感谢本应用中所使用开源库的作者
