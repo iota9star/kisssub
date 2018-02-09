@@ -69,8 +69,8 @@
     <string name="clear_selected_photos">清空选中图片</string>
     <string name="refresh_photos">刷新图库</string>
     <string name="all_rights_reserved">All rights reserved</string>
-    <string name="dynamic_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/I8ViNgmSuj6SaKeWQvsTJ0E5TA*qrr158*uJ3i1*SzU!/r/dPcAAAAAAAAA</string>
-    <string name="content_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/QZctZAxZA09MQ73EWsiBciNau0fRI7k2zorHu.2uDm0!/r/dKwAAAAAAAAA</string>
+    <string name="dynamic_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/r4uZknity6GZmHi5wQSGxlwypQ4JC4k3Q4GPMvFKvY0!/r/dG0BAAAAAAAA</string>
+    <string name="content_banner">http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/r4uZknity6GZmHi5wQSGxlwypQ4JC4k3Q4GPMvFKvY0!/r/dG0BAAAAAAAA</string>
     <string name="thanks">>> 感谢爱恋BT及其所有发布组\n>> 感谢本应用中所使用开源库的作者\n再次感谢所有对此作出贡献的大家（90°鞠躬）</string>
     <string name="filter">过滤</string>
     <string name="please_input_rss_tag">请输入订阅关键字</string>

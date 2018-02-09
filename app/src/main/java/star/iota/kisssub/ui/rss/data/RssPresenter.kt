@@ -61,7 +61,7 @@ class RssPresenter(private val view: RssContract.View) : RssContract.Presenter {
             bean.title = ("/" + title?.replace(Regex("]\\s*\\[|\\[|]|】\\s*【|】|【"), "/") + "/").replace(Regex("/\\s*/+"), "/")
             val torrent = it?.select("enclosure")?.attr("url")
             val hash = torrent?.substring(torrent.lastIndexOf("hash=") + 4, torrent.length)
-            bean.magnet = "magnet:?xt=urn:btih:${hash}&tr=http://open.acgtracker.com:1096/announce"
+            bean.magnet = "magnet:?xt=urn:btih:$hash&tr=http://open.acgtracker.com:1096/announce"
             bean.url = it?.select("guid")?.text()
             bean.sub = it?.select("author")?.text()
             val desc = it?.select("description")?.html()?.replace("<![CDATA[", "")?.replace("]]>", "")?.replace("&gt;", ">")?.replace("&lt;", "<")

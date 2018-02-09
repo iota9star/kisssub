@@ -65,7 +65,7 @@ class SearchPresenter(private val view: SearchContract.View) : SearchContract.Pr
             bean.title = ("/" + title?.replace(Regex("]\\s*\\[|\\[|]|】\\s*【|】|【"), "/") + "/").replace(Regex("/\\s*/+"), "/")
             val tUrl = it?.select("td:nth-child(3) > a")?.attr("href")
             val hash = tUrl?.replace("show-", "")?.replace(".html", "")
-            bean.magnet = "magnet:?xt=urn:btih:${hash}&tr=http://open.acgtracker.com:1096/announce"
+            bean.magnet = "magnet:?xt=urn:btih:$hash&tr=http://open.acgtracker.com:1096/announce"
             bean.url = KisssubUrl.BASE + tUrl
             bean.size = it?.select("td:nth-child(4)")?.text()
             bean.sub = it?.select("td:nth-child(8) > a")?.text()
