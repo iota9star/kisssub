@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -16,8 +16,17 @@
  *
  */
 
-package star.iota.kisssub.base
+package star.iota.kisssub.ui.about
 
-interface Callback {
-    fun result(result: Any?)
+import star.iota.kisssub.base.BasePresenter
+
+interface GodModeContract {
+    interface View {
+        fun other(e: String?)
+        fun isActivated(activate: Boolean)
+    }
+
+    interface Presenter : BasePresenter {
+        fun get(url: String, code: String)
+    }
 }

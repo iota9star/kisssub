@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ import android.content.SharedPreferences
 
 object SecurityHelper {
 
-    private val PIN = "pin"
-    private val LOCK = "lock"
-    private val FINGERPRINT = "fingerprint"
-    private val PREFERENCE_NAME = "security"
+    private const val PIN = "pin"
+    private const val LOCK = "lock"
+    private const val FINGERPRINT = "fingerprint"
+    private const val PREFERENCE_NAME = "security"
 
-    val LOCK_TYPE_NONE = 0
-    val LOCK_TYPE_PIN = 1
-    val LOCK_TYPE_PATTERN = 2
+    const val LOCK_TYPE_NONE = 0
+    const val LOCK_TYPE_PIN = 1
+    const val LOCK_TYPE_PATTERN = 2
 
     private fun getSharePreference(context: Context): SharedPreferences =
             context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -18,10 +18,12 @@
 
 package star.iota.kisssub.ui.settings
 
+import android.content.Intent
+import android.support.v7.widget.Toolbar
 import kotlinx.android.synthetic.main.activity_settings.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
-import star.iota.kisssub.ext.addFragmentToActivity
+import star.iota.kisssub.ext.replaceFragmentInActivity
 
 
 class SettingsActivity : BaseActivity() {
@@ -30,22 +32,23 @@ class SettingsActivity : BaseActivity() {
 
     override fun doSome() {
         initToolbar()
-        setFirstFragment()
+        replaceFragmentInActivity(SettingsMainFragment.newInstance(), R.id.frameLayoutContainer)
     }
 
-    private fun setFirstFragment() {
-        addFragmentToActivity(SettingsMainFragment.newInstance(), R.id.frameLayoutContainer)
+    override fun onNewIntent(intent: Intent?) {
+        replaceFragmentInActivity(SettingsMainFragment.newInstance(), R.id.frameLayoutContainer)
     }
+
+    override fun getToolbar(): Toolbar? = toolbar
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener {
+        toolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1) {
+        if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
             finish()

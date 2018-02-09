@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -47,9 +47,14 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     }
 
     companion object {
-        val URL = "url"
-        val SUFFIX = "suffix"
+        const val ACTIVE = "active"
+        const val URL = "url"
+        const val SUFFIX = "suffix"
         fun newInstance(param: String?): RssFragment {
+            return newInstance(param, false)
+        }
+
+        fun newInstance(param: String?, active: Boolean): RssFragment {
             val fragment = RssFragment()
             val bundle = Bundle()
             val url = if (param == null) {
@@ -59,6 +64,7 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
             }
             bundle.putString(URL, url)
             bundle.putString(SUFFIX, ".xml")
+            bundle.putBoolean(ACTIVE, active)
             fragment.arguments = bundle
             return fragment
         }
@@ -67,7 +73,7 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     private fun end() {
         isLoaded = true
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -85,10 +91,12 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
 
     private lateinit var url: String
     private lateinit var suffix: String
+    private var active: Boolean = false
 
     private fun initBase() {
         url = arguments!!.getString(URL)
         suffix = arguments!!.getString(SUFFIX, "")
+        active = arguments!!.getBoolean(ACTIVE, false)
     }
 
     private lateinit var presenter: RssPresenter
@@ -98,19 +106,20 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
 
     private var isInitialized: Boolean = false
     private var isLoaded: Boolean = false
+
     override fun onVisible() {
         if (isInitialized && !isLoaded) {
-            refreshLayout.autoRefresh()
+            refreshLayout?.autoRefresh()
         }
     }
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        if (isShow()) {
-            refreshLayout.autoRefresh()
+        if (isShow() || active) {
+            refreshLayout?.autoRefresh()
         }
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!isLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -128,10 +137,10 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
 
     private lateinit var adapter: RssAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = RssAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

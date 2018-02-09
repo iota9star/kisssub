@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -20,33 +20,27 @@ package star.iota.kisssub.ui.anime
 
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
-import jp.wasabeef.glide.transformations.CropSquareTransformation
 import kotlinx.android.synthetic.main.item_anime.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.glide.GlideOptions
+import star.iota.kisssub.helper.SearchHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.item.search.SearchFragment
-import star.iota.kisssub.ui.item.search.SearchHelper
 
 class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
 
     override fun bindView(bean: Record) {
-        itemView.apply {
+        itemView?.apply {
             GlideApp.with(itemView)
                     .load(bean.cover)
-                    .listener(GlidePalette.with(bean.cover)
-                            .use(BitmapPalette.Profile.VIBRANT_LIGHT)
-                            .intoBackground(imageViewCover, BitmapPalette.Swatch.RGB)
-                            .crossfade(true))
-                    .apply(GlideOptions.bitmapTransform(CropSquareTransformation()))
+                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .fallback(R.mipmap.ic_launcher)
                     .into(imageViewCover)
-            textViewTitle.text = bean.title
-            linearLayoutContainer.setOnClickListener {
+            textViewTitle?.text = bean.title
+            linearLayoutContainer?.setOnClickListener {
                 if (!bean.title.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }

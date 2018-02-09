@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
  *
  */
 
-package star.iota.kisssub.ui.item.search
+package star.iota.kisssub.helper
 
 import android.content.Context
 import android.content.SharedPreferences
 
 object SearchHelper {
 
-    private val PARAM_PAN = "param_pan"
-    private val PARAM_COLLECTION = "param_collection"
-    private val PREFERENCE_NAME = "search_param"
+    private const val PARAM_PAN = "param_pan"
+    private const val PARAM_COLLECTION = "param_collection"
+    private const val PREFERENCE_NAME = "search_param"
 
     private fun getSharePreference(context: Context): SharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
 

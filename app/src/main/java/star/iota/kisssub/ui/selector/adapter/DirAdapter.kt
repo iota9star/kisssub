@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -56,13 +56,15 @@ class DirAdapter : RecyclerView.Adapter<DirAdapter.ViewHolder>() {
         val multi = MultiTransformation(
                 BlurTransformation(25),
                 CropCircleTransformation())
-        GlideApp.with(holder.context)
-                .load(folder.firstImgPath)
-                .apply(bitmapTransform(multi))
-                .into(holder.image)
-        holder.dir.text = folder.dir
-        holder.count.text = folder.count.toString()
-        holder.root.setOnClickListener {
+        if (holder.image != null) {
+            GlideApp.with(holder.context)
+                    .load(folder.firstImgPath)
+                    .apply(bitmapTransform(multi))
+                    .into(holder.image)
+        }
+        holder.dir?.text = folder.dir
+        holder.count?.text = folder.count.toString()
+        holder.root?.setOnClickListener {
             onDirSelectedListener?.selected(folder)
         }
     }
@@ -77,9 +79,9 @@ class DirAdapter : RecyclerView.Adapter<DirAdapter.ViewHolder>() {
     class ViewHolder(
             itemView: View,
             val context: Context = itemView.context,
-            val image: ImageView = itemView.findViewById(R.id.image_view_photo_cover),
-            val dir: TextView = itemView.findViewById(R.id.text_view_dir_name),
-            val count: TextView = itemView.findViewById(R.id.text_view_photo_count),
-            val root: LinearLayout = itemView.findViewById(R.id.linear_layout_item_root)
+            val image: ImageView? = itemView.findViewById(R.id.image_view_photo_cover),
+            val dir: TextView? = itemView.findViewById(R.id.text_view_dir_name),
+            val count: TextView? = itemView.findViewById(R.id.text_view_photo_count),
+            val root: LinearLayout? = itemView.findViewById(R.id.linear_layout_item_root)
     ) : RecyclerView.ViewHolder(itemView)
 }

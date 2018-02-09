@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class FilterBean {
     var url: String? = null
 
     companion object {
-        val TAG = 0
-        val HEADER = 1
+        const val TAG = 0
+        const val HEADER = 1
     }
 }

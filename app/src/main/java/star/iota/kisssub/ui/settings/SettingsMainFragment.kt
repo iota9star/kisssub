@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -43,15 +43,13 @@ import star.iota.kisssub.widget.MessageBar
 
 class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-
     companion object {
-        fun newInstance(): SettingsMainFragment = SettingsMainFragment()
+        fun newInstance() = SettingsMainFragment()
     }
 
     override fun doSome() {
         initEvent()
         initSwitchCompat()
-        DisplayUtils.tintImageView(linearLayoutContainer, ThemeHelper.getAccentColor(context!!))
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -77,16 +75,15 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
         when (button?.id) {
             R.id.switchCompatNightly -> {
-                ThemeHelper.isDark(context!!, isChecked)
                 if (isChecked) {
-                    Aesthetic.get()
+                    Aesthetic.get(context!!)
                             .activityTheme(R.style.AppThemeDark)
                             .isDark(true)
                             .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
                             .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
                             .apply()
                 } else {
-                    Aesthetic.get()
+                    Aesthetic.get(context!!)
                             .activityTheme(R.style.AppTheme)
                             .isDark(false)
                             .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
@@ -105,11 +102,11 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     }
 
     private fun initEvent() {
-        linearLayoutPinLock.setOnClickListener(this)
-        linearLayoutFingerprintLock.setOnClickListener(this)
-        textViewDynamicBackground.setOnClickListener(this)
-        textViewContentBackground.setOnClickListener(this)
-        linearLayoutThemeColor.setOnClickListener(this)
+        linearLayoutPinLock?.setOnClickListener(this)
+        linearLayoutFingerprintLock?.setOnClickListener(this)
+        textViewDynamicBackground?.setOnClickListener(this)
+        textViewContentBackground?.setOnClickListener(this)
+        linearLayoutThemeColor?.setOnClickListener(this)
     }
 
 
@@ -165,16 +162,21 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     }
 
     private fun initSwitchCompat() {
-        switchCompatNightly.isChecked = ThemeHelper.isDark(context!!)
-        switchCompatNightly.setOnCheckedChangeListener(this)
-        switchCompatAcceptOfficialContentBackground.isChecked = OfficialHelper.acceptOfficialContentBackground(context!!)
-        switchCompatAcceptOfficialContentBackground.setOnCheckedChangeListener(this)
-        switchCompatAcceptOfficialDynamicBackground.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
-        switchCompatAcceptOfficialDynamicBackground.setOnCheckedChangeListener(this)
+        Aesthetic.get(context!!)
+                .isDark
+                .take(1)
+                .subscribe {
+                    switchCompatNightly?.isChecked = it
+                }
+        switchCompatNightly?.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialContentBackground?.isChecked = OfficialHelper.acceptOfficialContentBackground(context!!)
+        switchCompatAcceptOfficialContentBackground?.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialDynamicBackground?.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
+        switchCompatAcceptOfficialDynamicBackground?.setOnCheckedChangeListener(this)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         DisplayUtils.tintImageView(linearLayoutContainer, ThemeHelper.getAccentColor(context!!))
     }
 }

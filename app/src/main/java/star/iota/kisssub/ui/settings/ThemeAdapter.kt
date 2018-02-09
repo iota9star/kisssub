@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -36,15 +36,15 @@ class ThemeAdapter(private val themes: ArrayList<ThemeBean>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val theme = themes[position]
-        holder.itemView.apply {
+        holder.itemView?.apply {
             if (theme.isSelected) {
-                imageViewPoint.setImageResource(R.drawable.ic_item_theme_checked)
+                imageViewPoint?.setImageResource(R.drawable.ic_item_theme_checked)
             } else {
-                imageViewPoint.setImageResource(R.drawable.ic_item_theme_uncheck)
+                imageViewPoint?.setImageResource(R.drawable.ic_item_theme_uncheck)
             }
-            imageViewPoint.setColorFilter(theme.color)
-            textViewDesc.text = theme.description
-            linearLayoutContainer.setOnClickListener {
+            imageViewPoint?.setColorFilter(theme.color)
+            textViewDesc?.text = theme.description
+            linearLayoutContainer?.setOnClickListener {
                 for (bean in themes) {
                     bean.isSelected = false
                 }

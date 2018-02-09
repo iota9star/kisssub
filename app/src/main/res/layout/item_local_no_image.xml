@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@
             <Button
                 android:id="@+id/buttonDownload"
                 android:layout_width="48dp"
-                android:layout_height="32dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="@string/action_download"

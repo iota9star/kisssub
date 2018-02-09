@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package star.iota.kisssub.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.Window
 import android.view.WindowManager
 import com.afollestad.aesthetic.Aesthetic
@@ -27,6 +28,8 @@ import com.afollestad.aesthetic.Aesthetic
 abstract class BaseActivity : AppCompatActivity() {
 
     protected open fun isFullScreen(): Boolean = false
+
+    open fun getToolbar(): Toolbar? = null
 
     abstract fun getContentViewId(): Int
     abstract fun doSome()
@@ -36,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
-        Aesthetic.attach(this)
+        Aesthetic.get(this).attach(this)
         super.onCreate(savedInstanceState)
         setContentView(getContentViewId())
         doSome()
@@ -44,12 +47,12 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        Aesthetic.get(this).resume(this)
         super.onResume()
-        Aesthetic.resume(this)
     }
 
     override fun onPause() {
-        Aesthetic.pause(this)
+        Aesthetic.get(this).pause(this)
         super.onPause()
     }
 }

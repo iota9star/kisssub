@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import android.content.SharedPreferences
 
 object OfficialHelper {
 
-    private val ACCEPT_OFFICIAL_DYNAMIC_BACKGROUND = "accept_official_dynamic_background"
-    private val ACCEPT_OFFICIAL_CONTENT_BACKGROUND = "accept_official_content_background"
-    private val PREFERENCE_NAME = "official"
+    private const val ACCEPT_OFFICIAL_DYNAMIC_BACKGROUND = "accept_official_dynamic_background"
+    private const val ACCEPT_OFFICIAL_CONTENT_BACKGROUND = "accept_official_content_background"
+    private const val PREFERENCE_NAME = "official"
 
     private fun getSharePreference(context: Context): SharedPreferences =
             context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import android.widget.ImageView
 
 import com.afollestad.aesthetic.AestheticImageView
 
-class KenBurnsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : AestheticImageView(context, attrs, defStyle) {
+class KenBurnsView constructor(context: Context, attrs: AttributeSet? = null) : AestheticImageView(context, attrs) {
 
     private val mMatrix = Matrix()
 
@@ -217,6 +217,6 @@ class KenBurnsView @JvmOverloads constructor(context: Context, attrs: AttributeS
     }
 
     companion object {
-        private val FRAME_DELAY = (1000 / 60).toLong()
+        private const val FRAME_DELAY = (1000 / 60).toLong()
     }
 }

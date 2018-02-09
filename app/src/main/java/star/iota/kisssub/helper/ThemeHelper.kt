@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -25,32 +25,20 @@ import star.iota.kisssub.R
 
 object ThemeHelper {
 
-    private val THEME_ACCENT_COLOR = "theme_accent_color"
-    private val THEME_PRIMARY_COLOR = "theme_primary_color"
-    private val THEME_PRIMARY_TEXT_COLOR = "theme_primary_text_color"
-    private val THEME_SECONDARY_TEXT_COLOR = "theme_secondary_text_color"
-    private val THEME_PRIMARY_TEXT_COLOR_DARK = "theme_primary_text_color_dark"
-    private val THEME_SECONDARY_TEXT_COLOR_DARK = "theme_secondary_text_color_dark"
-    private val THEME_TINT = "is_tint"
-    private val THEME_DARK = "is_dark"
-    private val THEME_DYNAMIC_BANNER = "theme_dynamic_banner"
-    private val THEME_CONTENT_BANNER = "theme_content_banner"
-    private val THEME_CONTENT_MASK_ALPHA = "theme_content_mask_alpha"
-    private val THEME_CONTENT_MASK_COLOR = "theme_content_mask_color"
-    private val THEME_CONTENT_MASK_COLOR_DARK = "theme_content_mask_color_dark"
-    private val PREFERENCE_NAME = "multiple_theme"
+    const val THEME_ACCENT_COLOR = "theme_accent_color"
+    const val THEME_PRIMARY_COLOR = "theme_primary_color"
+    const val THEME_PRIMARY_TEXT_COLOR = "theme_primary_text_color"
+    const val THEME_SECONDARY_TEXT_COLOR = "theme_secondary_text_color"
+    const val THEME_PRIMARY_TEXT_COLOR_DARK = "theme_primary_text_color_dark"
+    const val THEME_SECONDARY_TEXT_COLOR_DARK = "theme_secondary_text_color_dark"
+    private const val THEME_DYNAMIC_BANNER = "theme_dynamic_banner"
+    private const val THEME_CONTENT_BANNER = "theme_content_banner"
+    const val THEME_CONTENT_MASK_COLOR = "theme_content_mask_color"
+    const val THEME_CONTENT_MASK_COLOR_DARK = "theme_content_mask_color_dark"
+    private const val PREFERENCE_NAME = "multiple_theme"
 
     private fun getSharePreference(context: Context): SharedPreferences =
             context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
-
-    fun setContentMaskAlpha(context: Context, alpha: Float) {
-        getSharePreference(context).edit()
-                .putFloat(THEME_CONTENT_MASK_ALPHA, alpha)
-                .apply()
-    }
-
-    fun getContentMaskAlpha(context: Context): Float =
-            getSharePreference(context).getFloat(THEME_CONTENT_MASK_ALPHA, 1f)
 
     fun setContentMaskColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -59,7 +47,7 @@ object ThemeHelper {
     }
 
     fun getContentMaskColor(context: Context): Int =
-            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR, ContextCompat.getColor(context, R.color.white))
+            getSharePreference(context).getInt(THEME_CONTENT_MASK_COLOR, ContextCompat.getColor(context, R.color.background_color))
 
     fun setContentMaskColorDark(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -77,7 +65,7 @@ object ThemeHelper {
     }
 
     fun getAccentColor(context: Context): Int =
-            getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.deep_purple))
+            getSharePreference(context).getInt(THEME_ACCENT_COLOR, ContextCompat.getColor(context, R.color.pink))
 
     fun setPrimaryColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -86,7 +74,7 @@ object ThemeHelper {
     }
 
     fun getPrimaryColor(context: Context): Int =
-            getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.deep_purple))
+            getSharePreference(context).getInt(THEME_PRIMARY_COLOR, ContextCompat.getColor(context, R.color.white))
 
     fun setPrimaryTextColor(context: Context, color: Int) {
         getSharePreference(context).edit()
@@ -123,24 +111,6 @@ object ThemeHelper {
 
     fun getSecondaryTextColorDark(context: Context): Int =
             getSharePreference(context).getInt(THEME_SECONDARY_TEXT_COLOR_DARK, ContextCompat.getColor(context, R.color.text_color_secondary_dark))
-
-    fun isTint(context: Context, isTint: Boolean) {
-        getSharePreference(context).edit()
-                .putBoolean(THEME_TINT, isTint)
-                .apply()
-    }
-
-    fun isTint(context: Context): Boolean =
-            getSharePreference(context).getBoolean(THEME_TINT, true)
-
-    fun isDark(context: Context, isDark: Boolean) {
-        getSharePreference(context).edit()
-                .putBoolean(THEME_DARK, isDark)
-                .apply()
-    }
-
-    fun isDark(context: Context): Boolean =
-            getSharePreference(context).getBoolean(THEME_DARK, false)
 
     fun setDynamicBanner(context: Context, path: String?) {
         if (path == null) getSharePreference(context).edit().remove(THEME_DYNAMIC_BANNER).apply()

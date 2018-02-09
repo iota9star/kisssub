@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package star.iota.kisssub.ui.splash
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.os.CountDownTimer
-import android.util.TypedValue
 import com.afollestad.aesthetic.Aesthetic
 import com.afollestad.aesthetic.NavigationViewMode
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -70,27 +69,30 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun doSome() {
-        if (Aesthetic.isFirstTime()) {
-            Aesthetic.get()
+        if (Aesthetic.isFirstTime(this)) {
+            Aesthetic.get(this)
                     .activityTheme(R.style.AppTheme)
                     .textColorPrimaryRes(R.color.text_color_primary)
                     .textColorSecondaryRes(R.color.text_color_secondary)
-                    .colorPrimaryRes(R.color.deep_purple)
-                    .colorAccentRes(R.color.deep_purple)
+                    .colorPrimaryRes(R.color.white)
+                    .colorAccentRes(R.color.pink)
                     .navigationViewMode(NavigationViewMode.SELECTED_ACCENT)
                     .colorStatusBarAuto()
-                    .colorNavigationBarAuto()
+                    .colorNavigationBarAuto(true)
                     .apply()
         }
-        val typedValue = TypedValue()
-        this.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-        val colors = intArrayOf(0x00000000, typedValue.data)
-        val mask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
-        viewMask.background = mask
+        Aesthetic.get(this)
+                .colorWindowBackground()
+                .take(1)
+                .subscribe {
+                    val colors = intArrayOf(0x00000000, it)
+                    val mask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
+                    viewMask?.background = mask
+                }
         GlideApp.with(this)
                 .load(ThemeHelper.getDynamicBanner(this))
                 .into(kenBurnsView)
-        imageViewIcon.setOnClickListener {
+        imageViewIcon?.setOnClickListener {
             checkSecurity()
         }
         countDownTimer.start()

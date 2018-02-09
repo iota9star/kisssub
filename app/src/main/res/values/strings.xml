@@ -1,6 +1,6 @@
 <!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@
     <string name="settings_theme_color_primary_text_color_dark">主文本颜色 - 夜间</string>
     <string name="settings_theme_color_secondary_text_color">次文本颜色</string>
     <string name="settings_theme_color_secondary_text_color_dark">次文本颜色 - 夜间</string>
-    <string name="settings_theme_color_default">默认 - 重置所有颜色为默认</string>
+    <string name="settings_theme_color_default">默认 - 快速设置主颜色</string>
     <string name="settings_content_background_mask_alpha">遮罩透明度</string>
     <string name="settings_content_background_mask_color">遮罩颜色</string>
     <string name="settings_content_background_demo">演示</string>
@@ -121,5 +121,17 @@
     <string name="settings_accept_official_dynamic_background">接受推送的动态壁纸</string>
     <string name="settings_accept_official_content_background">接受推送的内容壁纸</string>
     <string name="settings_theme_color_base">基础</string>
+    <string name="remove_photo_from_preview">从预览移除当前图片</string>
+    <string name="action_done">确认</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_back">返回</string>
+    <string name="action_custom">定制</string>
+    <string name="label_color_dialog">颜料板</string>
+    <string name="label_color_choose">请选择颜色</string>
+    <string name="action_preset">预设</string>
+    <string name="action_activate_god_mode">ヽ(爱´∀‘爱)ノ激活上帝模式</string>
+    <string name="label_god_mode_hit">( *・ω・)✄·神·秘·代·码·( *・ω・)✄·</string>
+    <string name="label_god_mode">上帝模式</string>
+    <string name="settings_advance">高级</string>
 
 </resources>

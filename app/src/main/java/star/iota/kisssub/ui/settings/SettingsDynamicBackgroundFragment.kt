@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import star.iota.kisssub.utils.ToastUtils
 class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
-        val TITLE = "title"
+        const val TITLE = "title"
         fun newInstance(title: String): SettingsDynamicBackgroundFragment {
             val fragment = SettingsDynamicBackgroundFragment()
             val bundle = Bundle()
@@ -64,7 +64,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
                 finish()
             }
             R.id.buttonPreview -> {
-                val path = textInputEditTextPath.text.toString().trim()
+                val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
                     ToastUtils.short(context!!, "路径不能为空")
                 } else {
@@ -72,7 +72,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
                 }
             }
             R.id.buttonSetting -> {
-                val path = textInputEditTextPath.text.toString().trim()
+                val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
                     ToastUtils.short(context!!, "路径不能为空")
                 } else {
@@ -88,9 +88,10 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PhotoSelectorActivity.REQUEST_CODE) {
             if (resultCode == PhotoSelectorActivity.RESULT_CODE_FOR_OK) {
-                val photos = data.getStringArrayListExtra(PhotoSelectorActivity.SELECTED_STRING_ARRAY_LIST_PHOTOS) ?: return
+                val photos = data.getStringArrayListExtra(PhotoSelectorActivity.SELECTED_STRING_ARRAY_LIST_PHOTOS)
+                        ?: return
                 photos.forEach {
-                    textInputEditTextPath.setText(it)
+                    textInputEditTextPath?.setText(it)
                 }
             } else if (resultCode == PhotoSelectorActivity.RESULT_CODE_FOR_BACK) {
             }
@@ -107,7 +108,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
                     }
 
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        kenBurnsView.setImageDrawable(resource)
+                        kenBurnsView?.setImageDrawable(resource)
                         return true
                     }
                 })
@@ -126,10 +127,10 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun initEvent() {
-        buttonLocal.setOnClickListener(this)
-        buttonPreview.setOnClickListener(this)
-        buttonReset.setOnClickListener(this)
-        buttonSetting.setOnClickListener(this)
+        buttonLocal?.setOnClickListener(this)
+        buttonPreview?.setOnClickListener(this)
+        buttonReset?.setOnClickListener(this)
+        buttonSetting?.setOnClickListener(this)
     }
 
 }

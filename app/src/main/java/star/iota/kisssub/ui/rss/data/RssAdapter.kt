@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -29,8 +29,7 @@ class RssAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var list: ArrayList<Record> = ArrayList()
     override fun getItemCount(): Int = list.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
-            = if (viewType == IMAGE) RssWithImageViewHolder(LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = if (viewType == IMAGE) RssWithImageViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rss_with_image, parent, false))
     else RssNoImageViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rss_no_image, parent, false))
@@ -54,8 +53,8 @@ class RssAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     companion object {
-        val IMAGE = 1
-        val NO_IMAGE = 2
+        const val IMAGE = 1
+        const val NO_IMAGE = 2
     }
 
 }

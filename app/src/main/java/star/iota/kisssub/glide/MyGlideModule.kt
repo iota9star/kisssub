@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 package star.iota.kisssub.glide
 
 import android.content.Context
+
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
@@ -26,11 +27,11 @@ import com.bumptech.glide.module.AppGlideModule
 
 @GlideModule
 class MyGlideModule : AppGlideModule() {
-    override fun applyOptions(context: Context?, builder: GlideBuilder?) {
-        val diskCacheSizeBytes = Long.MAX_VALUE
-        builder!!.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
+
+    override fun applyOptions(context: Context, builder: GlideBuilder) {
+        val diskCacheSizeBytes = java.lang.Long.MAX_VALUE
+        builder.setDiskCache(InternalCacheDiskCacheFactory(context, diskCacheSizeBytes))
     }
 
-    override fun isManifestParsingEnabled(): Boolean = false
-
+    override fun isManifestParsingEnabled() = false
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -20,25 +20,27 @@ package star.iota.kisssub
 
 object KisssubUrl {
 
-    val BASE = "https://www.kisssub.org/"
-    val BGMLIST = "https://www.kisssub.org/addon.php?r=bgmlist"
-    val TAGS = "https://www.kisssub.org/addon.php?r=tagcloud"
-    val SUBS = "https://www.kisssub.org/addon.php?r=sublist/group"
-    val PLAY = "https://www.kisssub.org/addon.php?r=bangumi/table"
-    val SEARCH = "https://www.kisssub.org/search.php?keyword="
-    val RSS_BASE = "https://www.kisssub.org/rss"
+    const val BASE = "http://www.kisssub.org/"
+    const val BGMLIST = "http://www.kisssub.org/addon.php?r=bgmlist"
+    const val TAGS = "http://www.kisssub.org/addon.php?r=tagcloud"
+    const val SUBS = "http://www.kisssub.org/addon.php?r=sublist/group"
+    const val PLAY = "http://www.kisssub.org/addon.php?r=bangumi/table"
+    const val SEARCH = "http://www.kisssub.org/search.php?keyword="
+    const val RSS_BASE = "http://www.kisssub.org/rss"
 
-    val NEW = "https://www.kisssub.org/1.html"
-    val ANIME = "https://www.kisssub.org/sort-1-1.html"
-    val COMIC = "https://www.kisssub.org/sort-2-1.html"
-    val MUSIC = "https://www.kisssub.org/sort-3-1.html"
-    val AROUND = "https://www.kisssub.org/sort-4-1.html"
-    val OTHER = "https://www.kisssub.org/sort-5-1.html"
-    val RAW = "https://www.kisssub.org/sort-6-1.html"
-    val OVA = "@OVA,@OAD,@剧场版,@MOVIE sort_id:1"
-    val COLLECTION = "https://www.kisssub.org/complete-1.html"
-    val DISCUSS = "https://www.kisssub.org/discuss-1.html"
-    val PAN = "https://www.kisssub.org/cloudfile-1.html"
+    const val NEW = "http://www.kisssub.org/1.html"
+    const val ANIME = "http://www.kisssub.org/sort-1-1.html"
+    const val COMIC = "http://www.kisssub.org/sort-2-1.html"
+    const val MUSIC = "http://www.kisssub.org/sort-3-1.html"
+    const val AROUND = "http://www.kisssub.org/sort-4-1.html"
+    const val OTHER = "http://www.kisssub.org/sort-5-1.html"
+    const val RAW = "http://www.kisssub.org/sort-6-1.html"
+    const val OVA = "http://www.kisssub.org/animovie-1.html"
+    const val COLLECTION = "http://www.kisssub.org/complete-1.html"
+    const val DISCUSS = "http://www.kisssub.org/discuss-1.html"
+    const val PAN = "http://www.kisssub.org/cloudfile-1.html"
 
-    val UPDATE_URL = "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/update.json"
+    const val GOD_MODE = "http://kisssub.org/addon.php?r=god_mode/console"
+
+    const val UPDATE_URL = "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/update.json"
 }

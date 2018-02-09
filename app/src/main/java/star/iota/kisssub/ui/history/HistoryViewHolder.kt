@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -30,21 +30,21 @@ import star.iota.kisssub.ui.play.PlayFragment
 class HistoryViewHolder(itemView: View) : BaseViewHolder<HistoryBean>(itemView) {
 
     override fun bindView(bean: HistoryBean) {
-        itemView.apply {
+        itemView?.apply {
             val title = bean.title
             if (bean.title.isNullOrBlank()) {
-                textViewDate.text = "数据错误"
-                textViewSeason.text = "o(*≧▽≦)ツ"
+                textViewDate?.text = "数据错误"
+                textViewSeason?.text = "o(*≧▽≦)ツ"
             } else {
-                textViewDate.text = title!!.substring(0, title.length - 3)
-                textViewSeason.text = title.substring(title.length - 3, title.length)
+                textViewDate?.text = title!!.substring(0, title.length - 3)
+                textViewSeason?.text = title.substring(title.length - 3, title.length)
             }
-            linearLayoutContainer.setOnClickListener {
+            linearLayoutContainer?.setOnClickListener {
                 if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(PlayFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
                 }
             }
-            imageViewLabel.setColorFilter(ThemeHelper.getAccentColor(context))
+            imageViewLabel?.setColorFilter(ThemeHelper.getAccentColor(context))
         }
     }
 

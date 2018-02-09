@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ package star.iota.kisssub.eventbus
 
 class ChangeAdapterEvent(val type: Int, val pos: Int) {
     companion object {
-        val ADD = 0
-        val MODIFY = 1
-        val DELETE = 2
+        const val ADD = 0
+        const val MODIFY = 1
+        const val DELETE = 2
     }
 }

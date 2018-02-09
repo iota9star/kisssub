@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
     private fun initView() {
         behavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
         behavior.isHideable = false
-        linearLayoutInfo.setOnClickListener { exchangeBehavior() }
+        linearLayoutInfo?.setOnClickListener { exchangeBehavior() }
     }
 
     private var paths: ArrayList<String>? = null
@@ -53,7 +53,7 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
     private var sourceActivity: String? = null
     private fun bind() {
         val can = intent.getBooleanExtra(PhotoSelectorActivity.PHOTOS_CAN_BE_REMOVE, true)
-        if (!can) buttonRemove.visibility = View.GONE
+        if (!can) buttonRemove?.visibility = View.GONE
         paths = intent.getStringArrayListExtra(PhotoSelectorActivity.SELECTED_STRING_ARRAY_LIST_PHOTOS)
         index = intent.getIntExtra(PhotoSelectorActivity.FIRST_PHOTO_INDEX, 0)
         sourceActivity = intent.getStringExtra(PhotoSelectorActivity.SOURCE_ACTIVITY)
@@ -65,14 +65,14 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
             Toast.makeText(this, "没有获得预览的图片", Toast.LENGTH_LONG).show()
             return
         }
-        textViewPhotoCount.text = (" / ${paths!!.size}")
-        textViewPhotoIndex.text = (index + 1).toString()
+        textViewPhotoCount?.text = (" / ${paths!!.size}")
+        textViewPhotoIndex?.text = (index + 1).toString()
         val fragments = ArrayList<Fragment>()
         paths!!.forEach { path -> fragments.add(PhotoFragment.newInstance(path)) }
         val pagerAdapter = PhotoPagerAdapter(supportFragmentManager, fragments)
-        viewPager.adapter = pagerAdapter
-        viewPager.currentItem = index
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        viewPager?.adapter = pagerAdapter
+        viewPager?.currentItem = index
+        viewPager?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 
             }
@@ -82,40 +82,42 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                textViewPhotoIndex.text = (position + 1).toString()
+                textViewPhotoIndex?.text = (position + 1).toString()
             }
         })
-        recyclerViewPreview.layoutManager = GridLayoutManager(this, 4)
+        recyclerViewPreview?.layoutManager = GridLayoutManager(this, 4)
         val photoAdapter = PhotoAdapter(this, paths!!)
-        recyclerViewPreview.adapter = photoAdapter
+        recyclerViewPreview?.adapter = photoAdapter
         if (paths!!.size > 8) {
-            val lp = recyclerViewPreview.layoutParams
-            lp.height = resources.getDimensionPixelSize(R.dimen.v256dp)
-            recyclerViewPreview.layoutParams = lp
+            val lp = recyclerViewPreview?.layoutParams
+            lp?.height = resources.getDimensionPixelSize(R.dimen.v256dp)
+            recyclerViewPreview?.layoutParams = lp
         }
         photoAdapter.setOnPhotoSelected(object : PhotoAdapter.OnPhotoSelected {
             override fun selected(position: Int) {
-                viewPager.currentItem = position
-                textViewPhotoIndex.text = (position + 1).toString()
+                viewPager?.currentItem = position
+                textViewPhotoIndex?.text = (position + 1).toString()
             }
         })
-        buttonRemove.setOnClickListener {
+        buttonRemove?.setOnClickListener {
             if (paths!!.size == 0) {
                 onBackPressed()
                 return@setOnClickListener
             }
-            val currentItem = viewPager.currentItem
-            paths!!.removeAt(currentItem)
-            pagerAdapter.remove(currentItem)
-            photoAdapter.notifyItemRemoved(currentItem)
-            viewPager.currentItem = 0
-            if (paths!!.size == 0) {
-                textViewPhotoIndex.text = 0.toString()
-                buttonRemove.text = "点击返回前页"
-            } else {
-                textViewPhotoIndex.text = 1.toString()
+            val currentItem = viewPager?.currentItem
+            if (currentItem != null) {
+                paths!!.removeAt(currentItem)
+                pagerAdapter.remove(currentItem)
+                photoAdapter.notifyItemRemoved(currentItem)
             }
-            textViewPhotoCount.text = (" / ${paths!!.size}")
+            viewPager?.currentItem = 0
+            if (paths!!.size == 0) {
+                textViewPhotoIndex?.text = 0.toString()
+                buttonRemove?.text = "点击返回前页"
+            } else {
+                textViewPhotoIndex?.text = 1.toString()
+            }
+            textViewPhotoCount?.text = (" / ${paths!!.size}")
         }
     }
 

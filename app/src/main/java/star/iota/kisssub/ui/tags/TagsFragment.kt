@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -47,12 +47,12 @@ class TagsFragment : BaseFragment(), TagsContract.View {
     }
 
     companion object {
-        fun newInstance(): TagsFragment = TagsFragment()
+        fun newInstance() = TagsFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -74,9 +74,9 @@ class TagsFragment : BaseFragment(), TagsContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -98,10 +98,10 @@ class TagsFragment : BaseFragment(), TagsContract.View {
         val layoutManager = FlexboxLayoutManager(context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
-        recyclerView.layoutManager = layoutManager
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = layoutManager
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = TagsAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

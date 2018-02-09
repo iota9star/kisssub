@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -47,12 +47,12 @@ class HistoryFragment : BaseFragment(), HistoryContract.View {
     }
 
     companion object {
-        fun newInstance(): HistoryFragment = HistoryFragment()
+        fun newInstance() = HistoryFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -74,9 +74,9 @@ class HistoryFragment : BaseFragment(), HistoryContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -95,10 +95,10 @@ class HistoryFragment : BaseFragment(), HistoryContract.View {
 
     private lateinit var adapter: HistoryAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = HistoryAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

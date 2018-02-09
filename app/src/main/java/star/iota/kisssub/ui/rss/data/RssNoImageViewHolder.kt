@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -37,27 +37,27 @@ import star.iota.kisssub.widget.MessageBar
 
 class RssNoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
     override fun bindView(bean: Record) {
-        itemView.apply {
-            textViewTitle.text = bean.title
-            textViewDate.text = bean.date
-            textViewCategory.text = bean.category
-            textViewSub.text = bean.sub
-            textViewSub.setOnClickListener {
+        itemView?.apply {
+            textViewTitle?.text = bean.title
+            textViewDate?.text = bean.date
+            textViewCategory?.text = bean.category
+            textViewSub?.text = bean.sub
+            textViewSub?.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!, true), R.id.frameLayoutContainer)
                 }
             }
-            textViewTitle.setOnClickListener {
+            textViewTitle?.setOnClickListener {
                 if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
+                    (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(("/" + bean.title?.replace(Regex("]\\s*\\[|\\[|]|】\\s*【|】|【"), "/") + "/").replace(Regex("/\\s*/+"), "/"), bean.url!!), R.id.frameLayoutContainer)
                 }
             }
-            textViewDownload.setOnClickListener {
+            textViewDownload?.setOnClickListener {
                 SendUtils.copy(context!!, bean.title, bean.magnet)
                 SendUtils.open(context!!, bean.magnet)
                 MessageBar.create(context!!, "已复制到剪切板，并尝试打开本地应用")
             }
-            textViewShare.setOnClickListener {
+            textViewShare?.setOnClickListener {
                 val content = "\n标题：${bean.title}\n\n" +
                         "分类：${bean.category}\n\n" +
                         "发布时间：${bean.date}\n\n" +
@@ -68,7 +68,7 @@ class RssNoImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                 SendUtils.copy(context!!, bean.title, bean.magnet)
                 ToastUtils.short(context, "磁链已复制到剪切板")
             }
-            textViewCollection.setOnClickListener {
+            textViewCollection?.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))
                         .map { it.addRecord(bean) }
                         .subscribeOn(Schedulers.io())

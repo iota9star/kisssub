@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
+import star.iota.kisssub.widget.MessageBar
+import java.util.*
 
 fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment?, @IdRes fragmentContainer: Int) {
     if (fragment == null) return
@@ -41,8 +43,8 @@ fun AppCompatActivity.addFragmentToActivity(fragment: Fragment?, @IdRes fragment
             .commitAllowingStateLoss()
 }
 
-fun AppCompatActivity.removeFragmentsFromView(@IdRes fragmentContainer: Int) {
-    (findViewById<View>(fragmentContainer) as ViewGroup).removeAllViews()
+fun AppCompatActivity.removeFragmentsFromView(@IdRes fragmentContainerId: Int) {
+    (findViewById<View>(fragmentContainerId) as ViewGroup).removeAllViews()
 }
 
 private val mHints = LongArray(2)
@@ -53,7 +55,8 @@ fun AppCompatActivity.exit() {
     } else {
         System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
         mHints[mHints.size - 1] = SystemClock.uptimeMillis()
-        Snackbar.make(findViewById(android.R.id.content), "期待下一次与你相遇", Snackbar.LENGTH_SHORT).setAction("o(*≧▽≦)ツ") { System.exit(0) }.show()
+        val faces = MessageBar.FACES
+        Snackbar.make(findViewById(android.R.id.content), "期待下一次与你相遇", Snackbar.LENGTH_SHORT).setAction(faces[Random().nextInt(faces.size)]) { System.exit(0) }.show()
         if (SystemClock.uptimeMillis() - mHints[0] <= 1600) {
             System.exit(0)
         }

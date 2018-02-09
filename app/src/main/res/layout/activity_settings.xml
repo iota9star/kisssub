@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -29,8 +29,12 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="?android:attr/homeAsUpIndicator"
-            app:title="@string/menu_settings" />
+            app:title="@string/menu_settings"
+            app:titleMarginStart="0dp" />
 
     </android.support.design.widget.AppBarLayout>
 

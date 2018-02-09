@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -32,9 +32,6 @@
             android:layout_width="0dp"
             android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="?android:windowBackground"
-            app:tabBackground="?android:windowBackground"
-            app:tabGravity="fill"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable" />
 
@@ -46,7 +43,6 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="8dp"
-            android:textColor="?android:textColorSecondary"
             app:srcCompat="@drawable/ic_action_add"
             tools:ignore="ContentDescription" />
     </LinearLayout>

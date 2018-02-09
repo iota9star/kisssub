@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.support.v7.widget.ListPopupWindow
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import com.afollestad.aesthetic.Aesthetic
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -44,14 +45,20 @@ import star.iota.kisssub.utils.ToastUtils
 class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
 
     override fun bindView(bean: RssTag) {
-        itemView.apply {
-            if (ThemeHelper.isDark(context)) {
-                DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColorDark(context))
-            } else {
-                DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColor(context))
-            }
-            textViewTag.text = bean.tag
-            imageViewMenu.setOnClickListener {
+        itemView?.apply {
+            Aesthetic.get(context)
+                    .isDark
+                    .take(1)
+                    .subscribe {
+                        if (it) {
+                            DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColorDark(context))
+                        } else {
+                            DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColor(context))
+                        }
+                    }
+
+            textViewTag?.text = bean.tag
+            imageViewMenu?.setOnClickListener {
                 showMenu(context!!, bean, imageViewMenu)
             }
         }

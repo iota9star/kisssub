@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -60,12 +60,12 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     companion object {
-        fun newInstance(): RssTagManageFragment = RssTagManageFragment()
+        fun newInstance() = RssTagManageFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -92,7 +92,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
         when (event.type) {
             ChangeAdapterEvent.DELETE -> adapter.remove(event.pos)
             ChangeAdapterEvent.MODIFY -> {
-                if (!isLoading) refreshLayout.autoRefresh()
+                if (!isLoading) refreshLayout?.autoRefresh()
             }
         }
     }
@@ -132,9 +132,9 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -152,10 +152,10 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private lateinit var adapter: RssTagAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = FadeInUpAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+//        recyclerView?.itemAnimator = FadeInUpAnimator()
         adapter = RssTagAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

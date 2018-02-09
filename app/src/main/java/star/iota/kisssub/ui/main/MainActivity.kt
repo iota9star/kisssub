@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
-import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.SearchView
-import android.util.TypedValue
-import android.view.Menu
+import android.support.v7.widget.Toolbar
 import android.view.View
+import com.afollestad.aesthetic.Aesthetic
+import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.liuguangqiang.cookie.OnActionClickListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main_content.*
@@ -49,6 +49,7 @@ import star.iota.kisssub.ext.removeFragmentsFromView
 import star.iota.kisssub.ext.replaceFragmentInActivity
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.OfficialHelper
+import star.iota.kisssub.helper.SearchHelper
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.about.AboutActivity
 import star.iota.kisssub.ui.about.InfoBean
@@ -59,7 +60,6 @@ import star.iota.kisssub.ui.collection.CollectionFragment
 import star.iota.kisssub.ui.history.HistoryFragment
 import star.iota.kisssub.ui.item.ItemFragment
 import star.iota.kisssub.ui.item.search.SearchFragment
-import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.ui.play.PlayFragment
 import star.iota.kisssub.ui.rss.main.RssTagFragment
 import star.iota.kisssub.ui.settings.SettingsActivity
@@ -95,18 +95,44 @@ class MainActivity : BaseActivity(), InfoContract.View {
 
     private lateinit var presenter: InfoPresenter
     override fun doSome() {
-        setSupportActionBar(toolbar)
+        initToolbar()
         initDrawer()
         initNavigationView()
         setFirstFragment()
         checkPermission()
+        initPresenter()
+        EventBus.getDefault().register(this)
+    }
+
+    private fun initPresenter() {
         presenter = InfoPresenter(this)
         presenter.get(KisssubUrl.UPDATE_URL)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
+    override fun getToolbar(): Toolbar? = toolbar
+
+    private fun initToolbar() {
+        toolbar?.menu?.clear()
+        toolbar?.inflateMenu(R.menu.menu_main)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val menu = toolbar?.menu
+        val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
+        searchView.queryHint = "请输入关键字..."
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        val pan = menu?.findItem(R.id.menu_pan)
+        val collection = menu?.findItem(R.id.menu_collection)
+        pan?.isChecked = SearchHelper.getPan(this)
+        collection?.isChecked = SearchHelper.getCollection(this)
+        pan?.setOnMenuItemClickListener {
+            pan.isChecked = !pan.isChecked
+            SearchHelper.setPan(this@MainActivity, pan.isChecked)
+            true
+        }
+        collection?.setOnMenuItemClickListener {
+            collection.isChecked = !collection.isChecked
+            SearchHelper.setCollection(this@MainActivity, collection.isChecked)
+            true
+        }
     }
 
     override fun onDestroy() {
@@ -129,29 +155,6 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 })
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.menu_search).actionView as SearchView
-        searchView.queryHint = "请输入关键字..."
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        val pan = menu.findItem(R.id.menu_pan)
-        val collection = menu.findItem(R.id.menu_collection)
-        pan.isChecked = SearchHelper.getPan(this)
-        collection.isChecked = SearchHelper.getCollection(this)
-        pan.setOnMenuItemClickListener {
-            pan.isChecked = !pan.isChecked
-            SearchHelper.setPan(this@MainActivity, pan.isChecked)
-            true
-        }
-        collection.setOnMenuItemClickListener {
-            collection.isChecked = !collection.isChecked
-            SearchHelper.setCollection(this@MainActivity, collection.isChecked)
-            true
-        }
-        return true
-    }
-
     override fun onNewIntent(intent: Intent) {
         if (intent.action != Intent.ACTION_SEARCH) {
             return
@@ -170,14 +173,14 @@ class MainActivity : BaseActivity(), InfoContract.View {
     private fun initDrawer() {
         val toggle = ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
+        drawerLayout?.addDrawerListener(toggle)
         toggle.syncState()
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
+        if (drawerLayout !== null && drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout?.closeDrawer(GravityCompat.START)
+        } else if (!BackHandlerHelper.handleBackPress(this)) {
             exit()
         }
     }
@@ -198,14 +201,16 @@ class MainActivity : BaseActivity(), InfoContract.View {
 
     private fun initNavigationView() {
         setDynamicBackground()
-        val typedValue = TypedValue()
-        this@MainActivity.theme.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-        val colors = intArrayOf(0x00000000, typedValue.data)
-        val startMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
-        val endMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
-        navigationViewStart.getHeaderView(0).findViewById<View>(R.id.viewMask).background = startMask
-        navigationViewEnd.getHeaderView(0).findViewById<View>(R.id.viewMask).background = endMask
-        navigationViewStart.setNavigationItemSelectedListener {
+        Aesthetic.get(this).colorWindowBackground()
+                .take(1)
+                .subscribe {
+                    val colors = intArrayOf(0x00000000, it)
+                    val startMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
+                    val endMask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
+                    navigationViewStart?.getHeaderView(0)?.findViewById<View>(R.id.viewMask)?.background = startMask
+                    navigationViewEnd?.getHeaderView(0)?.findViewById<View>(R.id.viewMask)?.background = endMask
+                }
+        navigationViewStart?.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_play -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
@@ -242,10 +247,11 @@ class MainActivity : BaseActivity(), InfoContract.View {
                     startActivity(Intent(this@MainActivity, AboutActivity::class.java))
                 }
             }
-            drawerLayout.closeDrawer(GravityCompat.START)
+            drawerLayout?.closeDrawer(GravityCompat.START)
+            initToolbar()
             true
         }
-        navigationViewEnd.setNavigationItemSelectedListener {
+        navigationViewEnd?.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_new -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
@@ -277,7 +283,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 }
                 R.id.menu_ova -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
-                    replaceFragmentInActivity(SearchFragment.newInstance(getString(R.string.menu_ova), KisssubUrl.OVA, SearchHelper.getParam(this)), R.id.frameLayoutContainer)
+                    replaceFragmentInActivity(ItemFragment.newInstance(getString(R.string.menu_ova), KisssubUrl.OVA), R.id.frameLayoutContainer)
                 }
                 R.id.menu_raw -> {
                     removeFragmentsFromView(R.id.frameLayoutContainer)
@@ -292,7 +298,8 @@ class MainActivity : BaseActivity(), InfoContract.View {
                     replaceFragmentInActivity(ItemFragment.newInstance(getString(R.string.menu_pan), KisssubUrl.PAN), R.id.frameLayoutContainer)
                 }
             }
-            drawerLayout.closeDrawer(GravityCompat.END)
+            drawerLayout?.closeDrawer(GravityCompat.END)
+            initToolbar()
             true
         }
     }

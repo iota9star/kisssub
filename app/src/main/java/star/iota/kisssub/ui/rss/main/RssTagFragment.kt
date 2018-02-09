@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
+import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.fragment_rss.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
@@ -45,22 +46,20 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
             }
         }
         pagerAdapter.addAll(titles, fragments)
-        viewPager.offscreenPageLimit = pagerAdapter.count
+        viewPager?.offscreenPageLimit = pagerAdapter.count
     }
 
     override fun success(rssTag: RssTag) {
     }
 
     override fun error(e: String?) {
-        println("run here rss tag fragment error")
     }
 
     override fun noData() {
-        println("run here rss tag fragment nodata")
     }
 
     companion object {
-        fun newInstance(): RssTagFragment = RssTagFragment()
+        fun newInstance() = RssTagFragment()
     }
 
     override fun getContainerViewId(): Int = R.layout.fragment_rss
@@ -81,12 +80,23 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initActionView() {
-        if (ThemeHelper.isDark(context!!)) {
-            imageViewAdd.setColorFilter(ThemeHelper.getSecondaryTextColorDark(context!!))
-        } else {
-            imageViewAdd.setColorFilter(ThemeHelper.getSecondaryTextColor(context!!))
-        }
-        imageViewAdd.setOnClickListener {
+        Aesthetic.get(context!!)
+                .isDark
+                .take(1)
+                .subscribe {
+                    if (it) {
+                        imageViewAdd?.setColorFilter(ThemeHelper.getSecondaryTextColorDark(context!!))
+                    } else {
+                        imageViewAdd?.setColorFilter(ThemeHelper.getSecondaryTextColor(context!!))
+                    }
+                }
+        Aesthetic.get(context!!)
+                .colorWindowBackground()
+                .take(1)
+                .subscribe {
+                    imageViewAdd?.setBackgroundColor(it)
+                }
+        imageViewAdd?.setOnClickListener {
             (activity!! as AppCompatActivity).addFragmentToActivity(RssTagManageFragment.newInstance(), R.id.frameLayoutContainer)
         }
     }
@@ -100,9 +110,9 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initViewPager() {
-        tabLayout.setupWithViewPager(viewPager)
-        viewPager.adapter = pagerAdapter
-        viewPager.offscreenPageLimit = pagerAdapter.count
+        tabLayout?.setupWithViewPager(viewPager)
+        viewPager?.adapter = pagerAdapter
+        viewPager?.offscreenPageLimit = pagerAdapter.count
     }
 
     override fun getBackgroundView(): ImageView? = null

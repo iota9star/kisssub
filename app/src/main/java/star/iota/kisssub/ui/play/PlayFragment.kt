@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -46,8 +46,8 @@ class PlayFragment : BaseFragment(), PlayContract.View {
     }
 
     companion object {
-        val URL = "url"
-        val TITLE = "title"
+        const val URL = "url"
+        const val TITLE = "title"
         fun newInstance(title: String, url: String): PlayFragment {
             val fragment = PlayFragment()
             val bundle = Bundle()
@@ -60,7 +60,7 @@ class PlayFragment : BaseFragment(), PlayContract.View {
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -87,9 +87,9 @@ class PlayFragment : BaseFragment(), PlayContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -111,10 +111,10 @@ class PlayFragment : BaseFragment(), PlayContract.View {
         val layoutManager = FlexboxLayoutManager(context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
-        recyclerView.layoutManager = layoutManager
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = layoutManager
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = PlayAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

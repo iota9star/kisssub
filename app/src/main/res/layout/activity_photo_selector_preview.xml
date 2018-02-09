@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="从预览移除当前图片"
+                android:text="@string/remove_photo_from_preview"
                 android:textColor="?android:textColorSecondary"
                 android:textStyle="bold" />
 

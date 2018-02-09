@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -41,18 +41,20 @@ object DisplayUtils {
 
     fun getDialogWidth(context: Context): Int = context.resources.displayMetrics.widthPixels - 100
 
-    fun tintImageView(view: View, color: Int) {
-        if (view is ViewGroup) {
-            (0 until view.childCount)
-                    .map { view.getChildAt(it) }
-                    .forEach {
-                        when (it) {
-                            is ViewGroup -> tintImageView(it, color)
-                            is ImageView -> it.setColorFilter(color)
+    fun tintImageView(view: View?, color: Int) {
+        if (view != null) {
+            if (view is ViewGroup) {
+                (0 until view.childCount)
+                        .map { view.getChildAt(it) }
+                        .forEach {
+                            when (it) {
+                                is ViewGroup -> tintImageView(it, color)
+                                is ImageView -> it.setColorFilter(color)
+                            }
                         }
-                    }
-        } else if (view is ImageView) {
-            view.setColorFilter(color)
+            } else if (view is ImageView) {
+                view.setColorFilter(color)
+            }
         }
     }
 }

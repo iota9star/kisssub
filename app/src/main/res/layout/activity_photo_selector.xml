@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@string/please_choose_photo" />
+            app:title="@string/please_choose_photo"
+            app:titleMarginStart="0dp" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -92,14 +93,14 @@
             <ImageButton
                 android:id="@+id/imageButtonPreview"
                 android:layout_width="64dp"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_menu_preview"
                 tools:ignore="ContentDescription" />
 
             <Button
                 android:id="@+id/buttonOK"
                 android:layout_width="64dp"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="@string/ok"

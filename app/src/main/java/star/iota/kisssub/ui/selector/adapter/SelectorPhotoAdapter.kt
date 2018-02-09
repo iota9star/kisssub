@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -25,12 +25,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
-import jp.wasabeef.glide.transformations.CropSquareTransformation
 import star.iota.kisssub.R
 import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.glide.GlideOptions.bitmapTransform
 import star.iota.kisssub.helper.ThemeHelper
 
 
@@ -62,22 +58,22 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val filePath = dirPath + "/" + photos[position]
-        holder.mask.visibility = View.GONE
-        holder.selected.visibility = View.GONE
-        holder.selected.setColorFilter(ThemeHelper.getAccentColor(context))
-        GlideApp.with(context)
-                .load(filePath)
-                .listener(GlidePalette.with(filePath)
-                        .use(BitmapPalette.Profile.VIBRANT_LIGHT)
-                        .intoBackground(holder.image, BitmapPalette.Swatch.RGB)
-                        .crossfade(true))
-                .apply(bitmapTransform(CropSquareTransformation()))
-                .into(holder.image)
-        holder.image.setOnClickListener {
+        holder.mask?.visibility = View.GONE
+        holder.selected?.visibility = View.GONE
+        holder.selected?.setColorFilter(ThemeHelper.getAccentColor(context))
+        if (holder.image != null) {
+            GlideApp.with(context)
+                    .load(filePath)
+                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .fallback(R.mipmap.ic_launcher)
+                    .into(holder.image)
+        }
+        holder.image?.setOnClickListener {
             if (selectedPhotos.contains(filePath)) {
                 selectedPhotos.remove(filePath)
-                holder.mask.visibility = View.GONE
-                holder.selected.visibility = View.GONE
+                holder.mask?.visibility = View.GONE
+                holder.selected?.visibility = View.GONE
             } else {
                 if (selectedPhotos.size >= limit) {
                     Toast.makeText(
@@ -87,18 +83,18 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
                             .show()
                 } else {
                     selectedPhotos.add(filePath)
-                    holder.mask.visibility = View.VISIBLE
-                    holder.selected.visibility = View.VISIBLE
+                    holder.mask?.visibility = View.VISIBLE
+                    holder.selected?.visibility = View.VISIBLE
                 }
             }
             onPhotoSelected?.selected(selectedPhotos.size)
         }
         if (selectedPhotos.contains(filePath)) {
-            holder.mask.visibility = View.VISIBLE
-            holder.selected.visibility = View.VISIBLE
+            holder.mask?.visibility = View.VISIBLE
+            holder.selected?.visibility = View.VISIBLE
         } else {
-            holder.mask.visibility = View.GONE
-            holder.selected.visibility = View.GONE
+            holder.mask?.visibility = View.GONE
+            holder.selected?.visibility = View.GONE
         }
         onPhotoSelected?.selected(selectedPhotos.size)
 
@@ -123,9 +119,9 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
 
     class ViewHolder(
             itemView: View,
-            val image: ImageView = itemView.findViewById(R.id.image_view_photo),
-            val mask: ImageView = itemView.findViewById(R.id.image_view_photo_mask),
-            val selected: ImageView = itemView.findViewById(R.id.image_view_select_button)
+            val image: ImageView? = itemView.findViewById(R.id.image_view_photo),
+            val mask: ImageView? = itemView.findViewById(R.id.image_view_photo_mask),
+            val selected: ImageView? = itemView.findViewById(R.id.image_view_select_button)
     ) : RecyclerView.ViewHolder(itemView)
 
     companion object {

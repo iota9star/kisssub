@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -24,12 +24,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.github.florent37.glidepalette.BitmapPalette
-import com.github.florent37.glidepalette.GlidePalette
-import jp.wasabeef.glide.transformations.CropSquareTransformation
 import star.iota.kisssub.R
 import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.glide.GlideOptions
 
 
 class PhotoAdapter(val context: Context, private val photos: ArrayList<String>) : RecyclerView.Adapter<PhotoAdapter.ViewHolder>() {
@@ -52,16 +48,16 @@ class PhotoAdapter(val context: Context, private val photos: ArrayList<String>) 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val filePath = photos[position]
-        GlideApp.with(context)
-                .load(filePath)
-                .listener(GlidePalette.with(filePath)
-                        .use(BitmapPalette.Profile.VIBRANT_LIGHT)
-                        .intoBackground(holder.image, BitmapPalette.Swatch.RGB)
-                        .crossfade(true))
-                .apply(GlideOptions.bitmapTransform(CropSquareTransformation()))
-                .into(holder.image)
-        holder.image.setOnClickListener {
-            onPhotoSelected?.selected(position)
+        if (holder.image != null) {
+            GlideApp.with(context)
+                    .load(filePath)
+                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .fallback(R.mipmap.ic_launcher)
+                    .into(holder.image)
+            holder.image.setOnClickListener {
+                onPhotoSelected?.selected(position)
+            }
         }
 
     }
@@ -70,6 +66,6 @@ class PhotoAdapter(val context: Context, private val photos: ArrayList<String>) 
 
     class ViewHolder(
             itemView: View,
-            val image: ImageView = itemView.findViewById(R.id.image_view_photo)
+            val image: ImageView? = itemView.findViewById(R.id.image_view_photo)
     ) : RecyclerView.ViewHolder(itemView)
 }

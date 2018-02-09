@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.afollestad.aesthetic.Aesthetic
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -44,13 +45,13 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
     private var preTitle: String? = null
 
     protected fun setToolbarTitle(title: CharSequence?) {
-        (this.activity!! as BaseActivity).supportActionBar?.title = title
+        (this.activity!! as BaseActivity).getToolbar()?.title = title
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-        preTitle = (this.activity!! as BaseActivity).supportActionBar?.title?.toString()
+        preTitle = (this.activity!! as BaseActivity).getToolbar()?.title?.toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(getContainerViewId(), container, false)
@@ -70,12 +71,16 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         GlideApp.with(this)
                 .load(ThemeHelper.getContentBanner(context!!))
                 .into(bg)
-        mask.alpha = ThemeHelper.getContentMaskAlpha(context!!)
-        if (ThemeHelper.isDark(context!!)) {
-            mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(context!!))
-        } else {
-            mask.setBackgroundColor(ThemeHelper.getContentMaskColor(context!!))
-        }
+        Aesthetic.get(context!!)
+                .isDark
+                .take(1)
+                .subscribe {
+                    if (it) {
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(context!!))
+                    } else {
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColor(context!!))
+                    }
+                }
     }
 
     abstract fun getBackgroundView(): ImageView?

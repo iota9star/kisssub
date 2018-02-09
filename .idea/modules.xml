@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KISSSUB.iml" filepath="$PROJECT_DIR$/KISSSUB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aesthetic/aesthetic.iml" filepath="$PROJECT_DIR$/aesthetic/aesthetic.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/kisssub-app-android.iml" filepath="$PROJECT_DIR$/.idea/kisssub-app-android.iml" />
     </modules>
   </component>
 </project>

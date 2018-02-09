@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -22,8 +22,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_default.*
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.widget.MessageBar
@@ -45,12 +48,12 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
     }
 
     companion object {
-        fun newInstance(): CollectionFragment = CollectionFragment()
+        fun newInstance() = CollectionFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
 
@@ -71,9 +74,9 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -92,10 +95,18 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     private lateinit var adapter: CollectionAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = CollectionAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onAdapterDataChange(event: ChangeAdapterEvent) {
+        when (event.type) {
+            ChangeAdapterEvent.DELETE -> adapter.remove(event.pos)
+        }
     }
 
     override fun onDestroy() {

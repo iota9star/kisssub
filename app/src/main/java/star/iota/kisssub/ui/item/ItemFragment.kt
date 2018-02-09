@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -45,9 +45,9 @@ class ItemFragment : BaseFragment(), ItemContract.View {
     }
 
     companion object {
-        val TITLE = "title"
-        val URL = "url"
-        val SUFFIX = "suffix"
+        const val TITLE = "title"
+        const val URL = "url"
+        const val SUFFIX = "suffix"
 
         fun newInstance(title: String, url: String): ItemFragment {
             val fragment = ItemFragment()
@@ -64,10 +64,10 @@ class ItemFragment : BaseFragment(), ItemContract.View {
         isLoading = false
         if (isRefresh) {
             page = 2
-            refreshLayout.finishRefresh()
+            refreshLayout?.finishRefresh()
         } else {
             if (!error) page++
-            refreshLayout.finishLoadmore()
+            refreshLayout?.finishLoadmore()
         }
     }
 
@@ -100,8 +100,8 @@ class ItemFragment : BaseFragment(), ItemContract.View {
     private var isLoading = false
     private var isRefresh = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isRefresh = true
                 isLoading = true
@@ -109,7 +109,7 @@ class ItemFragment : BaseFragment(), ItemContract.View {
                 presenter.get(url + "1" + suffix)
             }
         }
-        refreshLayout.setOnLoadmoreListener {
+        refreshLayout?.setOnLoadmoreListener {
             if (!checkIsLoading()) {
                 isRefresh = false
                 isLoading = true
@@ -127,10 +127,10 @@ class ItemFragment : BaseFragment(), ItemContract.View {
 
     private lateinit var adapter: ItemAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = FadeInUpAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+//        recyclerView?.itemAnimator = FadeInUpAnimator()
         adapter = ItemAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -27,11 +27,11 @@ import kotlinx.android.synthetic.main.item_item.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
+import star.iota.kisssub.helper.SearchHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
 import star.iota.kisssub.ui.item.search.SearchFragment
-import star.iota.kisssub.ui.item.search.SearchHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ShareUtils
 import star.iota.kisssub.utils.ToastUtils
@@ -41,28 +41,28 @@ import star.iota.kisssub.widget.MessageBar
 class ItemViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
 
     override fun bindView(bean: Record) {
-        itemView.apply {
-            textViewTitle.text = bean.title
-            textViewSize.text = bean.size
-            textViewDate.text = bean.date
-            textViewCategory.text = bean.category
-            textViewSub.text = bean.sub
-            textViewSub.setOnClickListener {
+        itemView?.apply {
+            textViewTitle?.text = bean.title
+            textViewSize?.text = bean.size
+            textViewDate?.text = bean.date
+            textViewCategory?.text = bean.category
+            textViewSub?.text = bean.sub
+            textViewSub?.setOnClickListener {
                 if (!bean.sub.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.sub!!, bean.sub!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
-            textViewTitle.setOnClickListener {
+            textViewTitle?.setOnClickListener {
                 if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
                 }
             }
-            textViewDownload.setOnClickListener {
+            textViewDownload?.setOnClickListener {
                 SendUtils.copy(context!!, bean.title, bean.magnet)
                 SendUtils.open(context!!, bean.magnet)
                 MessageBar.create(context!!, "已复制到剪切板，并尝试打开本地应用")
             }
-            textViewShare.setOnClickListener {
+            textViewShare?.setOnClickListener {
                 val content = "\n标题：${bean.title}\n\n" +
                         "分类：${bean.category}\n\n" +
                         "文件大小：${bean.size}\n\n" +
@@ -74,7 +74,7 @@ class ItemViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                 SendUtils.copy(context!!, bean.title, bean.magnet)
                 ToastUtils.short(context, "磁链已复制到剪切板")
             }
-            textViewCollection.setOnClickListener {
+            textViewCollection?.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))
                         .map { it.addRecord(bean) }
                         .subscribeOn(Schedulers.io())

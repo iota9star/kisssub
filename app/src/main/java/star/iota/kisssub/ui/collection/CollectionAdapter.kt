@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
-import star.iota.kisssub.base.Callback
 import star.iota.kisssub.room.Record
 
 class CollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -40,14 +39,10 @@ class CollectionAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder == null) return
-        (holder as BaseViewHolder<Record>).bindView(list[position], object : Callback {
-            override fun result(result: Any?) {
-                remove(result as Int)
-            }
-        })
+        (holder as BaseViewHolder<Record>).bindView(list[position])
     }
 
-    private fun remove(pos: Int) {
+    fun remove(pos: Int) {
         list.removeAt(pos)
         notifyItemRemoved(pos)
     }

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -60,10 +60,11 @@ class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presente
             bean.type = Record.NO_IMAGE
             bean.date = it?.select("td:nth-child(1)")?.text()
             bean.category = it?.select("td:nth-child(2) > a")?.text()
-            bean.title = it?.select("td:nth-child(3) > a")?.text()
+            val title = it?.select("td:nth-child(3) > a")?.text()
+            bean.title = ("/" + title?.replace(Regex("]\\s*\\[|\\[|]|】\\s*【|】|【"), "/") + "/").replace(Regex("/\\s*/+"), "/")
             val tUrl = it?.select("td:nth-child(3) > a")?.attr("href")
             val hash = tUrl?.replace("show-", "")?.replace(".html", "")
-            bean.magnet = "magnet:?xt=urn:btih:${hash}&tr=http://open.acgtracker.com:1096/announce"
+            bean.magnet = "magnet:?xt=urn:btih:$hash&tr=http://open.acgtracker.com:1096/announce"
             bean.url = KisssubUrl.BASE + tUrl
             bean.size = it?.select("td:nth-child(4)")?.text()
             bean.sub = it?.select("td:nth-child(8) > a")?.text()

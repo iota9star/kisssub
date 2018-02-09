@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -51,12 +51,12 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
     }
 
     companion object {
-        fun newInstance(): AnimeFragment = AnimeFragment()
+        fun newInstance() = AnimeFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefresh()
+        refreshLayout?.finishRefresh()
     }
 
 
@@ -76,9 +76,9 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.autoRefresh()
-        refreshLayout.isEnableLoadmore = false
-        refreshLayout.setOnRefreshListener {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
@@ -97,10 +97,10 @@ class AnimeFragment : BaseFragment(), AnimeContract.View {
 
     private lateinit var adapter: AnimeAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL)
+//        recyclerView?.itemAnimator = LandingAnimator()
         adapter = AnimeAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {
