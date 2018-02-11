@@ -43,7 +43,6 @@ import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  */
 @RestrictTo(LIBRARY_GROUP)
 final class EdgeGlowUtil {
-
     private static Field EDGE_GLOW_FIELD_EDGE;
     private static Field EDGE_GLOW_FIELD_GLOW;
     private static Field EDGE_EFFECT_COMPAT_FIELD_EDGE_EFFECT;
@@ -219,7 +218,6 @@ final class EdgeGlowUtil {
         }
     }
 
-    // Setter methods
 
     static void setEdgeGlowColor(@NonNull ScrollView scrollView, @ColorInt int color) {
         invalidateScrollViewFields();
@@ -300,8 +298,6 @@ final class EdgeGlowUtil {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
     }
-
-    // Utilities
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static void setEffectColor(Object edgeEffect, @ColorInt int color) {

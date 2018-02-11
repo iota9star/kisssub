@@ -28,7 +28,7 @@
     android:gravity="center_vertical"
     android:padding="8dp">
 
-    <ImageView
+    <com.afollestad.aesthetic.AestheticIconView
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:padding="8dp"
@@ -46,14 +46,13 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ImageView
+    <com.afollestad.aesthetic.AestheticIconView
         android:id="@+id/imageViewMenu"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:padding="8dp"
         app:srcCompat="@drawable/ic_action_more"
         tools:ignore="ContentDescription" />
 </LinearLayout>

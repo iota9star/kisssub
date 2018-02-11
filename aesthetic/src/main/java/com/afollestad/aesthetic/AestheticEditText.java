@@ -24,9 +24,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 
@@ -35,7 +33,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticEditText extends AppCompatEditText {
 
-    private CompositeDisposable subscriptions;
+    private CompositeDisposable compositeDisposable;
     private int backgroundResId;
     private int textColorResId;
     private int textColorHintResId;
@@ -73,41 +71,39 @@ public class AestheticEditText extends AppCompatEditText {
         TintHelper.setCursorTint(this, state.color());
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscriptions = new CompositeDisposable();
-        subscriptions.add(
-                Observable.combineLatest(
-                        ViewUtil.getObservableForResId(
-                                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()),
-                        Aesthetic.get(getContext()).isDark(),
-                        ColorIsDarkState.creator())
-                        .compose(Rx.<ColorIsDarkState>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<ColorIsDarkState>() {
-                                    @Override
-                                    public void accept(@NonNull ColorIsDarkState colorIsDarkState) {
-                                        invalidateColors(colorIsDarkState);
-                                    }
-                                },
-                                onErrorLogAndRethrow()));
-        subscriptions.add(
-                ViewUtil.getObservableForResId(
-                        getContext(), textColorResId, Aesthetic.get(getContext()).textColorPrimary())
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
-        subscriptions.add(
-                ViewUtil.getObservableForResId(
-                        getContext(), textColorHintResId, Aesthetic.get(getContext()).textColorSecondary())
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
+        compositeDisposable = new CompositeDisposable();
+        Observable<Integer> obs1 = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        if (obs1 != null) {
+            compositeDisposable.add(
+                    Observable.combineLatest(
+                            obs1,
+                            Aesthetic.get(getContext()).isDark(),
+                            ColorIsDarkState.creator())
+                            .compose(Rx.distinctToMainThread())
+                            .subscribe(
+                                    this::invalidateColors,
+                                    onErrorLogAndRethrow()));
+        }
+        Observable<Integer> obs2 = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorPrimary());
+        if (obs2 != null) {
+            compositeDisposable.add(
+                    obs2.compose(Rx.distinctToMainThread()).subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
+        }
+        Observable<Integer> obs3 = ViewUtil.getObservableForResId(getContext(), textColorHintResId, Aesthetic.get(getContext()).textColorSecondary());
+        if (obs3 != null) {
+            compositeDisposable.add(
+                    obs3.compose(Rx.distinctToMainThread()).subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscriptions.clear();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+        }
         super.onDetachedFromWindow();
     }
 }

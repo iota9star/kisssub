@@ -38,7 +38,6 @@ import star.iota.kisssub.helper.OfficialHelper
 import star.iota.kisssub.helper.SecurityHelper
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.lock.SetPinLockActivity
-import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.widget.MessageBar
 
 class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
@@ -55,6 +54,7 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
     override fun getContainerViewId(): Int = R.layout.fragment_settings_main
+    override fun isShowCircularReveal() = false
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -173,10 +173,5 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
         switchCompatAcceptOfficialContentBackground?.setOnCheckedChangeListener(this)
         switchCompatAcceptOfficialDynamicBackground?.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
         switchCompatAcceptOfficialDynamicBackground?.setOnCheckedChangeListener(this)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        DisplayUtils.tintImageView(linearLayoutContainer, ThemeHelper.getAccentColor(context!!))
     }
 }

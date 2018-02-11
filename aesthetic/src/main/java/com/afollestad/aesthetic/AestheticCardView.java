@@ -24,9 +24,7 @@ import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -36,7 +34,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticCardView extends CardView {
 
-    private Disposable bgSubscription;
+    private Disposable disposable;
     private int backgroundResId;
 
     public AestheticCardView(Context context) {
@@ -62,26 +60,17 @@ public class AestheticCardView extends CardView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Observable<Integer> obs =
-                ViewUtil.getObservableForResId(
-                        getContext(), backgroundResId, Aesthetic.get(getContext()).colorCardViewBackground());
-        //noinspection ConstantConditions
-        bgSubscription =
-                obs.compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<Integer>() {
-                                    @Override
-                                    public void accept(@NonNull Integer bgColor) throws Exception {
-                                        setCardBackgroundColor(bgColor);
-                                    }
-                                },
-                                onErrorLogAndRethrow());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorCardViewBackground());
+        if (obs != null) {
+            disposable = obs.compose(Rx.distinctToMainThread())
+                    .subscribe(this::setCardBackgroundColor, onErrorLogAndRethrow());
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (bgSubscription != null) {
-            bgSubscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
         }
         super.onDetachedFromWindow();
     }

@@ -20,9 +20,7 @@ package star.iota.kisssub.ui.details
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +33,6 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.helper.SearchHelper
-import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.item.search.SearchFragment
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
 import star.iota.kisssub.ui.selector.PhotoSelectorPreviewActivity
@@ -75,12 +72,8 @@ class DetailsFragment : BaseFragment(), DetailsContract.View {
         RichText.from(bean.tree).imageGetter(DefaultImageGetter()).into(textViewList)
         textViewDesc?.text = bean.desc?.replace("，", "\n")
         bean.tags?.forEach { str ->
-            val drawable = ContextCompat.getDrawable(context!!, R.drawable.bg_border) as GradientDrawable
-            drawable.setColor(ThemeHelper.getAccentColor(context!!))
-            drawable.setBounds(0, 0, drawable.minimumWidth, drawable.minimumHeight)
             val tag = LayoutInflater.from(context!!).inflate(R.layout.item_details_tag, null) as TextView
             tag.text = str
-            tag.setCompoundDrawables(drawable, null, null, null)
             tag.setOnClickListener {
                 (context!! as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance("标签：$str", str, SearchHelper.getParam(context!!)), R.id.frameLayoutContainer)
             }

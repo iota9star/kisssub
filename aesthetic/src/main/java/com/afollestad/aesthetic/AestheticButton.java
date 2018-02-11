@@ -25,9 +25,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -37,7 +35,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticButton extends AppCompatButton {
 
-    private Disposable subscription;
+    private Disposable disposable;
     private int backgroundResId;
 
     public AestheticButton(Context context) {
@@ -63,16 +61,8 @@ public class AestheticButton extends AppCompatButton {
     private void invalidateColors(ColorIsDarkState state) {
         TintHelper.setTintAuto(this, state.color(), true, state.isDark());
         ColorStateList textColorSl =
-                new ColorStateList(
-                        new int[][]{
-                                new int[]{android.R.attr.state_enabled}, new int[]{-android.R.attr.state_enabled}
-                        },
-                        new int[]{
-                                Util.isColorLight(state.color()) ? Color.BLACK : Color.WHITE,
-                                state.isDark() ? Color.WHITE : Color.BLACK
-                        });
+                new ColorStateList(new int[][]{new int[]{android.R.attr.state_enabled}, new int[]{-android.R.attr.state_enabled}}, new int[]{Util.isColorLight(state.color()) ? Color.BLACK : Color.WHITE, state.isDark() ? Color.WHITE : Color.BLACK});
         setTextColor(textColorSl);
-
         // Hack around button color not updating
         setEnabled(!isEnabled());
         setEnabled(!isEnabled());
@@ -82,26 +72,19 @@ public class AestheticButton extends AppCompatButton {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         //noinspection ConstantConditions
-        subscription =
-                Observable.combineLatest(
-                        ViewUtil.getObservableForResId(
-                                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()),
-                        Aesthetic.get(getContext()).isDark(),
-                        ColorIsDarkState.creator())
-                        .compose(Rx.<ColorIsDarkState>distinctToMainThread())
+        disposable =
+                Observable.combineLatest(ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()), Aesthetic.get(getContext()).isDark(), ColorIsDarkState.creator())
+                        .compose(Rx.distinctToMainThread())
                         .subscribe(
-                                new Consumer<ColorIsDarkState>() {
-                                    @Override
-                                    public void accept(@NonNull ColorIsDarkState colorIsDarkState) {
-                                        invalidateColors(colorIsDarkState);
-                                    }
-                                },
+                                this::invalidateColors,
                                 onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

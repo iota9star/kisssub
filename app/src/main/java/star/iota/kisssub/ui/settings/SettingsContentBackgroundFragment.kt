@@ -139,7 +139,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener, 
                 .presetsButton(R.string.action_preset)
                 .allowUserColorInput(true)
                 .allowUserColorInputAlpha(true)
-                .dynamicButtonColor(true)
+                .dynamicButtonColor(false)
                 .show(childFragmentManager)
     }
 

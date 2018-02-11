@@ -26,7 +26,7 @@ import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 
 
-class RssTagManagePresenter(private val view: RssTagManageContract.View) : RssTagManageContract.Presenter {
+class RssTagManagePresenter(private val view: RssTagManageContract.View) : RssTagManageContract.Presenter() {
     override fun get(helper: AppDatabaseHelper) {
         compositeDisposable.add(
                 Single.just(helper)

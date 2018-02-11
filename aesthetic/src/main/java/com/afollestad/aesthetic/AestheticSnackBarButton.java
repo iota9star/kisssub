@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
  */
 final class AestheticSnackBarButton extends AppCompatButton {
 
-    private Disposable subscription;
+    private Disposable disposable;
 
     public AestheticSnackBarButton(Context context) {
         super(context);
@@ -46,16 +46,17 @@ final class AestheticSnackBarButton extends AppCompatButton {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription =
-                Aesthetic.get(getContext())
-                        .snackbarActionTextColor()
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(ViewTextColorAction.create(this));
+        disposable = Aesthetic.get(getContext())
+                .snackbarActionTextColor()
+                .compose(Rx.distinctToMainThread())
+                .subscribe(ViewTextColorAction.create(this));
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

@@ -26,6 +26,7 @@ import com.github.ikidou.fragmentBackHandler.FragmentBackHandler
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_search.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -129,7 +130,7 @@ class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler 
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
         recyclerViewFilters?.layoutManager = layoutManager
-//        recyclerView?.itemAnimator = FadeInUpAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         filterAdapter = FilterAdapter()
         recyclerViewFilters?.adapter = filterAdapter
     }
@@ -185,7 +186,7 @@ class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler 
     private lateinit var recordAdapter: ItemAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView?.itemAnimator = FadeInUpAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         recordAdapter = ItemAdapter()
         recyclerView?.adapter = recordAdapter
     }

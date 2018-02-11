@@ -18,9 +18,11 @@
 
 package star.iota.kisssub.base
 
+import CircularReveal
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import com.afollestad.aesthetic.Aesthetic
@@ -42,9 +44,18 @@ abstract class BaseActivity : AppCompatActivity() {
         Aesthetic.get(this).attach(this)
         super.onCreate(savedInstanceState)
         setContentView(getContentViewId())
+        val revealView = getCircularRevealView()
+        revealView?.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                v.removeOnLayoutChangeListener(this)
+                CircularReveal.create(revealView)
+            }
+        })
         doSome()
         title = "o(*≧▽≦)ツ 嗨！你好吗"
     }
+
+    open fun getCircularRevealView(): View? = null
 
     override fun onResume() {
         Aesthetic.get(this).resume(this)

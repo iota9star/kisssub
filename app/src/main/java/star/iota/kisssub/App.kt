@@ -22,7 +22,10 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.multidex.MultiDex
+import com.afollestad.aesthetic.AestheticStoreHouseHeader
 import com.crashlytics.android.Crashlytics
+import com.facebook.stetho.Stetho
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.cache.CacheEntity
 import com.lzy.okgo.cache.CacheMode
@@ -30,12 +33,13 @@ import com.lzy.okgo.cookie.CookieJarImpl
 import com.lzy.okgo.cookie.store.DBCookieStore
 import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.model.HttpHeaders
-import com.scwang.smartrefresh.header.StoreHouseHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
+import com.squareup.leakcanary.LeakCanary
 import com.zzhoujay.richtext.RichText
 import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
+import star.iota.kisssub.helper.ThemeHelper
 import java.util.concurrent.TimeUnit
 
 
@@ -49,10 +53,10 @@ class App : Application() {
     companion object {
         fun makeOkHttpClient(context: Context): OkHttpClient {
             val builder = OkHttpClient.Builder()
-//            val loggingInterceptor = HttpLoggingInterceptor("OkGo")
+//            val loggingInterceptor = HttpLoggingInterceptor("okhttp")
 //            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY)
 //            loggingInterceptor.setColorLevel(Level.INFO)
-//            builder.addInterceptor(loggingInterceptor)
+            builder.addNetworkInterceptor(StethoInterceptor())
             builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
@@ -64,11 +68,13 @@ class App : Application() {
 
         init {
             SmartRefreshLayout.setDefaultRefreshHeaderCreater { context, _ ->
-                val header = StoreHouseHeader(context)
+                val header = AestheticStoreHouseHeader(context)
                 header.initWithString(context.resources.getString(R.string.kisssub))
                 header.setLineWidth(8)
                 header.loadingAniDuration = 800
                 header.setDropHeight(context.resources.getDimensionPixelSize(R.dimen.v256dp))
+                header.setBackgroundColor(0x00000000)
+                header.setTextColor(ThemeHelper.getAccentColor(context))
                 header
             }
             SmartRefreshLayout.setDefaultRefreshFooterCreater { context, _ -> ClassicsFooter(context) }
@@ -77,8 +83,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        LeakCanary.install(this)
         Fabric.with(this, Crashlytics())
         RichText.initCacheDir(this)
+        Stetho.initializeWithDefaults(this)
         initOkGo()
     }
 

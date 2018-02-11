@@ -31,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 final class AestheticSnackBarTextView extends AppCompatTextView {
 
-    private Disposable subscription;
+    private Disposable disposable;
 
     public AestheticSnackBarTextView(Context context) {
         super(context);
@@ -48,16 +48,17 @@ final class AestheticSnackBarTextView extends AppCompatTextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription =
-                Aesthetic.get(getContext())
-                        .snackbarTextColor()
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
+        disposable = Aesthetic.get(getContext())
+                .snackbarTextColor()
+                .compose(Rx.distinctToMainThread())
+                .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

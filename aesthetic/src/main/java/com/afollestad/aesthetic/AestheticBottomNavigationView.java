@@ -27,10 +27,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function3;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
@@ -40,8 +38,8 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticBottomNavigationView extends BottomNavigationView {
 
-    private Disposable modesSubscription;
-    private CompositeDisposable colorSubscriptions;
+    private Disposable disposable;
+    private CompositeDisposable compositeDisposable;
     private int lastTextIconColor;
 
     public AestheticBottomNavigationView(Context context) {
@@ -57,23 +55,10 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     }
 
     private void invalidateIconTextColor(int backgroundColor, int selectedColor) {
-        int baseColor =
-                ContextCompat.getColor(
-                        getContext(),
-                        Util.isColorLight(backgroundColor) ? R.color.ate_icon_light : R.color.ate_icon_dark);
+        int baseColor = ContextCompat.getColor(getContext(), Util.isColorLight(backgroundColor) ? R.color.ate_icon_light : R.color.ate_icon_dark);
         int unselectedIconTextColor = Util.adjustAlpha(baseColor, .87f);
-        ColorStateList iconColor =
-                new ColorStateList(
-                        new int[][]{
-                                new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}
-                        },
-                        new int[]{unselectedIconTextColor, selectedColor});
-        ColorStateList textColor =
-                new ColorStateList(
-                        new int[][]{
-                                new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}
-                        },
-                        new int[]{unselectedIconTextColor, selectedColor});
+        ColorStateList iconColor = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedIconTextColor, selectedColor});
+        ColorStateList textColor = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedIconTextColor, selectedColor});
         setItemIconTintList(iconColor);
         setItemTextColor(textColor);
     }
@@ -88,39 +73,24 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     }
 
     private void onState(State state) {
-        if (colorSubscriptions != null) {
-            colorSubscriptions.clear();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
         }
-        colorSubscriptions = new CompositeDisposable();
-
+        compositeDisposable = new CompositeDisposable();
         switch (state.iconTextMode) {
             case BottomNavIconTextMode.SELECTED_PRIMARY:
-                colorSubscriptions.add(
+                compositeDisposable.add(
                         Aesthetic.get(getContext())
                                 .colorPrimary()
-                                .compose(Rx.<Integer>distinctToMainThread())
-                                .subscribe(
-                                        new Consumer<Integer>() {
-                                            @Override
-                                            public void accept(@NonNull Integer color) {
-                                                lastTextIconColor = color;
-                                            }
-                                        },
-                                        onErrorLogAndRethrow()));
+                                .compose(Rx.distinctToMainThread())
+                                .subscribe(color -> lastTextIconColor = color, onErrorLogAndRethrow()));
                 break;
             case BottomNavIconTextMode.SELECTED_ACCENT:
-                colorSubscriptions.add(
+                compositeDisposable.add(
                         Aesthetic.get(getContext())
                                 .colorAccent()
-                                .compose(Rx.<Integer>distinctToMainThread())
-                                .subscribe(
-                                        new Consumer<Integer>() {
-                                            @Override
-                                            public void accept(@NonNull Integer color) {
-                                                lastTextIconColor = color;
-                                            }
-                                        },
-                                        onErrorLogAndRethrow()));
+                                .compose(Rx.distinctToMainThread())
+                                .subscribe(color -> lastTextIconColor = color, onErrorLogAndRethrow()));
                 break;
             case BottomNavIconTextMode.BLACK_WHITE_AUTO:
                 // We will automatically set the icon/text color when the background color is set
@@ -129,36 +99,33 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
             default:
                 throw new IllegalStateException("Unknown bottom nav icon/text mode: " + state.iconTextMode);
         }
-
         switch (state.bgMode) {
             case BottomNavBgMode.PRIMARY:
-                colorSubscriptions.add(
+                compositeDisposable.add(
                         Aesthetic.get(getContext())
                                 .colorPrimary()
-                                .compose(Rx.<Integer>distinctToMainThread())
+                                .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.PRIMARY_DARK:
-                colorSubscriptions.add(
+                compositeDisposable.add(
                         Aesthetic.get(getContext())
                                 .colorStatusBar()
-                                .compose(Rx.<Integer>distinctToMainThread())
+                                .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.ACCENT:
-                colorSubscriptions.add(
+                compositeDisposable.add(
                         Aesthetic.get(getContext())
                                 .colorAccent()
-                                .compose(Rx.<Integer>distinctToMainThread())
+                                .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.BLACK_WHITE_AUTO:
                 setBackgroundColor(
                         ContextCompat.getColor(
                                 getContext(),
-                                state.isDark
-                                        ? R.color.ate_bottom_nav_default_dark_bg
-                                        : R.color.ate_bottom_nav_default_light_bg));
+                                state.isDark ? R.color.ate_bottom_nav_default_dark_bg : R.color.ate_bottom_nav_default_light_bg));
                 break;
             default:
                 throw new IllegalStateException("Unknown bottom nav bg mode: " + state.bgMode);
@@ -168,32 +135,27 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        modesSubscription =
-                Observable.combineLatest(
-                        Aesthetic.get(getContext()).bottomNavigationBackgroundMode(),
-                        Aesthetic.get(getContext()).bottomNavigationIconTextMode(),
-                        Aesthetic.get(getContext()).isDark(),
-                        State.creator())
-                        .compose(Rx.<State>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<State>() {
-                                    @Override
-                                    public void accept(@android.support.annotation.NonNull State state) {
-                                        onState(state);
-                                    }
-                                },
-                                onErrorLogAndRethrow());
+        disposable = Observable.combineLatest(
+                Aesthetic.get(getContext()).bottomNavigationBackgroundMode(),
+                Aesthetic.get(getContext()).bottomNavigationIconTextMode(),
+                Aesthetic.get(getContext()).isDark(),
+                State.creator())
+                .compose(Rx.distinctToMainThread())
+                .subscribe(this::onState, onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        modesSubscription.dispose();
-        colorSubscriptions.clear();
+        if (disposable != null) {
+            disposable.dispose();
+        }
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+        }
         super.onDetachedFromWindow();
     }
 
     private static class State {
-
         @BottomNavBgMode
         private final int bgMode;
         @BottomNavIconTextMode
@@ -206,18 +168,12 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
             this.isDark = isDark;
         }
 
-        static State create(
-                @BottomNavBgMode int bgMode, @BottomNavIconTextMode int iconTextMode, boolean isDark) {
+        static State create(@BottomNavBgMode int bgMode, @BottomNavIconTextMode int iconTextMode, boolean isDark) {
             return new State(bgMode, iconTextMode, isDark);
         }
 
         static Function3<Integer, Integer, Boolean, State> creator() {
-            return new Function3<Integer, Integer, Boolean, State>() {
-                @Override
-                public State apply(Integer integer, Integer integer2, Boolean aBoolean) {
-                    return State.create(integer, integer2, aBoolean);
-                }
-            };
+            return State::create;
         }
     }
 }

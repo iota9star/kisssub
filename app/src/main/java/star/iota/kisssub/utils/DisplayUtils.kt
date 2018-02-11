@@ -20,9 +20,6 @@ package star.iota.kisssub.utils
 
 import android.content.Context
 import android.util.TypedValue
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
 
 
 object DisplayUtils {
@@ -40,21 +37,4 @@ object DisplayUtils {
     fun sp2px(context: Context, sp: Float): Int = (sp * context.resources.displayMetrics.scaledDensity + 0.5f).toInt()
 
     fun getDialogWidth(context: Context): Int = context.resources.displayMetrics.widthPixels - 100
-
-    fun tintImageView(view: View?, color: Int) {
-        if (view != null) {
-            if (view is ViewGroup) {
-                (0 until view.childCount)
-                        .map { view.getChildAt(it) }
-                        .forEach {
-                            when (it) {
-                                is ViewGroup -> tintImageView(it, color)
-                                is ImageView -> it.setColorFilter(color)
-                            }
-                        }
-            } else if (view is ImageView) {
-                view.setColorFilter(color)
-            }
-        }
-    }
 }

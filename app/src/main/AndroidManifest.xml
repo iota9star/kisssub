@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~  *    Copyright 2018. iota9star
   ~  *
@@ -38,6 +37,7 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3313e98754f18b0efde9664af36d96a47254b0e3" />
+
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,9 +58,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.lock.SetPinLockActivity" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".ui.settings.SettingsActivity" />
         <activity android:name=".ui.selector.PhotoSelectorActivity" />
         <activity android:name=".ui.selector.PhotoSelectorPreviewActivity" />
         <activity android:name=".ui.about.AboutActivity" />

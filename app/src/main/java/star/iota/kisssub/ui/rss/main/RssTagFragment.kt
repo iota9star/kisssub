@@ -22,12 +22,10 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
-import com.afollestad.aesthetic.Aesthetic
 import kotlinx.android.synthetic.main.fragment_rss.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 import star.iota.kisssub.ui.rss.data.RssFragment
@@ -80,22 +78,6 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initActionView() {
-        Aesthetic.get(context!!)
-                .isDark
-                .take(1)
-                .subscribe {
-                    if (it) {
-                        imageViewAdd?.setColorFilter(ThemeHelper.getSecondaryTextColorDark(context!!))
-                    } else {
-                        imageViewAdd?.setColorFilter(ThemeHelper.getSecondaryTextColor(context!!))
-                    }
-                }
-        Aesthetic.get(context!!)
-                .colorWindowBackground()
-                .take(1)
-                .subscribe {
-                    imageViewAdd?.setBackgroundColor(it)
-                }
         imageViewAdd?.setOnClickListener {
             (activity!! as AppCompatActivity).addFragmentToActivity(RssTagManageFragment.newInstance(), R.id.frameLayoutContainer)
         }

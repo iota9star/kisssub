@@ -30,15 +30,15 @@ import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.room.Record
 
 
-class SearchPresenter(private val view: SearchContract.View) : SearchContract.Presenter {
+class SearchPresenter(private val view: SearchContract.View) : SearchContract.Presenter() {
     override fun get(url: String) {
+        addCookie(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
                         .adapt(ObservableResponse<String>())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.computation())
                         .map { deal(it) }
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (it?.records == null || it.records!!.isEmpty()) {

@@ -23,9 +23,7 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -35,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticRadioButton extends AppCompatRadioButton {
 
-    private CompositeDisposable subscriptions;
+    private CompositeDisposable compositeDisposable;
     private int backgroundResId;
 
     public AestheticRadioButton(Context context) {
@@ -65,33 +63,28 @@ public class AestheticRadioButton extends AppCompatRadioButton {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscriptions = new CompositeDisposable();
-        //noinspection ConstantConditions
-        subscriptions.add(
-                Observable.combineLatest(
-                        ViewUtil.getObservableForResId(
-                                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()),
-                        Aesthetic.get(getContext()).isDark(),
-                        ColorIsDarkState.creator())
-                        .compose(Rx.<ColorIsDarkState>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<ColorIsDarkState>() {
-                                    @Override
-                                    public void accept(@NonNull ColorIsDarkState colorIsDarkState) {
-                                        invalidateColors(colorIsDarkState);
-                                    }
-                                },
-                                onErrorLogAndRethrow()));
-        subscriptions.add(
+        compositeDisposable = new CompositeDisposable();
+        Observable<Integer> obs = ViewUtil.getObservableForResId(
+                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        if (obs != null) {
+            compositeDisposable.add(
+                    Observable.combineLatest(
+                            obs,
+                            Aesthetic.get(getContext()).isDark(),
+                            ColorIsDarkState.creator())
+                            .compose(Rx.distinctToMainThread())
+                            .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
+        }
+        compositeDisposable.add(
                 Aesthetic.get(getContext())
                         .textColorPrimary()
-                        .compose(Rx.<Integer>distinctToMainThread())
+                        .compose(Rx.distinctToMainThread())
                         .subscribe(ViewTextColorAction.create(this)));
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscriptions.clear();
+        compositeDisposable.clear();
         super.onDetachedFromWindow();
     }
 }

@@ -28,9 +28,11 @@ import star.iota.kisssub.glide.GlideApp
 
 
 class PhotoFragment : BaseFragment() {
+
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
     override fun getContainerViewId(): Int = R.layout.fragment_photo_selector_preview
+    override fun isShowCircularReveal() = false
 
     override fun doSome() {
         photoView?.tag = null

@@ -46,12 +46,7 @@ public final class LightDarkColorState {
     }
 
     public static Function3<Integer, Integer, Boolean, LightDarkColorState> creator() {
-        return new Function3<Integer, Integer, Boolean, LightDarkColorState>() {
-            @Override
-            public LightDarkColorState apply(Integer lightcolor, Integer darkColor, Boolean aBoolean) {
-                return LightDarkColorState.create(lightcolor, darkColor, aBoolean);
-            }
-        };
+        return LightDarkColorState::create;
     }
 
     @ColorInt

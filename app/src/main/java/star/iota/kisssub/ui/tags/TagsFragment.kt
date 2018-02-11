@@ -23,6 +23,7 @@ import android.widget.ImageView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -99,7 +100,7 @@ class TagsFragment : BaseFragment(), TagsContract.View {
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
         recyclerView?.layoutManager = layoutManager
-//        recyclerView?.itemAnimator = LandingAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = TagsAdapter()
         recyclerView?.adapter = adapter
     }

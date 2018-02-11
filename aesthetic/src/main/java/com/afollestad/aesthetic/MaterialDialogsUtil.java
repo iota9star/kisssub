@@ -26,8 +26,6 @@ import java.lang.reflect.Method;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function4;
 
 import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
@@ -49,7 +47,6 @@ final class MaterialDialogsUtil {
         return true;
     }
 
-    @SuppressWarnings("TryWithIdenticalCatches")
     static void theme(Params params) {
         try {
             Class<?> cls = Class.forName("com.afollestad.materialdialogs.internal.ThemeSingleton");
@@ -83,58 +80,30 @@ final class MaterialDialogsUtil {
             Field fieldLinkColor = cls.getField("linkColor");
             fieldLinkColor.set(instance, ColorStateList.valueOf(params.accentColor));
 
-        } catch (Throwable t) {
-//      t.printStackTrace();
+        } catch (Throwable ignored) {
         }
     }
 
     static Disposable observe(Aesthetic instance) {
-        return Observable.combineLatest(
-                instance.textColorPrimary(),
-                instance.textColorSecondary(),
-                instance.colorAccent(),
-                instance.isDark(),
-                new Function4<Integer, Integer, Integer, Boolean, Params>() {
-                    @Override
-                    public Params apply(
-                            @io.reactivex.annotations.NonNull Integer primaryText,
-                            @io.reactivex.annotations.NonNull Integer secondaryText,
-                            @io.reactivex.annotations.NonNull Integer accent,
-                            @io.reactivex.annotations.NonNull Boolean isDark)
-                            throws Exception {
-                        return Params.create(
-                                primaryText, secondaryText, accent, isDark);
-                    }
-                })
+        return Observable.combineLatest(instance.textColorPrimary(), instance.textColorSecondary(), instance.colorAccent(), instance.isDark(), Params::create)
                 .distinctUntilChanged()
-                .subscribe(
-                        new Consumer<Params>() {
-                            @Override
-                            public void accept(
-                                    @io.reactivex.annotations.NonNull Params params)
-                                    throws Exception {
-                                MaterialDialogsUtil.theme(params);
-                            }
-                        });
+                .subscribe(MaterialDialogsUtil::theme);
     }
 
     static class Params {
-
         final int primaryTextColor;
         final int secondaryTextColor;
         final int accentColor;
         final boolean darkTheme;
 
-        private Params(
-                int primaryTextColor, int secondaryTextColor, int accentColor, boolean darkTheme) {
+        private Params(int primaryTextColor, int secondaryTextColor, int accentColor, boolean darkTheme) {
             this.primaryTextColor = primaryTextColor;
             this.secondaryTextColor = secondaryTextColor;
             this.accentColor = accentColor;
             this.darkTheme = darkTheme;
         }
 
-        public static Params create(
-                int primaryTextColor, int secondaryTextColor, int accentColor, boolean darkTheme) {
+        public static Params create(int primaryTextColor, int secondaryTextColor, int accentColor, boolean darkTheme) {
             return new Params(primaryTextColor, secondaryTextColor, accentColor, darkTheme);
         }
     }

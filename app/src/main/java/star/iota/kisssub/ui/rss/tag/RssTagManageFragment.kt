@@ -25,13 +25,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_rss_tag_manage.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
-import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 import star.iota.kisssub.utils.ToastUtils
@@ -81,7 +81,6 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initActionView() {
-        imageViewAdd.setColorFilter(ThemeHelper.getAccentColor(context!!))
         imageViewAdd.setOnClickListener {
             showAddDialog()
         }
@@ -153,7 +152,7 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
     private lateinit var adapter: RssTagAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView?.itemAnimator = FadeInUpAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = RssTagAdapter()
         recyclerView?.adapter = adapter
     }

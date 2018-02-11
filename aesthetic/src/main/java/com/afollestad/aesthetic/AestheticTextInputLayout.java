@@ -22,9 +22,8 @@ import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
 
-import io.reactivex.annotations.NonNull;
+import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.adjustAlpha;
@@ -35,7 +34,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticTextInputLayout extends TextInputLayout {
 
-    private CompositeDisposable subs;
+    private CompositeDisposable compositeDisposable;
     private int backgroundResId;
 
     public AestheticTextInputLayout(Context context) {
@@ -62,40 +61,26 @@ public class AestheticTextInputLayout extends TextInputLayout {
         TextInputLayoutUtil.setAccent(this, color);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subs = new CompositeDisposable();
-        subs.add(
+        compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(
                 Aesthetic.get(getContext())
                         .textColorSecondary()
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<Integer>() {
-                                    @Override
-                                    public void accept(@NonNull Integer color) {
-                                        TextInputLayoutUtil.setHint(
-                                                AestheticTextInputLayout.this, adjustAlpha(color, 0.7f));
-                                    }
-                                },
-                                onErrorLogAndRethrow()));
-        subs.add(
-                ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent())
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<Integer>() {
-                                    @Override
-                                    public void accept(@NonNull Integer color) {
-                                        invalidateColors(color);
-                                    }
-                                },
-                                onErrorLogAndRethrow()));
+                        .compose(Rx.distinctToMainThread())
+                        .subscribe(color -> TextInputLayoutUtil.setHint(AestheticTextInputLayout.this, adjustAlpha(color, 0.7f)), onErrorLogAndRethrow()));
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        if (obs != null) {
+            compositeDisposable.add(obs.compose(Rx.distinctToMainThread()).subscribe(this::invalidateColors, onErrorLogAndRethrow()));
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subs.clear();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+        }
         super.onDetachedFromWindow();
     }
 }

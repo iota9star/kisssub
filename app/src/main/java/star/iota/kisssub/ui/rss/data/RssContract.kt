@@ -29,7 +29,7 @@ interface RssContract {
         fun noData()
     }
 
-    interface Presenter : BasePresenter {
-        fun get(url: String)
+    abstract class Presenter : BasePresenter() {
+        abstract fun get(url: String)
     }
 }

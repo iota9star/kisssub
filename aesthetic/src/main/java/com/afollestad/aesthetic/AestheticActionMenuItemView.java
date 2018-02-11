@@ -27,7 +27,6 @@ import android.util.AttributeSet;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.TintHelper.createTintedDrawable;
@@ -39,7 +38,7 @@ import static com.afollestad.aesthetic.TintHelper.createTintedDrawable;
 final class AestheticActionMenuItemView extends ActionMenuItemView {
 
     private Drawable icon;
-    private Disposable subscription;
+    private Disposable disposable;
 
     public AestheticActionMenuItemView(Context context) {
         super(context);
@@ -72,12 +71,7 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(1)
                 .subscribe(
-                        new Consumer<ActiveInactiveColors>() {
-                            @Override
-                            public void accept(@NonNull ActiveInactiveColors colors) {
-                                invalidateColors(colors, icon);
-                            }
-                        },
+                        colors -> invalidateColors(colors, icon),
                         onErrorLogAndRethrow());
     }
 
@@ -89,23 +83,20 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription =
+        disposable =
                 Aesthetic.get(getContext())
                         .colorIconTitle(null)
-                        .compose(Rx.<ActiveInactiveColors>distinctToMainThread())
+                        .compose(Rx.distinctToMainThread())
                         .subscribe(
-                                new Consumer<ActiveInactiveColors>() {
-                                    @Override
-                                    public void accept(@NonNull ActiveInactiveColors colors) {
-                                        invalidateColors(colors, icon);
-                                    }
-                                },
+                                colors -> invalidateColors(colors, icon),
                                 onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

@@ -16,12 +16,14 @@
   ~  */
   -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.afollestad.aesthetic.AestheticDrawableTextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/textViewSub"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
+    android:drawableLeft="@drawable/bg_border"
     android:drawablePadding="8dp"
+    android:drawableStart="@drawable/bg_border"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:padding="8dp"

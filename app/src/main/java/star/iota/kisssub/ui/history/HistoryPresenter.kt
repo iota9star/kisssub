@@ -29,15 +29,15 @@ import org.jsoup.Jsoup
 import star.iota.kisssub.KisssubUrl
 
 
-class HistoryPresenter(private val view: HistoryContract.View) : HistoryContract.Presenter {
+class HistoryPresenter(private val view: HistoryContract.View) : HistoryContract.Presenter() {
     override fun get(url: String) {
+        addCookie(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
                         .adapt(ObservableResponse<String>())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.computation())
                         .map { deal(it) }
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (it == null || it.isEmpty()) {

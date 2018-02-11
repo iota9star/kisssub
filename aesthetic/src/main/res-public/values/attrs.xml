@@ -20,4 +20,11 @@
     <declare-styleable name="AestheticToolbar">
         <attr name="transparentBackground" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="AestheticStoreHouseHeader">
+        <attr name="text" format="string" />
+        <attr name="textColor" format="color" />
+        <attr name="lineWidth" format="dimension" />
+        <attr name="dropHeight" format="dimension" />
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
 </resources>

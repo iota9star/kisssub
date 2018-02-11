@@ -34,6 +34,7 @@ import star.iota.kisssub.ui.selector.adapter.PhotoPagerAdapter
 class PhotoSelectorPreviewActivity : BaseActivity() {
 
     override fun getContentViewId(): Int = R.layout.activity_photo_selector_preview
+    override fun getCircularRevealView(): View? = coordinatorLayout
 
     private lateinit var behavior: BottomSheetBehavior<View>
     private fun exchangeBehavior() = if (behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -100,10 +101,6 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
             }
         })
         buttonRemove?.setOnClickListener {
-            if (paths!!.size == 0) {
-                onBackPressed()
-                return@setOnClickListener
-            }
             val currentItem = viewPager?.currentItem
             if (currentItem != null) {
                 paths!!.removeAt(currentItem)
@@ -112,8 +109,7 @@ class PhotoSelectorPreviewActivity : BaseActivity() {
             }
             viewPager?.currentItem = 0
             if (paths!!.size == 0) {
-                textViewPhotoIndex?.text = 0.toString()
-                buttonRemove?.text = "点击返回前页"
+                onBackPressed()
             } else {
                 textViewPhotoIndex?.text = 1.toString()
             }

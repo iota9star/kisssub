@@ -34,7 +34,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticImageView extends AppCompatImageView {
 
-    private Disposable bgSubscription;
+    private Disposable disposable;
     private int backgroundResId;
 
     public AestheticImageView(Context context) {
@@ -62,16 +62,15 @@ public class AestheticImageView extends AppCompatImageView {
         super.onAttachedToWindow();
         Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, null);
         if (obs != null) {
-            bgSubscription =
-                    obs.compose(Rx.<Integer>distinctToMainThread())
-                            .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow());
+            disposable = obs.compose(Rx.distinctToMainThread())
+                    .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow());
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (bgSubscription != null) {
-            bgSubscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
         }
         super.onDetachedFromWindow();
     }

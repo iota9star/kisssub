@@ -31,7 +31,7 @@ android {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 9
+        versionCode 10
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"
@@ -60,6 +60,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     //support libs
     //noinspection GradleDependency
@@ -110,6 +113,12 @@ dependencies {
     //noinspection GradleDependency
     implementation 'com.squareup.okhttp3:okhttp:latest.release'
 
+    // stetho
+    //noinspection GradleDependency
+    implementation 'com.facebook.stetho:stetho:latest.release'
+    //noinspection GradleDependency
+    implementation 'com.facebook.stetho:stetho-okhttp3:latest.release'
+
     // glide
     //noinspection GradleDependency
     implementation 'com.github.bumptech.glide:glide:latest.release'
@@ -136,10 +145,6 @@ dependencies {
     // cookie bar
     //noinspection GradleDependency
     implementation 'com.liuguangqiang.cookie:library:latest.release'
-
-    // glide palette
-    //noinspection GradleDependency
-    implementation 'com.github.florent37:glidepalette:latest.release'
 
     // material-dialogs
     //noinspection GradleDependency

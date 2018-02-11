@@ -22,9 +22,7 @@ import android.content.Context;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 
@@ -33,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticNestedScrollView extends NestedScrollView {
 
-    private Disposable subscription;
+    private Disposable disposable;
 
     public AestheticNestedScrollView(Context context) {
         super(context);
@@ -54,23 +52,17 @@ public class AestheticNestedScrollView extends NestedScrollView {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription =
-                Aesthetic.get(getContext())
-                        .colorAccent()
-                        .compose(Rx.<Integer>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<Integer>() {
-                                    @Override
-                                    public void accept(@NonNull Integer color) {
-                                        invalidateColors(color);
-                                    }
-                                },
-                                onErrorLogAndRethrow());
+        disposable = Aesthetic.get(getContext())
+                .colorAccent()
+                .compose(Rx.distinctToMainThread())
+                .subscribe(this::invalidateColors, onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

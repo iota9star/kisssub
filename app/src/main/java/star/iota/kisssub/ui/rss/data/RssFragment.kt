@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -78,7 +79,7 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
-
+    override fun isShowCircularReveal() = false
     override fun getContainerViewId(): Int = R.layout.fragment_default
 
     override fun doSome() {
@@ -138,7 +139,7 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     private lateinit var adapter: RssAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView?.itemAnimator = LandingAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = RssAdapter()
         recyclerView?.adapter = adapter
     }

@@ -40,9 +40,7 @@ import android.view.View;
 import java.lang.reflect.Field;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 
@@ -52,8 +50,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 public class AestheticCoordinatorLayout extends CoordinatorLayout
         implements AppBarLayout.OnOffsetChangedListener {
 
-    private Disposable toolbarColorSubscription;
-    private Disposable statusBarColorSubscription;
+    private CompositeDisposable compositeDisposable;
     private AppBarLayout appBarLayout;
     private View colorView;
     private AestheticToolbar toolbar;
@@ -124,7 +121,7 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-
+        compositeDisposable = new CompositeDisposable();
         // Find the toolbar and color view used to blend the scroll transition
         if (getChildCount() > 0 && getChildAt(0) instanceof AppBarLayout) {
             appBarLayout = (AppBarLayout) getChildAt(0);
@@ -148,55 +145,38 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
 
         if (toolbar != null && colorView != null) {
             this.appBarLayout.addOnOffsetChangedListener(this);
-            toolbarColorSubscription =
+            compositeDisposable.add(
                     Observable.combineLatest(
                             toolbar.colorUpdated(),
                             Aesthetic.get(getContext()).colorIconTitle(toolbar.colorUpdated()),
-                            new BiFunction<
-                                    Integer, ActiveInactiveColors, Pair<Integer, ActiveInactiveColors>>() {
-                                @Override
-                                public Pair<Integer, ActiveInactiveColors> apply(
-                                        Integer integer, ActiveInactiveColors activeInactiveColors) {
-                                    return Pair.create(integer, activeInactiveColors);
-                                }
-                            })
-                            .compose(Rx.<Pair<Integer, ActiveInactiveColors>>distinctToMainThread())
+                            Pair::create)
+                            .compose(Rx.distinctToMainThread())
                             .subscribe(
-                                    new Consumer<Pair<Integer, ActiveInactiveColors>>() {
-                                        @Override
-                                        public void accept(@NonNull Pair<Integer, ActiveInactiveColors> result) {
-                                            toolbarColor = result.first;
-                                            iconTextColors = result.second;
-                                            invalidateColors();
-                                        }
-                                    },
-                                    onErrorLogAndRethrow());
+                                    result -> {
+                                        toolbarColor = result.first;
+                                        iconTextColors = result.second;
+                                        invalidateColors();
+                                    }, onErrorLogAndRethrow()));
         }
 
         if (collapsingToolbarLayout != null) {
-            statusBarColorSubscription =
+            compositeDisposable.add(
                     Aesthetic.get(getContext())
                             .colorStatusBar()
-                            .compose(Rx.<Integer>distinctToMainThread())
+                            .compose(Rx.distinctToMainThread())
                             .subscribe(
-                                    new Consumer<Integer>() {
-                                        @Override
-                                        public void accept(@io.reactivex.annotations.NonNull Integer color) {
-                                            collapsingToolbarLayout.setContentScrimColor(color);
-                                            collapsingToolbarLayout.setStatusBarScrimColor(color);
-                                        }
+                                    color -> {
+                                        collapsingToolbarLayout.setContentScrimColor(color);
+                                        collapsingToolbarLayout.setStatusBarScrimColor(color);
                                     },
-                                    onErrorLogAndRethrow());
+                                    onErrorLogAndRethrow()));
         }
     }
 
     @Override
     public void onDetachedFromWindow() {
-        if (toolbarColorSubscription != null) {
-            toolbarColorSubscription.dispose();
-        }
-        if (statusBarColorSubscription != null) {
-            statusBarColorSubscription.dispose();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
         }
         if (this.appBarLayout != null) {
             this.appBarLayout.removeOnOffsetChangedListener(this);
@@ -220,7 +200,6 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
         if (iconTextColors == null) {
             return;
         }
-
         final int maxOffset = appBarLayout.getMeasuredHeight() - toolbar.getMeasuredHeight();
         final float ratio = (float) lastOffset / (float) maxOffset;
 
@@ -229,15 +208,9 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
         final int collapsedTitleColor = iconTextColors.activeColor();
         final int expandedTitleColor = Util.isColorLight(colorViewColor) ? Color.BLACK : Color.WHITE;
         final int blendedTitleColor = Util.blendColors(expandedTitleColor, collapsedTitleColor, ratio);
-
         toolbar.setBackgroundColor(blendedColor);
-
         collapsingToolbarLayout.setCollapsedTitleTextColor(collapsedTitleColor);
         collapsingToolbarLayout.setExpandedTitleColor(expandedTitleColor);
-
-        tintMenu(
-                toolbar,
-                toolbar.getMenu(),
-                ActiveInactiveColors.create(blendedTitleColor, Util.adjustAlpha(blendedColor, 0.7f)));
+        tintMenu(toolbar, toolbar.getMenu(), ActiveInactiveColors.create(blendedTitleColor, Util.adjustAlpha(blendedColor, 0.7f)));
     }
 }

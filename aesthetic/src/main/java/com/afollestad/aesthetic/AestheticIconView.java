@@ -19,56 +19,62 @@
 package com.afollestad.aesthetic;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
 
-/**
- * @author Aidan Follestad (afollestad)
- */
-public class AestheticTextView extends AppCompatTextView {
+public class AestheticIconView extends AppCompatImageView {
 
-    private Disposable disposable;
-    private int textColorResId;
+    private CompositeDisposable compositeDisposable;
+    private int backgroundResId;
 
-    public AestheticTextView(Context context) {
+    public AestheticIconView(Context context) {
         super(context);
     }
 
-    public AestheticTextView(Context context, AttributeSet attrs) {
+    public AestheticIconView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AestheticTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AestheticIconView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            textColorResId = resolveResId(context, attrs, android.R.attr.textColor);
+            backgroundResId = resolveResId(context, attrs, android.R.attr.background);
         }
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorSecondary());
+        compositeDisposable = new CompositeDisposable();
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, null);
         if (obs != null) {
-            disposable = obs.compose(Rx.distinctToMainThread()).subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
+            compositeDisposable.add(
+                    obs.compose(Rx.distinctToMainThread())
+                            .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
         }
+        compositeDisposable.add(
+                Aesthetic.get(getContext())
+                        .colorAccent()
+                        .compose(Rx.distinctToMainThread())
+                        .subscribe(this::setColorFilter, onErrorLogAndRethrow()));
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
         }
         super.onDetachedFromWindow();
     }

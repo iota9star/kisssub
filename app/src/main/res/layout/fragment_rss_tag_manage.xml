@@ -71,7 +71,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <ImageView
+        <com.afollestad.aesthetic.AestheticIconView
             android:id="@+id/imageViewAdd"
             android:layout_width="48dp"
             android:layout_height="48dp"

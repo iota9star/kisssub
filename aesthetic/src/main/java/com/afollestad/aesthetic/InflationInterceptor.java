@@ -20,10 +20,9 @@ package com.afollestad.aesthetic;
 
 import android.content.Context;
 import android.support.annotation.RestrictTo;
-import android.support.v4.view.LayoutInflaterFactory;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -32,13 +31,12 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  * @author Aidan Follestad (afollestad)
  */
 @RestrictTo(LIBRARY_GROUP)
-final class InflationInterceptor implements LayoutInflaterFactory {
+final class InflationInterceptor implements LayoutInflater.Factory2 {
 
     @Override
     public View onCreateView(View parent, final String name, Context context, AttributeSet attrs) {
         View view = null;
         final int viewId = resolveResId(context, attrs, android.R.attr.id);
-
         switch (name) {
             case "ImageView":
             case "android.support.v7.widget.AppCompatImageView":
@@ -61,7 +59,7 @@ final class InflationInterceptor implements LayoutInflaterFactory {
                     view = null;
                 } else {
                     view = new AestheticTextView(context, attrs);
-                    if (parent instanceof LinearLayout && view.getId() == android.R.id.message) {
+                    if (view.getId() == android.R.id.message) {
                         // This is for a toast message
                         view = null;
                     }
@@ -108,7 +106,6 @@ final class InflationInterceptor implements LayoutInflaterFactory {
             case "android.support.v7.view.menu.ActionMenuItemView":
                 view = new AestheticActionMenuItemView(context, attrs);
                 break;
-
             case "android.support.v7.widget.RecyclerView":
                 view = new AestheticRecyclerView(context, attrs);
                 break;
@@ -124,19 +121,16 @@ final class InflationInterceptor implements LayoutInflaterFactory {
             case "android.support.v4.view.ViewPager":
                 view = new AestheticViewPager(context, attrs);
                 break;
-
             case "Spinner":
             case "android.support.v7.widget.AppCompatSpinner":
                 view = new AestheticSpinner(context, attrs);
                 break;
-
             case "android.support.design.widget.TextInputLayout":
                 view = new AestheticTextInputLayout(context, attrs);
                 break;
             case "android.support.design.widget.TextInputEditText":
                 view = new AestheticTextInputEditText(context, attrs);
                 break;
-
             case "android.support.v7.widget.CardView":
                 view = new AestheticCardView(context, attrs);
                 break;
@@ -156,12 +150,14 @@ final class InflationInterceptor implements LayoutInflaterFactory {
                 view = new AestheticCoordinatorLayout(context, attrs);
                 break;
         }
-
         if (view != null && view.getTag() != null && ":aesthetic_ignore".equals(view.getTag())) {
-            // Set view back to null so we can let AppCompat handle this view instead.
             view = null;
         }
-
         return view;
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        return onCreateView(null, name, context, attrs);
     }
 }

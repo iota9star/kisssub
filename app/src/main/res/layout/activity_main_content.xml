@@ -35,10 +35,10 @@
             app:titleMarginStart="0dp" />
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <io.codetail.widget.RevealFrameLayout
         android:id="@+id/frameLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:tag="@string/ignore_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 </android.support.design.widget.CoordinatorLayout>

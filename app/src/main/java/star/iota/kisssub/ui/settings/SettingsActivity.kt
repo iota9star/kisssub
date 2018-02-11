@@ -18,8 +18,8 @@
 
 package star.iota.kisssub.ui.settings
 
-import android.content.Intent
 import android.support.v7.widget.Toolbar
+import android.view.View
 import kotlinx.android.synthetic.main.activity_settings.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
@@ -29,13 +29,10 @@ import star.iota.kisssub.ext.replaceFragmentInActivity
 class SettingsActivity : BaseActivity() {
 
     override fun getContentViewId(): Int = R.layout.activity_settings
+    override fun getCircularRevealView(): View? = coordinatorLayout
 
     override fun doSome() {
         initToolbar()
-        replaceFragmentInActivity(SettingsMainFragment.newInstance(), R.id.frameLayoutContainer)
-    }
-
-    override fun onNewIntent(intent: Intent?) {
         replaceFragmentInActivity(SettingsMainFragment.newInstance(), R.id.frameLayoutContainer)
     }
 

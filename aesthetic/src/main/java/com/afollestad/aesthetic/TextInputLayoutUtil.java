@@ -37,12 +37,10 @@ final class TextInputLayoutUtil {
 
     static void setHint(@NonNull TextInputLayout view, @ColorInt int hintColor) {
         try {
-            final Field mDefaultTextColorField =
-                    TextInputLayout.class.getDeclaredField("mDefaultTextColor");
+            final Field mDefaultTextColorField = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
             mDefaultTextColorField.setAccessible(true);
             mDefaultTextColorField.set(view, ColorStateList.valueOf(hintColor));
-            final Method updateLabelStateMethod =
-                    TextInputLayout.class.getDeclaredMethod("updateLabelState", boolean.class, boolean.class);
+            final Method updateLabelStateMethod = TextInputLayout.class.getDeclaredMethod("updateLabelState", boolean.class, boolean.class);
             updateLabelStateMethod.setAccessible(true);
             updateLabelStateMethod.invoke(view, false, true);
         } catch (Throwable t) {
@@ -53,12 +51,10 @@ final class TextInputLayoutUtil {
 
     static void setAccent(@NonNull TextInputLayout view, @ColorInt int accentColor) {
         try {
-            final Field mFocusedTextColorField =
-                    TextInputLayout.class.getDeclaredField("mFocusedTextColor");
+            final Field mFocusedTextColorField = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
             mFocusedTextColorField.setAccessible(true);
             mFocusedTextColorField.set(view, ColorStateList.valueOf(accentColor));
-            final Method updateLabelStateMethod =
-                    TextInputLayout.class.getDeclaredMethod("updateLabelState", boolean.class, boolean.class);
+            final Method updateLabelStateMethod = TextInputLayout.class.getDeclaredMethod("updateLabelState", boolean.class, boolean.class);
             updateLabelStateMethod.setAccessible(true);
             updateLabelStateMethod.invoke(view, false, true);
         } catch (Throwable t) {

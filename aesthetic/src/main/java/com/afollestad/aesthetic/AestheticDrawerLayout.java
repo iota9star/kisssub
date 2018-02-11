@@ -26,7 +26,6 @@ import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.util.AttributeSet;
 
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 
@@ -37,7 +36,7 @@ public class AestheticDrawerLayout extends DrawerLayout {
 
     private ActiveInactiveColors lastState;
     private DrawerArrowDrawable arrowDrawable;
-    private Disposable subscription;
+    private Disposable disposable;
 
     public AestheticDrawerLayout(Context context) {
         super(context);
@@ -64,24 +63,19 @@ public class AestheticDrawerLayout extends DrawerLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription =
-                Aesthetic.get(getContext())
-                        .colorIconTitle(null)
-                        .compose(Rx.<ActiveInactiveColors>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<ActiveInactiveColors>() {
-                                    @Override
-                                    public void accept(
-                                            @io.reactivex.annotations.NonNull ActiveInactiveColors colors) {
-                                        invalidateColor(colors);
-                                    }
-                                },
-                                onErrorLogAndRethrow());
+        disposable = Aesthetic.get(getContext())
+                .colorIconTitle(null)
+                .compose(Rx.distinctToMainThread())
+                .subscribe(
+                        this::invalidateColor,
+                        onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 

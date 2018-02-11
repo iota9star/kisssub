@@ -45,8 +45,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
 public final class ViewUtil {
 
     @Nullable
-    public static Observable<Integer> getObservableForResId(
-            @NonNull Context context, @IdRes int resId, @Nullable Observable<Integer> fallback) {
+    public static Observable<Integer> getObservableForResId(@NonNull Context context, @IdRes int resId, @Nullable Observable<Integer> fallback) {
         if (resId == 0) {
             return fallback;
         } else if (resId == resolveResId(context, R.attr.colorPrimary, 0)) {
@@ -71,8 +70,7 @@ public final class ViewUtil {
         return fallback;
     }
 
-    static void tintToolbarMenu(
-            @NonNull Toolbar toolbar, @NonNull Menu menu, ActiveInactiveColors titleIconColors) {
+    static void tintToolbarMenu(@NonNull Toolbar toolbar, @NonNull Menu menu, ActiveInactiveColors titleIconColors) {
         // The collapse icon displays when action views are expanded (e.g. SearchView)
         try {
             final Field field = Toolbar.class.getDeclaredField("mCollapseIcon");
@@ -128,13 +126,11 @@ public final class ViewUtil {
         }
     }
 
-    private static void tintImageView(Object target, Field field, ActiveInactiveColors tintColors)
-            throws Exception {
+    private static void tintImageView(Object target, Field field, ActiveInactiveColors tintColors) throws Exception {
         field.setAccessible(true);
         final ImageView imageView = (ImageView) field.get(target);
         if (imageView.getDrawable() != null) {
-            imageView.setImageDrawable(
-                    createTintedDrawable(imageView.getDrawable(), tintColors.toEnabledSl()));
+            imageView.setImageDrawable(createTintedDrawable(imageView.getDrawable(), tintColors.toEnabledSl()));
         }
     }
 }

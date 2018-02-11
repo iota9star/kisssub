@@ -19,7 +19,9 @@
 package com.afollestad.aesthetic;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
@@ -31,56 +33,67 @@ import static com.afollestad.aesthetic.Util.resolveResId;
 /**
  * @author Aidan Follestad (afollestad)
  */
-public class AestheticCheckBox extends AppCompatCheckBox {
+public class AestheticDrawableTextView extends AppCompatTextView {
 
-    protected int backgroundResId;
     private CompositeDisposable compositeDisposable;
+    private int textColorResId;
 
-    public AestheticCheckBox(Context context) {
+    public AestheticDrawableTextView(Context context) {
         super(context);
     }
 
-    public AestheticCheckBox(Context context, AttributeSet attrs) {
+    public AestheticDrawableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public AestheticCheckBox(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AestheticDrawableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
-            backgroundResId = resolveResId(context, attrs, android.R.attr.background);
+            textColorResId = resolveResId(context, attrs, android.R.attr.textColor);
         }
-    }
-
-    protected void invalidateColors(ColorIsDarkState state) {
-        TintHelper.setTint(this, state.color(), state.isDark());
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         compositeDisposable = new CompositeDisposable();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorSecondary());
         if (obs != null) {
             compositeDisposable.add(
-                    Observable.combineLatest(
-                            obs,
-                            Aesthetic.get(getContext()).isDark(),
-                            ColorIsDarkState.creator())
-                            .compose(Rx.distinctToMainThread())
-                            .subscribe(
-                                    this::invalidateColors,
-                                    onErrorLogAndRethrow()));
+                    obs.compose(Rx.distinctToMainThread())
+                            .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
         }
         compositeDisposable.add(
                 Aesthetic.get(getContext())
-                        .textColorPrimary()
+                        .colorAccent()
                         .compose(Rx.distinctToMainThread())
-                        .subscribe(ViewTextColorAction.create(this)));
+                        .subscribe(this::tintDrawables, onErrorLogAndRethrow()));
+    }
+
+    private void tintDrawables(Integer integer) {
+        Drawable[] drawables = getCompoundDrawables();
+        if (drawables.length > 0) {
+            for (int i = 0; i < drawables.length; i++) {
+                Drawable drawable = drawables[i];
+                if (drawable instanceof GradientDrawable) {
+                    ((GradientDrawable) drawable).setColor(integer);
+                    if (i == 0) {
+                        setCompoundDrawables(drawable, null, null, null);
+                    } else if (i == 1) {
+                        setCompoundDrawables(null, drawable, null, null);
+                    } else if (i == 2) {
+                        setCompoundDrawables(null, null, drawable, null);
+                    } else if (i == 3) {
+                        setCompoundDrawables(null, null, null, drawable);
+                    }
+                }
+            }
+        }
     }
 
     @Override

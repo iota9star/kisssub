@@ -26,9 +26,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -38,7 +36,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticFab extends FloatingActionButton {
 
-    private Disposable subscription;
+    private Disposable disposable;
     private int backgroundResId;
     private int iconColor;
 
@@ -76,27 +74,19 @@ public class AestheticFab extends FloatingActionButton {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        //noinspection ConstantConditions
-        subscription =
-                Observable.combineLatest(
-                        ViewUtil.getObservableForResId(
-                                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()),
-                        Aesthetic.get(getContext()).isDark(),
-                        ColorIsDarkState.creator())
-                        .compose(Rx.<ColorIsDarkState>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<ColorIsDarkState>() {
-                                    @Override
-                                    public void accept(@NonNull ColorIsDarkState colorIsDarkState) {
-                                        invalidateColors(colorIsDarkState);
-                                    }
-                                },
-                                onErrorLogAndRethrow());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        if (obs != null) {
+            disposable = Observable.combineLatest(obs, Aesthetic.get(getContext()).isDark(), ColorIsDarkState.creator())
+                    .compose(Rx.distinctToMainThread())
+                    .subscribe(this::invalidateColors, onErrorLogAndRethrow());
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subscription.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
         super.onDetachedFromWindow();
     }
 }

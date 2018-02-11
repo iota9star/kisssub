@@ -22,6 +22,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
@@ -128,7 +129,7 @@ class ItemFragment : BaseFragment(), ItemContract.View {
     private lateinit var adapter: ItemAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView?.itemAnimator = FadeInUpAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = ItemAdapter()
         recyclerView?.adapter = adapter
     }

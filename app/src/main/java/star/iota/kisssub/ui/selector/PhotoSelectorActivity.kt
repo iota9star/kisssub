@@ -46,6 +46,7 @@ import kotlin.collections.ArrayList
 
 class PhotoSelectorActivity : BaseActivity() {
     override fun getContentViewId(): Int = R.layout.activity_photo_selector
+    override fun getCircularRevealView(): View? = coordinatorLayout
 
     override fun doSome() {
         initToolbar()

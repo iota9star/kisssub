@@ -23,9 +23,7 @@ import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -35,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticTextInputEditText extends TextInputEditText {
 
-    private CompositeDisposable subs;
+    private CompositeDisposable compositeDisposable;
     private int backgroundResId;
     private ColorIsDarkState lastState;
 
@@ -68,38 +66,34 @@ public class AestheticTextInputEditText extends TextInputEditText {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subs = new CompositeDisposable();
-        subs.add(
+        compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(
                 Aesthetic.get(getContext())
                         .textColorPrimary()
-                        .compose(Rx.<Integer>distinctToMainThread())
+                        .compose(Rx.distinctToMainThread())
                         .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
-        subs.add(
+        compositeDisposable.add(
                 Aesthetic.get(getContext())
                         .textColorSecondary()
-                        .compose(Rx.<Integer>distinctToMainThread())
+                        .compose(Rx.distinctToMainThread())
                         .subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
-        //noinspection ConstantConditions
-        subs.add(
-                Observable.combineLatest(
-                        ViewUtil.getObservableForResId(
-                                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent()),
-                        Aesthetic.get(getContext()).isDark(),
-                        ColorIsDarkState.creator())
-                        .compose(Rx.<ColorIsDarkState>distinctToMainThread())
-                        .subscribe(
-                                new Consumer<ColorIsDarkState>() {
-                                    @Override
-                                    public void accept(@NonNull ColorIsDarkState colorIsDarkState) {
-                                        invalidateColors(colorIsDarkState);
-                                    }
-                                },
-                                onErrorLogAndRethrow()));
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        if (obs != null) {
+            compositeDisposable.add(
+                    Observable.combineLatest(
+                            obs,
+                            Aesthetic.get(getContext()).isDark(),
+                            ColorIsDarkState.creator())
+                            .compose(Rx.distinctToMainThread())
+                            .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        subs.clear();
+        if (compositeDisposable != null) {
+            compositeDisposable.clear();
+        }
         super.onDetachedFromWindow();
     }
 
@@ -107,13 +101,7 @@ public class AestheticTextInputEditText extends TextInputEditText {
     public void refreshDrawableState() {
         super.refreshDrawableState();
         if (lastState != null) {
-            post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            invalidateColors(lastState);
-                        }
-                    });
+            post(() -> invalidateColors(lastState));
         }
     }
 }

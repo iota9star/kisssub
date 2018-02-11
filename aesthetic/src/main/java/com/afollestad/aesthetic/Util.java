@@ -54,7 +54,7 @@ import android.view.ViewGroup;
 public final class Util {
 
     static void setInflaterFactory(@NonNull LayoutInflater li) {
-        LayoutInflaterCompat.setFactory(li, new InflationInterceptor());
+        LayoutInflaterCompat.setFactory2(li, new InflationInterceptor());
     }
 
     /**

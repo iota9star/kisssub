@@ -65,7 +65,7 @@
             <Button
                 android:id="@+id/buttonDownload"
                 android:layout_width="48dp"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:text="@string/action_download"

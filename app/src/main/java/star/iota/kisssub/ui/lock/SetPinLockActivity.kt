@@ -34,6 +34,7 @@ import star.iota.kisssub.widget.MessageBar
 class SetPinLockActivity : BaseActivity(), View.OnClickListener {
 
     override fun isFullScreen(): Boolean = true
+    override fun getCircularRevealView(): View? = frameLayoutContainer
     private var step = STEP_ONE
     private var pinCode: String = ""
 

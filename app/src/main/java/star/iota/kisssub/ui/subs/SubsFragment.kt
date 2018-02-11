@@ -21,6 +21,7 @@ package star.iota.kisssub.ui.subs
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -93,7 +94,7 @@ class SubsFragment : BaseFragment(), SubsContract.View {
     private lateinit var adapter: SubsAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-//        recyclerView?.itemAnimator = LandingAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = SubsAdapter()
         recyclerView?.adapter = adapter
     }

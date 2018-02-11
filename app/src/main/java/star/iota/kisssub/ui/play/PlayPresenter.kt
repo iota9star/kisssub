@@ -28,15 +28,15 @@ import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
 
 
-class PlayPresenter(private val view: PlayContract.View) : PlayContract.Presenter {
+class PlayPresenter(private val view: PlayContract.View) : PlayContract.Presenter() {
     override fun get(url: String) {
+        addCookie(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
                         .adapt(ObservableResponse<String>())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.computation())
                         .map { deal(it) }
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (it == null || it.isEmpty()) {

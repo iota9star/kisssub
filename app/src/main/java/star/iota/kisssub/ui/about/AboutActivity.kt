@@ -79,6 +79,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
     }
 
     override fun getContentViewId(): Int = R.layout.activity_about
+    override fun getCircularRevealView(): View? = scrollView
 
     private val mHints = LongArray(5)
     override fun onClick(v: View?) {
@@ -134,6 +135,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
     override fun onDestroy() {
         super.onDestroy()
         updatePresenter.unsubscribe()
+        godModePresenter.unsubscribe()
     }
 
     private var updateIsLoading = false

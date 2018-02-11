@@ -16,93 +16,98 @@
   ~  */
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <star.iota.kisssub.widget.ken.KenBurnsView
-        android:id="@+id/kenBurnsView"
+    <FrameLayout
+        android:id="@+id/frameLayoutContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#6c000000"
-        android:orientation="vertical">
-
-        <ScrollView
+        <star.iota.kisssub.widget.ken.KenBurnsView
+            android:id="@+id/kenBurnsView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#6c000000"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:src="@mipmap/ic_launcher"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="256dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:text="@string/lock_input_pin"
+                        android:textColor="?colorAccent"
+                        android:textSize="36sp" />
+
+                    <com.andrognito.pinlockview.IndicatorDots
+                        android:id="@+id/indicatorDots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="16dp"
+                        android:tag="@string/ignore_view" />
+
+                    <com.andrognito.pinlockview.PinLockView
+                        android:id="@+id/pinLockView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="@string/ignore_view"
+                        app:indicatorType="fillWithAnimation"
+                        app:keypadButtonSize="64dp"
+                        app:keypadShowDeleteButton="true"
+                        app:keypadTextColor="#ffffff"
+                        app:keypadTextSize="18sp"
+                        app:pinLength="4" />
+                </LinearLayout>
+            </ScrollView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:animateLayoutChanges="true"
+                android:padding="8dp">
 
-                <ImageView
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:src="@mipmap/ic_launcher"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="256dp"
+                <Button
+                    android:id="@+id/buttonLeft"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:maxLines="1"
-                    android:text="@string/lock_input_pin"
-                    android:textColor="?colorAccent"
-                    android:textSize="36sp" />
+                    android:layout_margin="8dp"
+                    android:layout_weight="1" />
 
-                <com.andrognito.pinlockview.IndicatorDots
-                    android:id="@+id/indicatorDots"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/buttonRight"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
-                    android:tag="@string/ignore_view" />
-
-                <com.andrognito.pinlockview.PinLockView
-                    android:id="@+id/pinLockView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="@string/ignore_view"
-                    app:indicatorType="fillWithAnimation"
-                    app:keypadButtonSize="64dp"
-                    app:keypadShowDeleteButton="true"
-                    app:keypadTextColor="#ffffff"
-                    app:keypadTextSize="18sp"
-                    app:pinLength="4" />
+                    android:layout_margin="8dp"
+                    android:layout_weight="1" />
             </LinearLayout>
-        </ScrollView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:padding="8dp">
-
-            <Button
-                android:id="@+id/buttonLeft"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/buttonRight"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_weight="1" />
         </LinearLayout>
-
-    </LinearLayout>
-</FrameLayout>
+    </FrameLayout>
+</io.codetail.widget.RevealFrameLayout>

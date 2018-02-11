@@ -26,7 +26,6 @@ import android.support.v7.widget.ListPopupWindow
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
-import com.afollestad.aesthetic.Aesthetic
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -35,7 +34,6 @@ import org.greenrobot.eventbus.EventBus
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
-import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 import star.iota.kisssub.utils.DisplayUtils
@@ -46,17 +44,6 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
 
     override fun bindView(bean: RssTag) {
         itemView?.apply {
-            Aesthetic.get(context)
-                    .isDark
-                    .take(1)
-                    .subscribe {
-                        if (it) {
-                            DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColorDark(context))
-                        } else {
-                            DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColor(context))
-                        }
-                    }
-
             textViewTag?.text = bean.tag
             imageViewMenu?.setOnClickListener {
                 showMenu(context!!, bean, imageViewMenu)

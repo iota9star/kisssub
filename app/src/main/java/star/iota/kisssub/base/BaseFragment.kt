@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.base
 
+import CircularReveal
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -34,6 +35,7 @@ import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.exit
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
+
 
 abstract class BaseFragment : Fragment(), View.OnTouchListener {
 
@@ -54,13 +56,26 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         preTitle = (this.activity!! as BaseActivity).getToolbar()?.title?.toString()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(getContainerViewId(), container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(getContainerViewId(), container, false)
+        if (isShowCircularReveal()) {
+            view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+                override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                    v.removeOnLayoutChangeListener(this)
+                    CircularReveal.create(view)
+                }
+            })
+        }
+        return view
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.setOnTouchListener(this)
         doSome()
         setContentBackground()
     }
+
+    open fun isShowCircularReveal() = true
 
     override fun onTouch(p0: View?, p1: MotionEvent?): Boolean = true
 

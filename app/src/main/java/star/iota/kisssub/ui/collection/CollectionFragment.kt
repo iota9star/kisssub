@@ -21,6 +21,7 @@ package star.iota.kisssub.ui.collection
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_default.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -96,7 +97,7 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
     private lateinit var adapter: CollectionAdapter
     private fun initRecyclerView() {
         recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView?.itemAnimator = LandingAnimator()
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = CollectionAdapter()
         recyclerView?.adapter = adapter
     }
