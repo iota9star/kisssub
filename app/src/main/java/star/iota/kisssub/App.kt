@@ -24,8 +24,6 @@ import android.content.pm.PackageManager
 import android.support.multidex.MultiDex
 import com.afollestad.aesthetic.AestheticStoreHouseHeader
 import com.crashlytics.android.Crashlytics
-import com.facebook.stetho.Stetho
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.lzy.okgo.OkGo
 import com.lzy.okgo.cache.CacheEntity
 import com.lzy.okgo.cache.CacheMode
@@ -35,7 +33,6 @@ import com.lzy.okgo.https.HttpsUtils
 import com.lzy.okgo.model.HttpHeaders
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
-import com.squareup.leakcanary.LeakCanary
 import com.zzhoujay.richtext.RichText
 import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
@@ -56,7 +53,7 @@ class App : Application() {
 //            val loggingInterceptor = HttpLoggingInterceptor("okhttp")
 //            loggingInterceptor.setPrintLevel(HttpLoggingInterceptor.Level.BODY)
 //            loggingInterceptor.setColorLevel(Level.INFO)
-            builder.addNetworkInterceptor(StethoInterceptor())
+//            builder.addNetworkInterceptor(StethoInterceptor())
             builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.writeTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
             builder.connectTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS)
@@ -83,10 +80,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        LeakCanary.install(this)
+//        LeakCanary.install(this)
         Fabric.with(this, Crashlytics())
         RichText.initCacheDir(this)
-        Stetho.initializeWithDefaults(this)
+//        Stetho.initializeWithDefaults(this)
         initOkGo()
     }
 
@@ -106,7 +103,7 @@ class App : Application() {
                 .setOkHttpClient(makeOkHttpClient(this))
                 .setCacheMode(CacheMode.REQUEST_FAILED_READ_CACHE)
                 .setCacheTime(CacheEntity.CACHE_NEVER_EXPIRE)
-                .setRetryCount(5)
+                .setRetryCount(3)
                 .addCommonHeaders(headers)
     }
 }

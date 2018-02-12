@@ -142,10 +142,6 @@ dependencies {
     //noinspection GradleDependency
     implementation 'jp.wasabeef:recyclerview-animators:latest.release'
 
-    // cookie bar
-    //noinspection GradleDependency
-    implementation 'com.liuguangqiang.cookie:library:latest.release'
-
     // material-dialogs
     //noinspection GradleDependency
     implementation 'com.afollestad.material-dialogs:core:latest.release'

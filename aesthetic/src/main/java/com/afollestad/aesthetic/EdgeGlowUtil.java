@@ -43,6 +43,7 @@ import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  */
 @RestrictTo(LIBRARY_GROUP)
 final class EdgeGlowUtil {
+
     private static Field EDGE_GLOW_FIELD_EDGE;
     private static Field EDGE_GLOW_FIELD_GLOW;
     private static Field EDGE_EFFECT_COMPAT_FIELD_EDGE_EFFECT;
@@ -222,11 +223,8 @@ final class EdgeGlowUtil {
     static void setEdgeGlowColor(@NonNull ScrollView scrollView, @ColorInt int color) {
         invalidateScrollViewFields();
         try {
-            Object ee;
-            ee = SCROLL_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView);
-            setEffectColor(ee, color);
-            ee = SCROLL_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView);
-            setEffectColor(ee, color);
+            setEffectColor(SCROLL_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView), color);
+            setEffectColor(SCROLL_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView), color);
         } catch (Exception ex) {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
@@ -235,10 +233,8 @@ final class EdgeGlowUtil {
     static void setEdgeGlowColor(@NonNull NestedScrollView scrollView, @ColorInt int color) {
         invalidateNestedScrollViewFields();
         try {
-            Object ee = NESTED_SCROLL_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView);
-            setEffectColor(ee, color);
-            ee = NESTED_SCROLL_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView);
-            setEffectColor(ee, color);
+            setEffectColor(NESTED_SCROLL_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView), color);
+            setEffectColor(NESTED_SCROLL_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView), color);
         } catch (Exception ex) {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
@@ -247,41 +243,31 @@ final class EdgeGlowUtil {
     static void setEdgeGlowColor(@NonNull AbsListView listView, @ColorInt int color) {
         invalidateListViewFields();
         try {
-            Object ee = LIST_VIEW_FIELD_EDGE_GLOW_TOP.get(listView);
-            setEffectColor(ee, color);
-            ee = LIST_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(listView);
-            setEffectColor(ee, color);
+            setEffectColor(LIST_VIEW_FIELD_EDGE_GLOW_TOP.get(listView), color);
+            setEffectColor(LIST_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(listView), color);
         } catch (Exception ex) {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
     }
 
-    static void setEdgeGlowColor(
-            @NonNull RecyclerView scrollView,
-            final @ColorInt int color,
-            @Nullable RecyclerView.OnScrollListener scrollListener) {
+    static void setEdgeGlowColor(@NonNull RecyclerView scrollView, final @ColorInt int color, @Nullable RecyclerView.OnScrollListener scrollListener) {
         invalidateRecyclerViewFields();
         invalidateRecyclerViewFields();
         if (scrollListener == null) {
-            scrollListener =
-                    new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            EdgeGlowUtil.setEdgeGlowColor(recyclerView, color, this);
-                        }
-                    };
+            scrollListener = new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    EdgeGlowUtil.setEdgeGlowColor(recyclerView, color, this);
+                }
+            };
             scrollView.addOnScrollListener(scrollListener);
         }
         try {
-            Object ee = RECYCLER_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView);
-            setEffectColor(ee, color);
-            ee = RECYCLER_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView);
-            setEffectColor(ee, color);
-            ee = RECYCLER_VIEW_FIELD_EDGE_GLOW_LEFT.get(scrollView);
-            setEffectColor(ee, color);
-            ee = RECYCLER_VIEW_FIELD_EDGE_GLOW_RIGHT.get(scrollView);
-            setEffectColor(ee, color);
+            setEffectColor(RECYCLER_VIEW_FIELD_EDGE_GLOW_TOP.get(scrollView), color);
+            setEffectColor(RECYCLER_VIEW_FIELD_EDGE_GLOW_BOTTOM.get(scrollView), color);
+            setEffectColor(RECYCLER_VIEW_FIELD_EDGE_GLOW_LEFT.get(scrollView), color);
+            setEffectColor(RECYCLER_VIEW_FIELD_EDGE_GLOW_RIGHT.get(scrollView), color);
         } catch (Exception ex) {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
@@ -290,14 +276,13 @@ final class EdgeGlowUtil {
     static void setEdgeGlowColor(@NonNull ViewPager pager, @ColorInt int color) {
         invalidateViewPagerFields();
         try {
-            Object ee = VIEW_PAGER_FIELD_EDGE_GLOW_LEFT.get(pager);
-            setEffectColor(ee, color);
-            ee = VIEW_PAGER_FIELD_EDGE_GLOW_RIGHT.get(pager);
-            setEffectColor(ee, color);
+            setEffectColor(VIEW_PAGER_FIELD_EDGE_GLOW_LEFT.get(pager), color);
+            setEffectColor(VIEW_PAGER_FIELD_EDGE_GLOW_RIGHT.get(pager), color);
         } catch (Exception ex) {
             if (BuildConfig.DEBUG) ex.printStackTrace();
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private static void setEffectColor(Object edgeEffect, @ColorInt int color) {

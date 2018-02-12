@@ -59,7 +59,10 @@ public class AestheticStoreHouseHeader extends View implements RefreshHeader {
     private static final float mFromAlpha = 1.0f;
     private static final float mToAlpha = 0.4f;
     private static final int mLoadingAniItemDuration = 400;
-    public ArrayList<StoreHouseBarItem> mItemList = new ArrayList<>();
+    public final ArrayList<StoreHouseBarItem> mItemList = new ArrayList<>();
+    private final Transformation mTransformation = new Transformation();
+    private final AniController mAniController = new AniController();
+    private final Matrix mMatrix = new Matrix();
     private int mLineWidth = -1;
     private float mScale = 1;
     private int mDropHeight = -1;
@@ -71,12 +74,9 @@ public class AestheticStoreHouseHeader extends View implements RefreshHeader {
     private int mOffsetY = 0;
     private int mLoadingAniDuration = 1000;
     private int mLoadingAniSegDuration = 1000;
-    private Transformation mTransformation = new Transformation();
     private boolean mIsInLoading = false;
-    private AniController mAniController = new AniController();
     private int mTextColor = Color.WHITE;
     private int mBackgroundColor = 0;
-    private Matrix mMatrix = new Matrix();
     private RefreshKernel mRefreshKernel;
 
     private CompositeDisposable compositeDisposable;
@@ -117,7 +117,7 @@ public class AestheticStoreHouseHeader extends View implements RefreshHeader {
         if (ta.hasValue(R.styleable.AestheticStoreHouseHeader_text)) {
             initWithString(ta.getString(R.styleable.AestheticStoreHouseHeader_text));
         } else {
-            initWithString("StoreHouse");
+            initWithString("Hello.World");
         }
         ta.recycle();
         setMinimumHeight(mDrawZoneHeight + DensityUtil.dp2px(48));
@@ -201,7 +201,7 @@ public class AestheticStoreHouseHeader extends View implements RefreshHeader {
         super.onAttachedToWindow();
         compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(
-                Aesthetic.get(getContext()).colorAccent()
+                Aesthetic.get().colorAccent()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(this::setTextColor, onErrorLogAndRethrow()));
     }

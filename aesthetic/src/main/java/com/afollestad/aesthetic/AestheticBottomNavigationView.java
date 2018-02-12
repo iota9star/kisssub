@@ -38,8 +38,8 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticBottomNavigationView extends BottomNavigationView {
 
-    private Disposable disposable;
-    private CompositeDisposable compositeDisposable;
+    private Disposable modesSubscription;
+    private CompositeDisposable colorSubscriptions;
     private int lastTextIconColor;
 
     public AestheticBottomNavigationView(Context context) {
@@ -57,8 +57,13 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     private void invalidateIconTextColor(int backgroundColor, int selectedColor) {
         int baseColor = ContextCompat.getColor(getContext(), Util.isColorLight(backgroundColor) ? R.color.ate_icon_light : R.color.ate_icon_dark);
         int unselectedIconTextColor = Util.adjustAlpha(baseColor, .87f);
-        ColorStateList iconColor = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedIconTextColor, selectedColor});
-        ColorStateList textColor = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedIconTextColor, selectedColor});
+        ColorStateList iconColor =
+                new ColorStateList(
+                        new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}},
+                        new int[]{unselectedIconTextColor, selectedColor});
+        ColorStateList textColor = new ColorStateList(
+                new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}},
+                new int[]{unselectedIconTextColor, selectedColor});
         setItemIconTintList(iconColor);
         setItemTextColor(textColor);
     }
@@ -73,21 +78,21 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     }
 
     private void onState(State state) {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (colorSubscriptions != null) {
+            colorSubscriptions.clear();
         }
-        compositeDisposable = new CompositeDisposable();
+        colorSubscriptions = new CompositeDisposable();
         switch (state.iconTextMode) {
             case BottomNavIconTextMode.SELECTED_PRIMARY:
-                compositeDisposable.add(
-                        Aesthetic.get(getContext())
+                colorSubscriptions.add(
+                        Aesthetic.get()
                                 .colorPrimary()
                                 .compose(Rx.distinctToMainThread())
                                 .subscribe(color -> lastTextIconColor = color, onErrorLogAndRethrow()));
                 break;
             case BottomNavIconTextMode.SELECTED_ACCENT:
-                compositeDisposable.add(
-                        Aesthetic.get(getContext())
+                colorSubscriptions.add(
+                        Aesthetic.get()
                                 .colorAccent()
                                 .compose(Rx.distinctToMainThread())
                                 .subscribe(color -> lastTextIconColor = color, onErrorLogAndRethrow()));
@@ -99,33 +104,31 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
             default:
                 throw new IllegalStateException("Unknown bottom nav icon/text mode: " + state.iconTextMode);
         }
+
         switch (state.bgMode) {
             case BottomNavBgMode.PRIMARY:
-                compositeDisposable.add(
-                        Aesthetic.get(getContext())
+                colorSubscriptions.add(
+                        Aesthetic.get()
                                 .colorPrimary()
                                 .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.PRIMARY_DARK:
-                compositeDisposable.add(
-                        Aesthetic.get(getContext())
+                colorSubscriptions.add(
+                        Aesthetic.get()
                                 .colorStatusBar()
                                 .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.ACCENT:
-                compositeDisposable.add(
-                        Aesthetic.get(getContext())
+                colorSubscriptions.add(
+                        Aesthetic.get()
                                 .colorAccent()
                                 .compose(Rx.distinctToMainThread())
                                 .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
                 break;
             case BottomNavBgMode.BLACK_WHITE_AUTO:
-                setBackgroundColor(
-                        ContextCompat.getColor(
-                                getContext(),
-                                state.isDark ? R.color.ate_bottom_nav_default_dark_bg : R.color.ate_bottom_nav_default_light_bg));
+                setBackgroundColor(ContextCompat.getColor(getContext(), state.isDark ? R.color.ate_bottom_nav_default_dark_bg : R.color.ate_bottom_nav_default_light_bg));
                 break;
             default:
                 throw new IllegalStateException("Unknown bottom nav bg mode: " + state.bgMode);
@@ -135,10 +138,10 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Observable.combineLatest(
-                Aesthetic.get(getContext()).bottomNavigationBackgroundMode(),
-                Aesthetic.get(getContext()).bottomNavigationIconTextMode(),
-                Aesthetic.get(getContext()).isDark(),
+        modesSubscription = Observable.combineLatest(
+                Aesthetic.get().bottomNavigationBackgroundMode(),
+                Aesthetic.get().bottomNavigationIconTextMode(),
+                Aesthetic.get().isDark(),
                 State.creator())
                 .compose(Rx.distinctToMainThread())
                 .subscribe(this::onState, onErrorLogAndRethrow());
@@ -146,16 +149,17 @@ public class AestheticBottomNavigationView extends BottomNavigationView {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (modesSubscription != null) {
+            modesSubscription.dispose();
         }
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (colorSubscriptions != null) {
+            colorSubscriptions.clear();
         }
         super.onDetachedFromWindow();
     }
 
     private static class State {
+
         @BottomNavBgMode
         private final int bgMode;
         @BottomNavIconTextMode

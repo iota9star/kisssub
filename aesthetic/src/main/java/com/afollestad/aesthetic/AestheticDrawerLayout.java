@@ -36,7 +36,7 @@ public class AestheticDrawerLayout extends DrawerLayout {
 
     private ActiveInactiveColors lastState;
     private DrawerArrowDrawable arrowDrawable;
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticDrawerLayout(Context context) {
         super(context);
@@ -63,18 +63,16 @@ public class AestheticDrawerLayout extends DrawerLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorIconTitle(null)
                 .compose(Rx.distinctToMainThread())
-                .subscribe(
-                        this::invalidateColor,
-                        onErrorLogAndRethrow());
+                .subscribe(this::invalidateColor, onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

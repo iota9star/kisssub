@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticEditText extends AppCompatEditText {
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable subscriptions;
     private int backgroundResId;
     private int textColorResId;
     private int textColorHintResId;
@@ -74,35 +74,38 @@ public class AestheticEditText extends AppCompatEditText {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
-        Observable<Integer> obs1 = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        subscriptions = new CompositeDisposable();
+        Observable<Integer> obs1 = ViewUtil.getObservableForResId(
+                getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs1 != null) {
-            compositeDisposable.add(
+            subscriptions.add(
                     Observable.combineLatest(
                             obs1,
-                            Aesthetic.get(getContext()).isDark(),
+                            Aesthetic.get().isDark(),
                             ColorIsDarkState.creator())
                             .compose(Rx.distinctToMainThread())
                             .subscribe(
                                     this::invalidateColors,
                                     onErrorLogAndRethrow()));
         }
-        Observable<Integer> obs2 = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorPrimary());
+        Observable<Integer> obs2 = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get().textColorPrimary());
         if (obs2 != null) {
-            compositeDisposable.add(
-                    obs2.compose(Rx.distinctToMainThread()).subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
+            subscriptions.add(
+                    obs2.compose(Rx.distinctToMainThread())
+                            .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
         }
-        Observable<Integer> obs3 = ViewUtil.getObservableForResId(getContext(), textColorHintResId, Aesthetic.get(getContext()).textColorSecondary());
+        Observable<Integer> obs3 = ViewUtil.getObservableForResId(getContext(), textColorHintResId, Aesthetic.get().textColorSecondary());
         if (obs3 != null) {
-            compositeDisposable.add(
-                    obs3.compose(Rx.distinctToMainThread()).subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
+            subscriptions.add(
+                    obs3.compose(Rx.distinctToMainThread())
+                            .subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
         super.onDetachedFromWindow();
     }

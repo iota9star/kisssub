@@ -44,8 +44,7 @@ final class TextInputLayoutUtil {
             updateLabelStateMethod.setAccessible(true);
             updateLabelStateMethod.invoke(view, false, true);
         } catch (Throwable t) {
-            throw new IllegalStateException(
-                    "Failed to set TextInputLayout hint (collapsed) color: " + t.getLocalizedMessage(), t);
+            throw new IllegalStateException("Failed to set TextInputLayout hint (collapsed) color: " + t.getLocalizedMessage(), t);
         }
     }
 
@@ -58,8 +57,7 @@ final class TextInputLayoutUtil {
             updateLabelStateMethod.setAccessible(true);
             updateLabelStateMethod.invoke(view, false, true);
         } catch (Throwable t) {
-            throw new IllegalStateException(
-                    "Failed to set TextInputLayout accent (expanded) color: " + t.getLocalizedMessage(), t);
+            throw new IllegalStateException("Failed to set TextInputLayout accent (expanded) color: " + t.getLocalizedMessage(), t);
         }
     }
 }

@@ -39,31 +39,31 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
             ThemeHelper.THEME_PRIMARY_COLOR -> {
                 imageViewPrimaryColor?.setColorFilter(selectedColor)
                 ThemeHelper.setPrimaryColor(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .colorPrimary(selectedColor)
                         .colorStatusBarAuto()
-                        .colorNavigationBarAuto(true)
+                        .colorNavigationBarAuto()
                         .apply()
                 adapter.removeSelectedStatus()
             }
             ThemeHelper.THEME_ACCENT_COLOR -> {
                 imageViewAccentColor?.setColorFilter(selectedColor)
                 ThemeHelper.setAccentColor(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .colorAccent(selectedColor)
                         .colorStatusBarAuto()
-                        .colorNavigationBarAuto(true)
+                        .colorNavigationBarAuto()
                         .apply()
             }
             ThemeHelper.THEME_PRIMARY_TEXT_COLOR -> {
                 imageViewPrimaryTextColor?.setColorFilter(selectedColor)
                 ThemeHelper.setPrimaryTextColor(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .isDark
                         .take(1)
                         .subscribe {
                             if (!it) {
-                                Aesthetic.get(context!!)
+                                Aesthetic.get()
                                         .textColorPrimary(selectedColor)
                                         .apply()
                             }
@@ -72,12 +72,12 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
             ThemeHelper.THEME_PRIMARY_TEXT_COLOR_DARK -> {
                 imageViewPrimaryTextColorDark?.setColorFilter(selectedColor)
                 ThemeHelper.setPrimaryTextColorDark(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .isDark
                         .take(1)
                         .subscribe {
                             if (it) {
-                                Aesthetic.get(context!!)
+                                Aesthetic.get()
                                         .textColorPrimary(selectedColor)
                                         .apply()
                             }
@@ -86,12 +86,12 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
             ThemeHelper.THEME_SECONDARY_TEXT_COLOR -> {
                 imageViewSecondaryTextColor?.setColorFilter(selectedColor)
                 ThemeHelper.setSecondaryTextColor(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .isDark
                         .take(1)
                         .subscribe {
                             if (!it) {
-                                Aesthetic.get(context!!)
+                                Aesthetic.get()
                                         .textColorSecondary(selectedColor)
                                         .apply()
                             }
@@ -100,12 +100,12 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
             ThemeHelper.THEME_SECONDARY_TEXT_COLOR_DARK -> {
                 imageViewSecondaryTextColorDark?.setColorFilter(selectedColor)
                 ThemeHelper.setSecondaryTextColorDark(context!!, selectedColor)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .isDark
                         .take(1)
                         .subscribe {
                             if (it) {
-                                Aesthetic.get(context!!)
+                                Aesthetic.get()
                                         .textColorSecondary(selectedColor)
                                         .apply()
                             }
@@ -192,10 +192,10 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
                 val color = theme.color
                 imageViewPrimaryColor?.setColorFilter(color)
                 ThemeHelper.setPrimaryColor(context!!, color)
-                Aesthetic.get(context!!)
+                Aesthetic.get()
                         .colorPrimary(color)
                         .colorStatusBarAuto()
-                        .colorNavigationBarAuto(true)
+                        .colorNavigationBarAuto()
                         .apply()
             }
         })
@@ -221,6 +221,9 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
 
     private fun getThemes(): ArrayList<ThemeBean> {
         val themes = arrayListOf<ThemeBean>().apply {
+            add(ThemeBean(ContextCompat.getColor(context!!, R.color.white), "白色/White", false))
+            add(ThemeBean(ContextCompat.getColor(context!!, R.color.black), "黑色/Black", false))
+            add(ThemeBean(ContextCompat.getColor(context!!, R.color.dark_black), "深黑/Deep Dark", false))
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.red), "红色/Red", false))
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.pink), "粉色/Pink", false))
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.purple), "紫色/Purple", false))
@@ -241,9 +244,6 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.grey), "灰色/Grey", false))
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.blue_grey), "蓝灰/Blue Grey", false))
             add(ThemeBean(ContextCompat.getColor(context!!, R.color.bilibili), "哔哩哔哩/BiliBili", false))
-            add(ThemeBean(ContextCompat.getColor(context!!, R.color.white), "白色/White", false))
-            add(ThemeBean(ContextCompat.getColor(context!!, R.color.black), "黑色/Black", false))
-            add(ThemeBean(ContextCompat.getColor(context!!, R.color.dark_black), "深黑/Deep Dark", false))
         }
         val color = ThemeHelper.getAccentColor(context!!)
         themes.filter { it.color == color }.forEach { it.isSelected = true }

@@ -31,8 +31,7 @@
     android:paddingRight="16dp"
     android:paddingTop="12dp">
 
-    <ImageView
-        android:id="@+id/imageViewLabel"
+    <com.afollestad.aesthetic.AestheticIconView
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginEnd="8dp"

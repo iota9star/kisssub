@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticRadioButton extends AppCompatRadioButton {
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable subscriptions;
     private int backgroundResId;
 
     public AestheticRadioButton(Context context) {
@@ -63,20 +63,19 @@ public class AestheticRadioButton extends AppCompatRadioButton {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(
-                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        subscriptions = new CompositeDisposable();
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs != null) {
-            compositeDisposable.add(
+            subscriptions.add(
                     Observable.combineLatest(
                             obs,
-                            Aesthetic.get(getContext()).isDark(),
+                            Aesthetic.get().isDark(),
                             ColorIsDarkState.creator())
                             .compose(Rx.distinctToMainThread())
                             .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
         }
-        compositeDisposable.add(
-                Aesthetic.get(getContext())
+        subscriptions.add(
+                Aesthetic.get()
                         .textColorPrimary()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(ViewTextColorAction.create(this)));
@@ -84,7 +83,9 @@ public class AestheticRadioButton extends AppCompatRadioButton {
 
     @Override
     protected void onDetachedFromWindow() {
-        compositeDisposable.clear();
+        if (subscriptions != null) {
+            subscriptions.clear();
+        }
         super.onDetachedFromWindow();
     }
 }

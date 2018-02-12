@@ -34,7 +34,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticTextInputLayout extends TextInputLayout {
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable subscriptions;
     private int backgroundResId;
 
     public AestheticTextInputLayout(Context context) {
@@ -64,22 +64,24 @@ public class AestheticTextInputLayout extends TextInputLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
-        compositeDisposable.add(
-                Aesthetic.get(getContext())
+        subscriptions = new CompositeDisposable();
+        subscriptions.add(
+                Aesthetic.get()
                         .textColorSecondary()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(color -> TextInputLayoutUtil.setHint(AestheticTextInputLayout.this, adjustAlpha(color, 0.7f)), onErrorLogAndRethrow()));
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs != null) {
-            compositeDisposable.add(obs.compose(Rx.distinctToMainThread()).subscribe(this::invalidateColors, onErrorLogAndRethrow()));
+            subscriptions.add(
+                    obs.compose(Rx.distinctToMainThread())
+                            .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
         super.onDetachedFromWindow();
     }

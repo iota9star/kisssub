@@ -24,7 +24,6 @@ import android.support.annotation.ColorInt;
 /**
  * @author Aidan Follestad (afollestad)
  */
-@SuppressWarnings("WeakerAccess")
 public final class ActiveInactiveColors {
 
     @ColorInt
@@ -37,8 +36,7 @@ public final class ActiveInactiveColors {
         this.inactiveColor = inactiveColor;
     }
 
-    public static ActiveInactiveColors create(
-            @ColorInt int activeColor, @ColorInt int inactiveColor) {
+    public static ActiveInactiveColors create(@ColorInt int activeColor, @ColorInt int inactiveColor) {
         return new ActiveInactiveColors(activeColor, inactiveColor);
     }
 
@@ -53,10 +51,10 @@ public final class ActiveInactiveColors {
     }
 
     public ColorStateList toEnabledSl() {
-        return new ColorStateList(
-                new int[][]{
-                        new int[]{android.R.attr.state_enabled}, new int[]{-android.R.attr.state_enabled}
-                },
-                new int[]{activeColor(), inactiveColor()});
+        return new ColorStateList(new int[][]{
+                new int[]{android.R.attr.state_enabled},
+                new int[]{-android.R.attr.state_enabled}},
+                new int[]{activeColor(), inactiveColor()}
+        );
     }
 }

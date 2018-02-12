@@ -41,7 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
-        Aesthetic.get(this).attach(this)
+        Aesthetic.attach(this)
         super.onCreate(savedInstanceState)
         setContentView(getContentViewId())
         val revealView = getCircularRevealView()
@@ -58,12 +58,12 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun getCircularRevealView(): View? = null
 
     override fun onResume() {
-        Aesthetic.get(this).resume(this)
+        Aesthetic.resume(this)
         super.onResume()
     }
 
     override fun onPause() {
-        Aesthetic.get(this).pause(this)
+        Aesthetic.pause(this)
         super.onPause()
     }
 }

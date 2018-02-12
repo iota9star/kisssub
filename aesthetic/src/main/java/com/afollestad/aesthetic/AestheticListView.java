@@ -31,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticListView extends ListView {
 
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticListView(Context context) {
         super(context);
@@ -52,18 +52,16 @@ public class AestheticListView extends ListView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorAccent()
                 .compose(Rx.distinctToMainThread())
-                .subscribe(
-                        this::invalidateColors,
-                        onErrorLogAndRethrow());
+                .subscribe(this::invalidateColors, onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

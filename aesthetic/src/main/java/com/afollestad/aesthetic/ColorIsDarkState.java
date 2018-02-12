@@ -29,13 +29,13 @@ import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  * @author Aidan Follestad (afollestad)
  */
 @RestrictTo(LIBRARY_GROUP)
-public final class ColorIsDarkState {
+final class ColorIsDarkState {
 
     @ColorInt
     private final int color;
     private final boolean isDark;
 
-    public ColorIsDarkState(@ColorInt int color, boolean isDark) {
+    private ColorIsDarkState(@ColorInt int color, boolean isDark) {
         this.color = color;
         this.isDark = isDark;
     }
@@ -44,16 +44,16 @@ public final class ColorIsDarkState {
         return new ColorIsDarkState(color, isDark);
     }
 
-    public static BiFunction<Integer, Boolean, ColorIsDarkState> creator() {
+    static BiFunction<Integer, Boolean, ColorIsDarkState> creator() {
         return ColorIsDarkState::create;
     }
 
     @ColorInt
-    public int color() {
+    int color() {
         return color;
     }
 
-    public boolean isDark() {
+    boolean isDark() {
         return isDark;
     }
 }

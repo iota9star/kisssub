@@ -31,8 +31,8 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.afollestad.aesthetic.Aesthetic
+import com.afollestad.aesthetic.AestheticMessage
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
-import com.liuguangqiang.cookie.OnActionClickListener
 import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main_content.*
 import kotlinx.android.synthetic.main.activity_main_drawer.*
@@ -145,7 +145,7 @@ class MainActivity : BaseActivity(), InfoContract.View {
         RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe({
                     if (!it) {
-                        MessageBar.create(this@MainActivity, "您拒绝了读取文件权限，请前往设置手动授予权限", "好的", OnActionClickListener {
+                        MessageBar.create(this@MainActivity, "您拒绝了读取文件权限，请前往设置手动授予权限", "好的", AestheticMessage.OnActionClickListener {
                             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri = Uri.fromParts("package", packageName, null)
                             intent.data = uri
@@ -201,7 +201,8 @@ class MainActivity : BaseActivity(), InfoContract.View {
 
     private fun initNavigationView() {
         setDynamicBackground()
-        Aesthetic.get(this).colorWindowBackground()
+        Aesthetic.get()
+                .colorWindowBackground()
                 .take(1)
                 .subscribe {
                     val colors = intArrayOf(0x00000000, it)
@@ -248,7 +249,6 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 }
             }
             drawerLayout?.closeDrawer(GravityCompat.START)
-            initToolbar()
             true
         }
         navigationViewEnd?.setNavigationItemSelectedListener {
@@ -299,7 +299,6 @@ class MainActivity : BaseActivity(), InfoContract.View {
                 }
             }
             drawerLayout?.closeDrawer(GravityCompat.END)
-            initToolbar()
             true
         }
     }

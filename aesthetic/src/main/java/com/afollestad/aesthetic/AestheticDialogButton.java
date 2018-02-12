@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable;
  */
 final class AestheticDialogButton extends AppCompatButton {
 
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticDialogButton(Context context) {
         super(context);
@@ -46,7 +46,7 @@ final class AestheticDialogButton extends AppCompatButton {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorAccent()
                 .compose(Rx.distinctToMainThread())
                 .subscribe(ViewTextColorAction.create(this));
@@ -54,8 +54,8 @@ final class AestheticDialogButton extends AppCompatButton {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

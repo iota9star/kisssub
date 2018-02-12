@@ -31,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticNestedScrollView extends NestedScrollView {
 
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticNestedScrollView(Context context) {
         super(context);
@@ -52,7 +52,7 @@ public class AestheticNestedScrollView extends NestedScrollView {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorAccent()
                 .compose(Rx.distinctToMainThread())
                 .subscribe(this::invalidateColors, onErrorLogAndRethrow());
@@ -60,8 +60,8 @@ public class AestheticNestedScrollView extends NestedScrollView {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

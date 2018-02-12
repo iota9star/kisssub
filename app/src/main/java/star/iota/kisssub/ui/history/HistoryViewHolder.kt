@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.item_history.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.play.PlayFragment
 
 class HistoryViewHolder(itemView: View) : BaseViewHolder<HistoryBean>(itemView) {
@@ -44,7 +43,6 @@ class HistoryViewHolder(itemView: View) : BaseViewHolder<HistoryBean>(itemView) 
                     (context as AppCompatActivity).addFragmentToActivity(PlayFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
                 }
             }
-            imageViewLabel?.setColorFilter(ThemeHelper.getAccentColor(context))
         }
     }
 

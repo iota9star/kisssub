@@ -26,7 +26,7 @@ import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import com.afollestad.aesthetic.Aesthetic
-import com.liuguangqiang.cookie.OnActionClickListener
+import com.afollestad.aesthetic.AestheticMessage
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
@@ -76,14 +76,14 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
         when (button?.id) {
             R.id.switchCompatNightly -> {
                 if (isChecked) {
-                    Aesthetic.get(context!!)
+                    Aesthetic.get()
                             .activityTheme(R.style.AppThemeDark)
                             .isDark(true)
                             .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
                             .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
                             .apply()
                 } else {
-                    Aesthetic.get(context!!)
+                    Aesthetic.get()
                             .activityTheme(R.style.AppTheme)
                             .isDark(false)
                             .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
@@ -142,7 +142,7 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
             MessageBar.create(context!!,
                     "您可能还没有设置指纹，是否前往设置",
                     "嗯",
-                    OnActionClickListener {
+                    AestheticMessage.OnActionClickListener {
                         startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS))
                     })
             return
@@ -162,7 +162,7 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     }
 
     private fun initSwitchCompat() {
-        Aesthetic.get(context!!)
+        Aesthetic.get()
                 .isDark
                 .take(1)
                 .subscribe {

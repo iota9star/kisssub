@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticSwitchCompat extends SwitchCompat {
 
-    private Disposable disposable;
+    private Disposable subscription;
     private int backgroundResId;
 
     public AestheticSwitchCompat(Context context) {
@@ -63,20 +63,21 @@ public class AestheticSwitchCompat extends SwitchCompat {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs != null) {
-            disposable = Observable.combineLatest(obs, Aesthetic.get(getContext()).isDark(), ColorIsDarkState.creator())
+            subscription = Observable.combineLatest(
+                    obs,
+                    Aesthetic.get().isDark(),
+                    ColorIsDarkState.creator())
                     .compose(Rx.distinctToMainThread())
-                    .subscribe(
-                            this::invalidateColors,
-                            onErrorLogAndRethrow());
+                    .subscribe(this::invalidateColors, onErrorLogAndRethrow());
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

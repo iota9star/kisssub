@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticSeekBar extends AppCompatSeekBar {
 
-    private Disposable disposable;
+    private Disposable subscription;
     private int backgroundResId;
 
     public AestheticSeekBar(Context context) {
@@ -63,15 +63,12 @@ public class AestheticSeekBar extends AppCompatSeekBar {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (isInEditMode()) {
-            return;
-        }
         Observable<Integer> obs = ViewUtil.getObservableForResId(
-                getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+                getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs != null) {
-            disposable = Observable.combineLatest(
+            subscription = Observable.combineLatest(
                     obs,
-                    Aesthetic.get(getContext()).isDark(),
+                    Aesthetic.get().isDark(),
                     ColorIsDarkState.creator())
                     .compose(Rx.distinctToMainThread())
                     .subscribe(this::invalidateColors, onErrorLogAndRethrow());
@@ -80,8 +77,8 @@ public class AestheticSeekBar extends AppCompatSeekBar {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

@@ -19,4 +19,5 @@
 <resources>
     <dimen name="v256dp">256dp</dimen>
     <dimen name="v96dp">96dp</dimen>
+    <dimen name="v4dp">4dp</dimen>
 </resources>

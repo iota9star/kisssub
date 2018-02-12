@@ -18,11 +18,25 @@
 
 package com.afollestad.aesthetic;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import io.reactivex.Observable;
 
 import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 import static com.afollestad.aesthetic.Util.resolveResId;
@@ -33,6 +47,68 @@ import static com.afollestad.aesthetic.Util.resolveResId;
 @RestrictTo(LIBRARY_GROUP)
 final class InflationInterceptor implements LayoutInflater.Factory2 {
 
+    private final Method onCreateViewMethod;
+    private final Method createViewMethod;
+    private final Field constructorArgsField;
+    private final AppCompatActivity keyContext;
+    @NonNull
+    private final LayoutInflater layoutInflater;
+    @Nullable
+    private final AppCompatDelegate delegate;
+    private int[] ATTRS_THEME;
+
+    InflationInterceptor(@Nullable AppCompatActivity keyContext, @NonNull LayoutInflater inflater, @Nullable AppCompatDelegate delegate) {
+        this.keyContext = keyContext;
+        layoutInflater = inflater;
+        this.delegate = delegate;
+        try {
+            onCreateViewMethod = LayoutInflater.class.getDeclaredMethod("onCreateView", View.class, String.class, AttributeSet.class);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("Failed to retrieve the onCreateView method.", e);
+        }
+
+        try {
+            createViewMethod = LayoutInflater.class.getDeclaredMethod("createView", String.class, String.class, AttributeSet.class);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalStateException("Failed to retrieve the createView method.", e);
+        }
+
+        try {
+            constructorArgsField = LayoutInflater.class.getDeclaredField("mConstructorArgs");
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException("Failed to retrieve the mConstructorArgs field.", e);
+        }
+
+        try {
+            final Field attrsThemeField = LayoutInflater.class.getDeclaredField("ATTRS_THEME");
+            attrsThemeField.setAccessible(true);
+            ATTRS_THEME = (int[]) attrsThemeField.get(null);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            Log.d("InflationInterceptor", "Failed to get the value of static field ATTRS_THEME: " + t.getMessage());
+        }
+
+        onCreateViewMethod.setAccessible(true);
+        createViewMethod.setAccessible(true);
+        constructorArgsField.setAccessible(true);
+    }
+
+    private static void log(String msg, Object... args) {
+        if (args != null) {
+            Log.d("InflationInterceptor", String.format(msg, args));
+        } else {
+            Log.d("InflationInterceptor", msg);
+        }
+    }
+
+    private boolean isBlackListedForApply(String name) {
+        return "android.support.design.internal.NavigationMenuItemView".equals(name)
+                || "ViewStub".equals(name)
+                || "fragment".equals(name)
+                || "include".equals(name);
+    }
+
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(View parent, final String name, Context context, AttributeSet attrs) {
         View view = null;
@@ -56,10 +132,10 @@ final class InflationInterceptor implements LayoutInflater.Factory2 {
             case "android.support.v7.widget.AppCompatTextView":
             case "TextView":
                 if (viewId == R.id.snackbar_text) {
-                    view = null;
+                    view = new AestheticSnackBarTextView(context, attrs);
                 } else {
                     view = new AestheticTextView(context, attrs);
-                    if (view.getId() == android.R.id.message) {
+                    if (parent instanceof LinearLayout && view.getId() == android.R.id.message) {
                         // This is for a toast message
                         view = null;
                     }
@@ -67,9 +143,7 @@ final class InflationInterceptor implements LayoutInflater.Factory2 {
                 break;
             case "Button":
             case "android.support.v7.widget.AppCompatButton":
-                if (viewId == android.R.id.button1
-                        || viewId == android.R.id.button2
-                        || viewId == android.R.id.button3) {
+                if (viewId == android.R.id.button1 || viewId == android.R.id.button2 || viewId == android.R.id.button3) {
                     view = new AestheticDialogButton(context, attrs);
                 } else if (viewId == R.id.snackbar_action) {
                     view = new AestheticSnackBarButton(context, attrs);
@@ -150,14 +224,96 @@ final class InflationInterceptor implements LayoutInflater.Factory2 {
                 view = new AestheticCoordinatorLayout(context, attrs);
                 break;
         }
+
+        int viewBackgroundRes = 0;
+
         if (view != null && view.getTag() != null && ":aesthetic_ignore".equals(view.getTag())) {
+            // Set view back to null so we can let AppCompat handle this view instead.
             view = null;
+        } else if (attrs != null) {
+            viewBackgroundRes = resolveResId(context, attrs, android.R.attr.background);
+        }
+
+        if (view == null) {
+            // First, check if the AppCompatDelegate will give us a view, usually (maybe always) null.
+            if (delegate != null) {
+                view = delegate.createView(parent, name, context, attrs);
+                if (view == null) {
+                    view = keyContext.onCreateView(parent, name, context, attrs);
+                } else {
+                    view = null;
+                }
+            } else {
+                view = null;
+            }
+
+            if (isBlackListedForApply(name)) {
+                return view;
+            }
+
+            // Mimic code of LayoutInflater using reflection tricks (this would normally be run when this factory returns null).
+            // We need to intercept the default behavior rather than allowing the LayoutInflater to handle it after this method returns.
+            if (view == null) {
+                try {
+                    Context viewContext = layoutInflater.getContext();
+                    // Apply a theme wrapper, if requested.
+                    if (ATTRS_THEME != null) {
+                        final TypedArray ta = viewContext.obtainStyledAttributes(attrs, ATTRS_THEME);
+                        final int themeResId = ta.getResourceId(0, 0);
+                        if (themeResId != 0) {
+                            //noinspection RestrictedApi
+                            viewContext = new ContextThemeWrapper(viewContext, themeResId);
+                        }
+                        ta.recycle();
+                    }
+                    Object[] constructorArgs;
+                    try {
+                        constructorArgs = (Object[]) constructorArgsField.get(layoutInflater);
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalStateException(
+                                "Failed to retrieve the mConstructorArgsField field.", e);
+                    }
+
+                    final Object lastContext = constructorArgs[0];
+                    constructorArgs[0] = viewContext;
+                    try {
+                        if (-1 == name.indexOf('.')) {
+                            view = (View) onCreateViewMethod.invoke(layoutInflater, parent, name, attrs);
+                        } else {
+                            view = (View) createViewMethod.invoke(layoutInflater, name, null, attrs);
+                        }
+                    } catch (Exception e) {
+                        log("Failed to inflate %s: %s", name, e.getMessage());
+                        e.printStackTrace();
+                    } finally {
+                        constructorArgs[0] = lastContext;
+                    }
+                } catch (Throwable t) {
+                    throw new RuntimeException(String.format("An error occurred while inflating View %s: %s", name, t.getMessage()), t);
+                }
+            }
+        }
+
+        if (view != null) {
+            if (viewBackgroundRes != 0) {
+                Observable<Integer> obs;
+                obs = ViewUtil.getObservableForResId(view.getContext(), viewBackgroundRes, null);
+                if (obs != null) {
+                    Aesthetic.get().addBackgroundSubscriber(view, obs);
+                }
+            }
+            String idName = "";
+            try {
+                idName = context.getResources().getResourceName(view.getId()) + " ";
+            } catch (Throwable ignored) {
+            }
+            log("Inflated -> %s%s", idName, view.getClass().getName());
         }
         return view;
     }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return onCreateView(null, name, context, attrs);
+        return null;
     }
 }

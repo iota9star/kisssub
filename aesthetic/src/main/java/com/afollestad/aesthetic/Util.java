@@ -53,8 +53,8 @@ import android.view.ViewGroup;
 @SuppressWarnings("WeakerAccess")
 public final class Util {
 
-    static void setInflaterFactory(@NonNull LayoutInflater li) {
-        LayoutInflaterCompat.setFactory2(li, new InflationInterceptor());
+    static void setInflaterFactory(@NonNull LayoutInflater inflater, @NonNull AppCompatActivity activity) {
+        LayoutInflaterCompat.setFactory2(inflater, new InflationInterceptor(activity, inflater, activity.getDelegate()));
     }
 
     /**
@@ -103,17 +103,14 @@ public final class Util {
 
     @ColorInt
     static int resolveColor(Context context, @AttrRes int attr, int fallback) {
-        if (context != null) {
-            TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
-            try {
-                return a.getColor(0, fallback);
-            } catch (Throwable ignored) {
-                return fallback;
-            } finally {
-                a.recycle();
-            }
+        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
+        try {
+            return a.getColor(0, fallback);
+        } catch (Throwable ignored) {
+            return fallback;
+        } finally {
+            a.recycle();
         }
-        return fallback;
     }
 
     @IdRes
@@ -201,7 +198,7 @@ public final class Util {
         return Color.argb(alpha, red, green, blue);
     }
 
-    public static void setOverflowButtonColor(@NonNull final Toolbar toolbar, final @ColorInt int color) {
+    static void setOverflowButtonColor(@NonNull final Toolbar toolbar, final @ColorInt int color) {
         Drawable overflowDrawable = toolbar.getOverflowIcon();
         if (overflowDrawable != null) {
             toolbar.setOverflowIcon(TintHelper.createTintedDrawable(overflowDrawable, color));
@@ -210,13 +207,10 @@ public final class Util {
 
     @ColorInt
     public static int shiftColor(@ColorInt int color, @FloatRange(from = 0.0f, to = 2.0f) float by) {
-        if (by == 1f) {
-            return color;
-        }
+        if (by == 1f) return color;
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
-        // value component
-        hsv[2] *= by;
+        hsv[2] *= by; // value component
         return Color.HSVToColor(hsv);
     }
 
@@ -231,14 +225,11 @@ public final class Util {
         } else if (color == Color.WHITE || color == Color.TRANSPARENT) {
             return true;
         }
-        final double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color)
-                + 0.114 * Color.blue(color)) / 255;
+        final double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return darkness < 0.4;
     }
 
-    /**
-     * optional convenience method, this can be called when we have information about the background color and want to consider it
-     */
+    // optional convenience method, this can be called when we have information about the background color and want to consider it
     static boolean isColorLight(@ColorInt int color, @ColorInt int bgColor) {
         if (Color.alpha(color)
                 < 128) { // if the color is less than 50% visible rely on the background color
@@ -278,7 +269,7 @@ public final class Util {
         color = stripAlpha(color);
         // Default is app's launcher icon
         Bitmap icon;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= 26) {
             icon = getAppIcon(activity.getPackageManager(), activity.getPackageName());
         } else {
             icon =
@@ -286,7 +277,7 @@ public final class Util {
                             .getBitmap();
         }
         if (icon != null) {
-            // Sets color of entry in the system recent page
+            // Sets color of entry in the system recents page
             ActivityManager.TaskDescription td =
                     new ActivityManager.TaskDescription((String) activity.getTitle(), icon, color);
             activity.setTaskDescription(td);

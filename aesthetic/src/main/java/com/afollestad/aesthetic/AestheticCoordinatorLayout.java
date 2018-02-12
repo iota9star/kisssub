@@ -40,17 +40,17 @@ import android.view.View;
 import java.lang.reflect.Field;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 
 /**
  * @author Aidan Follestad (afollestad)
  */
-public class AestheticCoordinatorLayout extends CoordinatorLayout
-        implements AppBarLayout.OnOffsetChangedListener {
+public class AestheticCoordinatorLayout extends CoordinatorLayout implements AppBarLayout.OnOffsetChangedListener {
 
-    private CompositeDisposable compositeDisposable;
+    private Disposable toolbarColorSubscription;
+    private Disposable statusBarColorSubscription;
     private AppBarLayout appBarLayout;
     private View colorView;
     private AestheticToolbar toolbar;
@@ -73,13 +73,11 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
     }
 
     @SuppressWarnings("unchecked")
-    private static void tintMenu(
-            @NonNull AestheticToolbar toolbar, @Nullable Menu menu, final ActiveInactiveColors colors) {
+    private static void tintMenu(@NonNull AestheticToolbar toolbar, @Nullable Menu menu, final ActiveInactiveColors colors) {
         if (toolbar.getNavigationIcon() != null) {
             toolbar.setNavigationIcon(toolbar.getNavigationIcon(), colors.activeColor());
         }
         Util.setOverflowButtonColor(toolbar, colors.activeColor());
-
         try {
             final Field field = Toolbar.class.getDeclaredField("mCollapseIcon");
             field.setAccessible(true);
@@ -91,8 +89,7 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
             e.printStackTrace();
         }
 
-        final PorterDuffColorFilter colorFilter =
-                new PorterDuffColorFilter(colors.activeColor(), PorterDuff.Mode.SRC_IN);
+        final PorterDuffColorFilter colorFilter = new PorterDuffColorFilter(colors.activeColor(), PorterDuff.Mode.SRC_IN);
         for (int i = 0; i < toolbar.getChildCount(); i++) {
             final View v = toolbar.getChildAt(i);
             // We can't iterate through the toolbar.getMenu() here, because we need the ActionMenuItemView.
@@ -103,8 +100,7 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
                         int drawablesCount = ((ActionMenuItemView) innerView).getCompoundDrawables().length;
                         for (int k = 0; k < drawablesCount; k++) {
                             if (((ActionMenuItemView) innerView).getCompoundDrawables()[k] != null) {
-                                ((ActionMenuItemView) innerView)
-                                        .getCompoundDrawables()[k].setColorFilter(colorFilter);
+                                ((ActionMenuItemView) innerView).getCompoundDrawables()[k].setColorFilter(colorFilter);
                             }
                         }
                     }
@@ -121,12 +117,11 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
+
         // Find the toolbar and color view used to blend the scroll transition
         if (getChildCount() > 0 && getChildAt(0) instanceof AppBarLayout) {
             appBarLayout = (AppBarLayout) getChildAt(0);
-            if (appBarLayout.getChildCount() > 0
-                    && appBarLayout.getChildAt(0) instanceof CollapsingToolbarLayout) {
+            if (appBarLayout.getChildCount() > 0 && appBarLayout.getChildAt(0) instanceof CollapsingToolbarLayout) {
                 collapsingToolbarLayout = (CollapsingToolbarLayout) appBarLayout.getChildAt(0);
                 for (int i = 0; i < collapsingToolbarLayout.getChildCount(); i++) {
                     if (this.toolbar != null && this.colorView != null) {
@@ -135,8 +130,7 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
                     View child = collapsingToolbarLayout.getChildAt(i);
                     if (child instanceof AestheticToolbar) {
                         this.toolbar = (AestheticToolbar) child;
-                    } else if (child.getBackground() != null
-                            && child.getBackground() instanceof ColorDrawable) {
+                    } else if (child.getBackground() != null && child.getBackground() instanceof ColorDrawable) {
                         this.colorView = child;
                     }
                 }
@@ -145,38 +139,36 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
 
         if (toolbar != null && colorView != null) {
             this.appBarLayout.addOnOffsetChangedListener(this);
-            compositeDisposable.add(
-                    Observable.combineLatest(
-                            toolbar.colorUpdated(),
-                            Aesthetic.get(getContext()).colorIconTitle(toolbar.colorUpdated()),
-                            Pair::create)
-                            .compose(Rx.distinctToMainThread())
-                            .subscribe(
-                                    result -> {
-                                        toolbarColor = result.first;
-                                        iconTextColors = result.second;
-                                        invalidateColors();
-                                    }, onErrorLogAndRethrow()));
+            toolbarColorSubscription = Observable.combineLatest(
+                    toolbar.colorUpdated(),
+                    Aesthetic.get().colorIconTitle(toolbar.colorUpdated()),
+                    Pair::create)
+                    .compose(Rx.distinctToMainThread())
+                    .subscribe(result -> {
+                        toolbarColor = result.first;
+                        iconTextColors = result.second;
+                        invalidateColors();
+                    }, onErrorLogAndRethrow());
         }
 
         if (collapsingToolbarLayout != null) {
-            compositeDisposable.add(
-                    Aesthetic.get(getContext())
-                            .colorStatusBar()
-                            .compose(Rx.distinctToMainThread())
-                            .subscribe(
-                                    color -> {
-                                        collapsingToolbarLayout.setContentScrimColor(color);
-                                        collapsingToolbarLayout.setStatusBarScrimColor(color);
-                                    },
-                                    onErrorLogAndRethrow()));
+            statusBarColorSubscription = Aesthetic.get()
+                    .colorStatusBar()
+                    .compose(Rx.distinctToMainThread())
+                    .subscribe(color -> {
+                        collapsingToolbarLayout.setContentScrimColor(color);
+                        collapsingToolbarLayout.setStatusBarScrimColor(color);
+                    }, onErrorLogAndRethrow());
         }
     }
 
     @Override
     public void onDetachedFromWindow() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (toolbarColorSubscription != null) {
+            toolbarColorSubscription.dispose();
+        }
+        if (statusBarColorSubscription != null) {
+            statusBarColorSubscription.dispose();
         }
         if (this.appBarLayout != null) {
             this.appBarLayout.removeOnOffsetChangedListener(this);
@@ -202,15 +194,17 @@ public class AestheticCoordinatorLayout extends CoordinatorLayout
         }
         final int maxOffset = appBarLayout.getMeasuredHeight() - toolbar.getMeasuredHeight();
         final float ratio = (float) lastOffset / (float) maxOffset;
-
         final int colorViewColor = ((ColorDrawable) colorView.getBackground()).getColor();
         final int blendedColor = Util.blendColors(colorViewColor, toolbarColor, ratio);
         final int collapsedTitleColor = iconTextColors.activeColor();
         final int expandedTitleColor = Util.isColorLight(colorViewColor) ? Color.BLACK : Color.WHITE;
         final int blendedTitleColor = Util.blendColors(expandedTitleColor, collapsedTitleColor, ratio);
+
         toolbar.setBackgroundColor(blendedColor);
+
         collapsingToolbarLayout.setCollapsedTitleTextColor(collapsedTitleColor);
         collapsingToolbarLayout.setExpandedTitleColor(expandedTitleColor);
+
         tintMenu(toolbar, toolbar.getMenu(), ActiveInactiveColors.create(blendedTitleColor, Util.adjustAlpha(blendedColor, 0.7f)));
     }
 }

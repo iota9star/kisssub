@@ -31,13 +31,13 @@ import java.util.Random;
  */
 public class StoreHouseBarItem extends Animation {
 
+    final PointF midPoint;
     private final Paint mPaint = new Paint();
-    PointF midPoint;
+    private final PointF mCStartPoint;
+    private final PointF mCEndPoint;
     float translationX;
     private float mFromAlpha = 1.0f;
     private float mToAlpha = 0.4f;
-    private PointF mCStartPoint;
-    private PointF mCEndPoint;
 
     StoreHouseBarItem(PointF start, PointF end, int color, int lineWidth) {
         midPoint = new PointF((start.x + end.x) / 2, (start.y + end.y) / 2);

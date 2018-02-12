@@ -31,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticProgressBar extends MaterialProgressBar {
 
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticProgressBar(Context context) {
         super(context);
@@ -52,7 +52,7 @@ public class AestheticProgressBar extends MaterialProgressBar {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorAccent()
                 .compose(Rx.distinctToMainThread())
                 .subscribe(this::invalidateColors, onErrorLogAndRethrow());
@@ -60,8 +60,8 @@ public class AestheticProgressBar extends MaterialProgressBar {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

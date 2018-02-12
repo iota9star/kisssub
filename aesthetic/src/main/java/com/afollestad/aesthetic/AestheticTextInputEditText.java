@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticTextInputEditText extends TextInputEditText {
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable subscriptions;
     private int backgroundResId;
     private ColorIsDarkState lastState;
 
@@ -66,23 +66,24 @@ public class AestheticTextInputEditText extends TextInputEditText {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
-        compositeDisposable.add(
-                Aesthetic.get(getContext())
+        subscriptions = new CompositeDisposable();
+        subscriptions.add(
+                Aesthetic.get()
                         .textColorPrimary()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
-        compositeDisposable.add(
-                Aesthetic.get(getContext())
+        subscriptions.add(
+                Aesthetic.get()
                         .textColorSecondary()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(ViewHintTextColorAction.create(this), onErrorLogAndRethrow()));
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), backgroundResId, Aesthetic.get(getContext()).colorAccent());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(
+                getContext(), backgroundResId, Aesthetic.get().colorAccent());
         if (obs != null) {
-            compositeDisposable.add(
+            subscriptions.add(
                     Observable.combineLatest(
                             obs,
-                            Aesthetic.get(getContext()).isDark(),
+                            Aesthetic.get().isDark(),
                             ColorIsDarkState.creator())
                             .compose(Rx.distinctToMainThread())
                             .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
@@ -91,8 +92,8 @@ public class AestheticTextInputEditText extends TextInputEditText {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
         super.onDetachedFromWindow();
     }

@@ -35,7 +35,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticDrawableTextView extends AppCompatTextView {
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable subscriptions;
     private int textColorResId;
 
     public AestheticDrawableTextView(Context context) {
@@ -61,15 +61,15 @@ public class AestheticDrawableTextView extends AppCompatTextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorSecondary());
+        subscriptions = new CompositeDisposable();
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get().textColorSecondary());
         if (obs != null) {
-            compositeDisposable.add(
+            subscriptions.add(
                     obs.compose(Rx.distinctToMainThread())
                             .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow()));
         }
-        compositeDisposable.add(
-                Aesthetic.get(getContext())
+        subscriptions.add(
+                Aesthetic.get()
                         .colorAccent()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(this::tintDrawables, onErrorLogAndRethrow()));
@@ -98,8 +98,8 @@ public class AestheticDrawableTextView extends AppCompatTextView {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
         super.onDetachedFromWindow();
     }

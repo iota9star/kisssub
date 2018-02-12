@@ -38,8 +38,8 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 @SuppressWarnings("RestrictedApi")
 public class AestheticNavigationView extends NavigationView {
 
-    private Disposable colorDisposable;
-    private Disposable modeDisposable;
+    private Disposable modeSubscription;
+    private Disposable colorSubscription;
 
     public AestheticNavigationView(Context context) {
         super(context);
@@ -59,14 +59,15 @@ public class AestheticNavigationView extends NavigationView {
         int baseColor = isDark ? Color.WHITE : Color.BLACK;
         int unselectedIconColor = Util.adjustAlpha(baseColor, .54f);
         int unselectedTextColor = Util.adjustAlpha(baseColor, .87f);
-        int selectedItemBgColor = ContextCompat.getColor(
-                getContext(),
-                isDark ? R.color.ate_navigation_drawer_selected_dark : R.color.ate_navigation_drawer_selected_light);
+        int selectedItemBgColor = ContextCompat.getColor(getContext(), isDark ? R.color.ate_navigation_drawer_selected_dark : R.color.ate_navigation_drawer_selected_light);
 
-        final ColorStateList iconSl = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedIconColor, selectedColor});
-        final ColorStateList textSl = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}}, new int[]{unselectedTextColor, selectedColor});
+        final ColorStateList iconSl = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}},
+                new int[]{unselectedIconColor, selectedColor});
+        final ColorStateList textSl = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}},
+                new int[]{unselectedTextColor, selectedColor});
         setItemTextColor(textSl);
         setItemIconTintList(iconSl);
+
         StateListDrawable bgDrawable = new StateListDrawable();
         bgDrawable.addState(new int[]{android.R.attr.state_checked}, new ColorDrawable(selectedItemBgColor));
         setItemBackground(bgDrawable);
@@ -75,24 +76,23 @@ public class AestheticNavigationView extends NavigationView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        modeDisposable = Aesthetic.get(getContext())
+        modeSubscription = Aesthetic.get()
                 .navigationViewMode()
                 .compose(Rx.distinctToMainThread())
-                .subscribe(
-                        mode -> {
+                .subscribe(mode -> {
                             switch (mode) {
                                 case NavigationViewMode.SELECTED_PRIMARY:
-                                    colorDisposable = Observable.combineLatest(
-                                            Aesthetic.get(getContext()).colorPrimary(),
-                                            Aesthetic.get(getContext()).isDark(),
+                                    colorSubscription = Observable.combineLatest(
+                                            Aesthetic.get().colorPrimary(),
+                                            Aesthetic.get().isDark(),
                                             ColorIsDarkState.creator())
                                             .compose(Rx.distinctToMainThread())
                                             .subscribe(this::invalidateColors, onErrorLogAndRethrow());
                                     break;
                                 case NavigationViewMode.SELECTED_ACCENT:
-                                    colorDisposable = Observable.combineLatest(
-                                            Aesthetic.get(getContext()).colorAccent(),
-                                            Aesthetic.get(getContext()).isDark(),
+                                    colorSubscription = Observable.combineLatest(
+                                            Aesthetic.get().colorAccent(),
+                                            Aesthetic.get().isDark(),
                                             ColorIsDarkState.creator())
                                             .compose(Rx.distinctToMainThread())
                                             .subscribe(this::invalidateColors, onErrorLogAndRethrow());
@@ -106,11 +106,11 @@ public class AestheticNavigationView extends NavigationView {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (modeDisposable != null) {
-            modeDisposable.dispose();
+        if (modeSubscription != null) {
+            modeSubscription.dispose();
         }
-        if (colorDisposable != null) {
-            colorDisposable.dispose();
+        if (colorSubscription != null) {
+            colorSubscription.dispose();
         }
         super.onDetachedFromWindow();
     }

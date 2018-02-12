@@ -31,7 +31,7 @@ import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
  */
 public class AestheticViewPager extends ViewPager {
 
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticViewPager(Context context) {
         super(context);
@@ -48,7 +48,7 @@ public class AestheticViewPager extends ViewPager {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable = Aesthetic.get(getContext())
+        subscription = Aesthetic.get()
                 .colorAccent()
                 .compose(Rx.distinctToMainThread())
                 .subscribe(this::invalidateColors, onErrorLogAndRethrow());
@@ -56,8 +56,8 @@ public class AestheticViewPager extends ViewPager {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

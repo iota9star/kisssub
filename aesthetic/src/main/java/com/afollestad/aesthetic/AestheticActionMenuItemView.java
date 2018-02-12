@@ -38,7 +38,7 @@ import static com.afollestad.aesthetic.TintHelper.createTintedDrawable;
 final class AestheticActionMenuItemView extends ActionMenuItemView {
 
     private Drawable icon;
-    private Disposable disposable;
+    private Disposable subscription;
 
     public AestheticActionMenuItemView(Context context) {
         super(context);
@@ -66,13 +66,11 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
         // We need to retrieve the color again here.
         // For some reason, without this, a transparent color is used and the icon disappears
         // when the overflow menu opens.
-        Aesthetic.get(getContext())
+        Aesthetic.get()
                 .colorIconTitle(null)
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(1)
-                .subscribe(
-                        colors -> invalidateColors(colors, icon),
-                        onErrorLogAndRethrow());
+                .subscribe(colors -> invalidateColors(colors, icon), onErrorLogAndRethrow());
     }
 
     public void setIcon(final Drawable icon, ColorStateList colors) {
@@ -83,19 +81,16 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        disposable =
-                Aesthetic.get(getContext())
-                        .colorIconTitle(null)
-                        .compose(Rx.distinctToMainThread())
-                        .subscribe(
-                                colors -> invalidateColors(colors, icon),
-                                onErrorLogAndRethrow());
+        subscription = Aesthetic.get()
+                .colorIconTitle(null)
+                .compose(Rx.distinctToMainThread())
+                .subscribe(colors -> invalidateColors(colors, icon), onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

@@ -23,6 +23,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.SystemClock
 import android.view.View
+import com.afollestad.aesthetic.Aesthetic
 import com.lzy.okgo.OkGo
 import kotlinx.android.synthetic.main.activity_about.*
 import okhttp3.HttpUrl
@@ -44,11 +45,11 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
     override fun isActivated(activate: Boolean) {
         if (activate) {
             MessageBar.create(this, "成功激活上帝模式")
-            linearLayoutGodModeContainer.visibility = View.GONE
-            textViewAppName.text = (getString(R.string.kisssub) + " - GOD")
+            linearLayoutGodModeContainer?.visibility = View.GONE
+            textViewAppName?.text = (getString(R.string.kisssub) + " - GOD")
         } else {
-            textInputEditTextCode.error = "神秘代码不正确"
-            textInputEditTextCode.requestFocus()
+            textInputEditTextCode?.error = "神秘代码不正确"
+            textInputEditTextCode?.requestFocus()
         }
         endGodMode()
     }
@@ -148,6 +149,19 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
         GlideApp.with(this)
                 .load(ThemeHelper.getDynamicBanner(this))
                 .into(kenBurnsView)
+        GlideApp.with(this)
+                .load(ThemeHelper.getContentBanner(this))
+                .into(imageViewContentBackground)
+        Aesthetic.get()
+                .isDark
+                .take(1)
+                .subscribe {
+                    if (it) {
+                        viewMask?.setBackgroundColor(ThemeHelper.getContentMaskColorDark(this))
+                    } else {
+                        viewMask?.setBackgroundColor(ThemeHelper.getContentMaskColor(this))
+                    }
+                }
         try {
             val packageInfo = this.packageManager.getPackageInfo(this.packageName, PackageManager.GET_CONFIGURATIONS)
             textViewVersion?.text = ("${packageInfo.versionName}  『 ${packageInfo.versionCode} 』")
@@ -162,7 +176,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
         val cookies = cookieStore.getCookie(httpUrl)
         val pattern = "god_mode\\s*="
         if (cookies.toString().contains(Regex(pattern))) {
-            textViewAppName.text = (getString(R.string.kisssub) + " - GOD")
+            textViewAppName?.text = (getString(R.string.kisssub) + " - GOD")
         }
     }
 

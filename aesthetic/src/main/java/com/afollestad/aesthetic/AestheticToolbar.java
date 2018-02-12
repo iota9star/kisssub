@@ -19,8 +19,6 @@
 package com.afollestad.aesthetic;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -28,12 +26,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.PublishSubject;
 
 import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
 import static com.afollestad.aesthetic.TintHelper.createTintedDrawable;
-import static com.afollestad.aesthetic.Util.setOverflowButtonColor;
 
 /**
  * @author Aidan Follestad (afollestad)
@@ -41,10 +38,8 @@ import static com.afollestad.aesthetic.Util.setOverflowButtonColor;
 public class AestheticToolbar extends Toolbar {
 
     private BgIconColorState lastState;
-    private CompositeDisposable compositeDisposable;
+    private Disposable subscription;
     private PublishSubject<Integer> onColorUpdated;
-
-    private boolean transparentBackground = false;
 
     public AestheticToolbar(Context context) {
         super(context);
@@ -52,32 +47,25 @@ public class AestheticToolbar extends Toolbar {
 
     public AestheticToolbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
     }
 
     public AestheticToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
-    }
-
-    private void init(Context context, @Nullable AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AestheticToolbar);
-        transparentBackground = a.getBoolean(R.styleable.AestheticToolbar_transparentBackground, false);
-        a.recycle();
     }
 
     private void invalidateColors(BgIconColorState state) {
-        lastState = state;
-        if (!transparentBackground) {
-            setBackgroundColor(state.bgColor());
+        this.lastState = state;
+        this.onColorUpdated.onNext(state.bgColor());
+        setBackgroundColor(state.bgColor());
+        final ActiveInactiveColors iconTitleColors = state.iconTitleColor();
+        if (iconTitleColors != null) {
+            setTitleTextColor(iconTitleColors.activeColor());
+            Util.setOverflowButtonColor(this, iconTitleColors.activeColor());
+            ViewUtil.tintToolbarMenu(this, getMenu(), iconTitleColors);
         }
-        setTitleTextColor(state.iconTitleColor().activeColor());
-        setOverflowButtonColor(this, state.iconTitleColor().activeColor());
         if (getNavigationIcon() != null) {
             setNavigationIcon(getNavigationIcon());
         }
-        onColorUpdated.onNext(state.bgColor());
-        ViewUtil.tintToolbarMenu(this, getMenu(), state.iconTitleColor());
     }
 
     public Observable<Integer> colorUpdated() {
@@ -86,49 +74,44 @@ public class AestheticToolbar extends Toolbar {
 
     @Override
     public void setNavigationIcon(@Nullable Drawable icon) {
-        if (lastState == null) {
+        if (this.lastState == null) {
             super.setNavigationIcon(icon);
             return;
         }
-        super.setNavigationIcon(createTintedDrawable(icon, lastState.iconTitleColor().toEnabledSl()));
+        final ActiveInactiveColors iconTitleColors = this.lastState.iconTitleColor();
+        if (iconTitleColors != null) {
+            super.setNavigationIcon(createTintedDrawable(icon, iconTitleColors.toEnabledSl()));
+        } else {
+            super.setNavigationIcon(icon);
+        }
     }
 
     public void setNavigationIcon(@Nullable Drawable icon, @ColorInt int color) {
-        if (lastState == null) {
+        if (this.lastState == null) {
             super.setNavigationIcon(icon);
             return;
         }
         super.setNavigationIcon(createTintedDrawable(icon, color));
     }
 
-    public void setTransparentBackground(boolean transparentBackground) {
-        this.transparentBackground = transparentBackground;
-        setBackgroundColor(Color.TRANSPARENT);
-    }
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        compositeDisposable = new CompositeDisposable();
         onColorUpdated = PublishSubject.create();
-        compositeDisposable.add(Observable.combineLatest(
-                Aesthetic.get(getContext()).colorPrimary(),
-                Aesthetic.get(getContext()).colorIconTitle(null),
+        subscription = Observable.combineLatest(
+                Aesthetic.get().colorPrimary(),
+                Aesthetic.get().colorIconTitle(null),
                 BgIconColorState.creator())
-                .take(1)
-                .subscribe(this::invalidateColors));
-        compositeDisposable.add(
-                Observable.combineLatest(Aesthetic.get(getContext()).colorPrimary(), Aesthetic.get(getContext()).colorIconTitle(null), BgIconColorState.creator())
-                        .compose(Rx.distinctToMainThread())
-                        .subscribe(this::invalidateColors, onErrorLogAndRethrow()));
+                .compose(Rx.distinctToMainThread())
+                .subscribe(this::invalidateColors, onErrorLogAndRethrow());
     }
 
     @Override
     protected void onDetachedFromWindow() {
         lastState = null;
         onColorUpdated = null;
-        if (compositeDisposable != null) {
-            compositeDisposable.clear();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

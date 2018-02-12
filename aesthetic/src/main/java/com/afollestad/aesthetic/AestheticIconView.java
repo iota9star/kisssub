@@ -65,7 +65,7 @@ public class AestheticIconView extends AppCompatImageView {
                             .subscribe(ViewBackgroundAction.create(this), onErrorLogAndRethrow()));
         }
         compositeDisposable.add(
-                Aesthetic.get(getContext())
+                Aesthetic.get()
                         .colorAccent()
                         .compose(Rx.distinctToMainThread())
                         .subscribe(this::setColorFilter, onErrorLogAndRethrow()));

@@ -47,6 +47,7 @@ final class MaterialDialogsUtil {
         return true;
     }
 
+    @SuppressWarnings("TryWithIdenticalCatches")
     static void theme(Params params) {
         try {
             Class<?> cls = Class.forName("com.afollestad.materialdialogs.internal.ThemeSingleton");
@@ -80,17 +81,25 @@ final class MaterialDialogsUtil {
             Field fieldLinkColor = cls.getField("linkColor");
             fieldLinkColor.set(instance, ColorStateList.valueOf(params.accentColor));
 
-        } catch (Throwable ignored) {
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 
     static Disposable observe(Aesthetic instance) {
-        return Observable.combineLatest(instance.textColorPrimary(), instance.textColorSecondary(), instance.colorAccent(), instance.isDark(), Params::create)
+        return Observable.combineLatest(
+                instance.textColorPrimary(),
+                instance.textColorSecondary(),
+                instance.colorAccent(),
+                instance.isDark(),
+                Params::create)
                 .distinctUntilChanged()
-                .subscribe(MaterialDialogsUtil::theme);
+                .subscribe(
+                        MaterialDialogsUtil::theme);
     }
 
     static class Params {
+
         final int primaryTextColor;
         final int secondaryTextColor;
         final int accentColor;

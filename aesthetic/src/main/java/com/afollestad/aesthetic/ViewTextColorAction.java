@@ -30,7 +30,7 @@ import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  * @author Aidan Follestad (afollestad)
  */
 @RestrictTo(LIBRARY_GROUP)
-public class ViewTextColorAction implements Consumer<Integer> {
+class ViewTextColorAction implements Consumer<Integer> {
 
     private final TextView view;
 

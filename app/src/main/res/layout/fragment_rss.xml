@@ -26,20 +26,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TabLayout
+        <com.afollestad.aesthetic.AestheticPureTabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:paddingEnd="42dp"
-            android:paddingRight="42dp"
+            android:layout_height="48dp"
+            android:paddingEnd="44dp"
+            android:paddingRight="44dp"
             app:tabIndicatorHeight="3dp"
             app:tabMode="scrollable" />
 
         <com.afollestad.aesthetic.AestheticIconView
             android:id="@+id/imageViewAdd"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="end"
+            android:layout_width="44dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end|center_vertical"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"

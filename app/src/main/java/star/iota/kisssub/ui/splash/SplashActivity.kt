@@ -23,6 +23,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.CountDownTimer
 import com.afollestad.aesthetic.Aesthetic
 import com.afollestad.aesthetic.NavigationViewMode
+import com.afollestad.aesthetic.TabLayoutIndicatorMode
 import kotlinx.android.synthetic.main.activity_splash.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
@@ -69,19 +70,20 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun doSome() {
-        if (Aesthetic.isFirstTime(this)) {
-            Aesthetic.get(this)
+        if (Aesthetic.isFirstTime()) {
+            Aesthetic.get()
                     .activityTheme(R.style.AppTheme)
                     .textColorPrimaryRes(R.color.text_color_primary)
                     .textColorSecondaryRes(R.color.text_color_secondary)
                     .colorPrimaryRes(R.color.white)
                     .colorAccentRes(R.color.pink)
                     .navigationViewMode(NavigationViewMode.SELECTED_ACCENT)
+                    .tabLayoutIndicatorMode(TabLayoutIndicatorMode.ACCENT)
                     .colorStatusBarAuto()
-                    .colorNavigationBarAuto(true)
+                    .colorNavigationBarAuto()
                     .apply()
         }
-        Aesthetic.get(this)
+        Aesthetic.get()
                 .colorWindowBackground()
                 .take(1)
                 .subscribe {

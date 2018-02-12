@@ -58,14 +58,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:windowBackground"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
             android:text="@string/add_rss_tag"
             android:textColor="?android:textColorSecondary"
             android:textSize="18sp"
@@ -73,7 +75,7 @@
 
         <com.afollestad.aesthetic.AestheticIconView
             android:id="@+id/imageViewAdd"
-            android:layout_width="48dp"
+            android:layout_width="44dp"
             android:layout_height="48dp"
             android:clickable="true"
             android:focusable="true"

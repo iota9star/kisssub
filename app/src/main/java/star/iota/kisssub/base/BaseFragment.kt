@@ -86,7 +86,7 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         GlideApp.with(this)
                 .load(ThemeHelper.getContentBanner(context!!))
                 .into(bg)
-        Aesthetic.get(context!!)
+        Aesthetic.get()
                 .isDark
                 .take(1)
                 .subscribe {

@@ -33,7 +33,7 @@ import static com.afollestad.aesthetic.Util.resolveResId;
  */
 public class AestheticTextView extends AppCompatTextView {
 
-    private Disposable disposable;
+    private Disposable subscription;
     private int textColorResId;
 
     public AestheticTextView(Context context) {
@@ -59,16 +59,17 @@ public class AestheticTextView extends AppCompatTextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, Aesthetic.get(getContext()).textColorSecondary());
+        Observable<Integer> obs = ViewUtil.getObservableForResId(getContext(), textColorResId, getId() == android.R.id.title ? Aesthetic.get().textColorPrimary() : Aesthetic.get().textColorSecondary());
         if (obs != null) {
-            disposable = obs.compose(Rx.distinctToMainThread()).subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
+            subscription = obs.compose(Rx.distinctToMainThread())
+                    .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
-        if (disposable != null) {
-            disposable.dispose();
+        if (subscription != null) {
+            subscription.dispose();
         }
         super.onDetachedFromWindow();
     }

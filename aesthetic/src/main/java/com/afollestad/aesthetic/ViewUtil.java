@@ -35,7 +35,6 @@ import java.lang.reflect.Field;
 
 import io.reactivex.Observable;
 
-import static com.afollestad.aesthetic.TintHelper.createTintedDrawable;
 import static com.afollestad.aesthetic.Util.isColorLight;
 import static com.afollestad.aesthetic.Util.resolveResId;
 
@@ -49,23 +48,23 @@ public final class ViewUtil {
         if (resId == 0) {
             return fallback;
         } else if (resId == resolveResId(context, R.attr.colorPrimary, 0)) {
-            return Aesthetic.get(context).colorPrimary();
+            return Aesthetic.get().colorPrimary();
         } else if (resId == resolveResId(context, R.attr.colorPrimaryDark, 0)) {
-            return Aesthetic.get(context).colorPrimaryDark();
+            return Aesthetic.get().colorPrimaryDark();
         } else if (resId == resolveResId(context, android.R.attr.statusBarColor, 0)) {
-            return Aesthetic.get(context).colorStatusBar();
+            return Aesthetic.get().colorStatusBar();
         } else if (resId == resolveResId(context, R.attr.colorAccent, 0)) {
-            return Aesthetic.get(context).colorAccent();
+            return Aesthetic.get().colorAccent();
         } else if (resId == resolveResId(context, android.R.attr.windowBackground, 0)) {
-            return Aesthetic.get(context).colorWindowBackground();
+            return Aesthetic.get().colorWindowBackground();
         } else if (resId == resolveResId(context, android.R.attr.textColorPrimary, 0)) {
-            return Aesthetic.get(context).textColorPrimary();
+            return Aesthetic.get().textColorPrimary();
         } else if (resId == resolveResId(context, android.R.attr.textColorPrimaryInverse, 0)) {
-            return Aesthetic.get(context).textColorPrimaryInverse();
+            return Aesthetic.get().textColorPrimaryInverse();
         } else if (resId == resolveResId(context, android.R.attr.textColorSecondary, 0)) {
-            return Aesthetic.get(context).textColorSecondary();
+            return Aesthetic.get().textColorSecondary();
         } else if (resId == resolveResId(context, android.R.attr.textColorSecondaryInverse, 0)) {
-            return Aesthetic.get(context).textColorSecondaryInverse();
+            return Aesthetic.get().textColorSecondaryInverse();
         }
         return fallback;
     }
@@ -76,8 +75,9 @@ public final class ViewUtil {
             final Field field = Toolbar.class.getDeclaredField("mCollapseIcon");
             field.setAccessible(true);
             Drawable collapseIcon = (Drawable) field.get(toolbar);
-            if (collapseIcon != null)
-                field.set(toolbar, createTintedDrawable(collapseIcon, titleIconColors.toEnabledSl()));
+            if (collapseIcon != null) {
+                field.set(toolbar, TintHelper.createTintedDrawable(collapseIcon, titleIconColors.toEnabledSl()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,6 +85,10 @@ public final class ViewUtil {
         // Theme menu action views
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
+            if (item.getIcon() != null) {
+                Drawable tintedDrawable = TintHelper.createTintedDrawable(item.getIcon(), titleIconColors.toEnabledSl());
+                item.setIcon(tintedDrawable);
+            }
             if (item.getActionView() instanceof SearchView) {
                 themeSearchView(titleIconColors, (SearchView) item.getActionView());
             }
@@ -120,7 +124,7 @@ public final class ViewUtil {
 
             field = cls.getDeclaredField("mSearchHintIcon");
             field.setAccessible(true);
-            field.set(view, createTintedDrawable((Drawable) field.get(view), tintColors.toEnabledSl()));
+            field.set(view, TintHelper.createTintedDrawable((Drawable) field.get(view), tintColors.toEnabledSl()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,7 +134,7 @@ public final class ViewUtil {
         field.setAccessible(true);
         final ImageView imageView = (ImageView) field.get(target);
         if (imageView.getDrawable() != null) {
-            imageView.setImageDrawable(createTintedDrawable(imageView.getDrawable(), tintColors.toEnabledSl()));
+            imageView.setImageDrawable(TintHelper.createTintedDrawable(imageView.getDrawable(), tintColors.toEnabledSl()));
         }
     }
 }

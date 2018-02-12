@@ -29,19 +29,19 @@ public class AestheticActivity extends AppCompatActivity implements AestheticKey
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Aesthetic.get(this).attach(this);
+        Aesthetic.attach(this);
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Aesthetic.get(this).resume(this);
+        Aesthetic.resume(this);
     }
 
     @Override
     protected void onPause() {
-        Aesthetic.get(this).pause(this);
+        Aesthetic.pause(this);
         super.onPause();
     }
 
