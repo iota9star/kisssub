@@ -1,3 +1,21 @@
+/*
+ *
+ *  *    Copyright 2018. iota9star
+ *  *
+ *  *    Licensed under the Apache License, Version 2.0 (the "License");
+ *  *    you may not use this file except in compliance with the License.
+ *  *    You may obtain a copy of the License at
+ *  *
+ *  *        http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  *    Unless required by applicable law or agreed to in writing, software
+ *  *    distributed under the License is distributed on an "AS IS" BASIS,
+ *  *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *    See the License for the specific language governing permissions and
+ *  *    limitations under the License.
+ *
+ */
+
 package star.iota.kisssub.ui.settings
 
 import android.support.v7.widget.RecyclerView
@@ -14,21 +32,19 @@ class ThemeAdapter(private val themes: ArrayList<ThemeBean>) : RecyclerView.Adap
         this.onItemClickListener = onItemClickListener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_theme, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_theme, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val theme = themes[position]
-        holder.itemView.apply {
+        holder.itemView?.apply {
             if (theme.isSelected) {
-                imageViewPoint.setImageResource(R.drawable.ic_item_theme_checked)
+                imageViewPoint?.setImageResource(R.drawable.ic_item_theme_checked)
             } else {
-                imageViewPoint.setImageResource(R.drawable.ic_item_theme_uncheck)
+                imageViewPoint?.setImageResource(R.drawable.ic_item_theme_uncheck)
             }
-            imageViewPoint.setColorFilter(theme.color)
-            textViewDesc.text = theme.description
-            linearLayoutContainer.setOnClickListener {
+            imageViewPoint?.setColorFilter(theme.color)
+            textViewDesc?.text = theme.description
+            linearLayoutContainer?.setOnClickListener {
                 for (bean in themes) {
                     bean.isSelected = false
                 }
@@ -40,9 +56,7 @@ class ThemeAdapter(private val themes: ArrayList<ThemeBean>) : RecyclerView.Adap
 
     }
 
-    override fun getItemCount(): Int {
-        return themes.size
-    }
+    override fun getItemCount(): Int = themes.size
 
     fun add(themes: List<ThemeBean>) {
         val size = this.themes.size

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/java/com/afollestad/aesthetic/AestheticStoreHouseHeader.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/java/com/afollestad/aesthetic/StoreHouseBarItem.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/java/com/afollestad/aesthetic/StoreHousePath.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/interpolator_anticipate.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/interpolator_overshoot.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/slide_in.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/slide_in_from_bottom.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/slide_out.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/anim/slide_out_to_bottom.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/layout" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/aesthetic/src/main/res/layout-v21/layout_message.xml" charset="GBK" />
+  </component>
+</project>

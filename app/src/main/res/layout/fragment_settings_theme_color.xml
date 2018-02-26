@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@
         android:id="@+id/imageViewContentBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/viewMask"
@@ -250,18 +251,6 @@
                 android:text="@string/settings_theme_color_default"
                 android:textColor="?colorAccent"
                 android:textStyle="bold" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/switchCompatTint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="12dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="12dp"
-                android:text="@string/settings_theme_color_tint_toolbar"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="16sp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"

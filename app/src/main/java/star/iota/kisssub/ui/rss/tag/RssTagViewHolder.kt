@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.ui.rss.tag
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
@@ -35,7 +36,6 @@ import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.utils.ToastUtils
 
@@ -43,14 +43,9 @@ import star.iota.kisssub.utils.ToastUtils
 class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
 
     override fun bindView(bean: RssTag) {
-        itemView.apply {
-            if (ThemeHelper.isDark(context)) {
-                DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColorDark(context))
-            } else {
-                DisplayUtils.tintImageView(this, ThemeHelper.getSecondaryTextColor(context))
-            }
-            textViewTag.text = bean.tag
-            imageViewMenu.setOnClickListener {
+        itemView?.apply {
+            textViewTag?.text = bean.tag
+            imageViewMenu?.setOnClickListener {
                 showMenu(context!!, bean, imageViewMenu)
             }
         }
@@ -83,6 +78,7 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
         listPopupWindow.show()
     }
 
+    @SuppressLint("InflateParams")
     private fun showModifyDialog(context: Context, bean: RssTag) {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_rss_tag, null)
         val editText = view.findViewById<TextInputEditText>(R.id.textInputEditTextRssTag)

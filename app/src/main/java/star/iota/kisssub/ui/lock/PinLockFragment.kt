@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -29,8 +29,9 @@ import com.wei.android.lib.fingerprintidentify.base.BaseFingerprint
 import kotlinx.android.synthetic.main.fragment_pin_lock.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.main.MainActivity
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
 class PinLockFragment : BaseFragment() {
@@ -39,9 +40,7 @@ class PinLockFragment : BaseFragment() {
     override fun getMaskView(): View? = null
 
     companion object {
-        fun newInstance(): PinLockFragment {
-            return PinLockFragment()
-        }
+        fun newInstance() = PinLockFragment()
     }
 
     override fun getContainerViewId(): Int = R.layout.fragment_pin_lock
@@ -96,14 +95,14 @@ class PinLockFragment : BaseFragment() {
     }
 
     private fun initEvent() {
-        pinLockView.setPinLockListener(object : PinLockListener {
+        pinLockView?.setPinLockListener(object : PinLockListener {
             private var errorTimes = 0
             override fun onComplete(pin: String) {
                 if (SecurityHelper.getPin(context!!) == pin) {
                     errorTimes = 0
                     verifySuccess()
                 } else {
-                    pinLockView.resetPinLockView()
+                    pinLockView?.resetPinLockView()
                     errorTimes++
                     if (errorTimes == 3) {
                         errorTimes = 0
@@ -124,9 +123,9 @@ class PinLockFragment : BaseFragment() {
     }
 
     private fun initView() {
-        pinLockView.textColor = ThemeHelper.getAccentColor(context!!)
-        indicatorDots.indicatorType = IndicatorDots.IndicatorType.FILL_WITH_ANIMATION
-        pinLockView.attachIndicatorDots(indicatorDots)
+        pinLockView?.textColor = ThemeHelper.getAccentColor(context!!)
+        indicatorDots?.indicatorType = IndicatorDots.IndicatorType.FILL_WITH_ANIMATION
+        pinLockView?.attachIndicatorDots(indicatorDots)
     }
 
     override fun doSome() {

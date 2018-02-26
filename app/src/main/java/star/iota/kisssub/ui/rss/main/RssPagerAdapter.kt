@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -31,13 +31,9 @@ class RssPagerAdapter(fm: FragmentManager, private val titles: ArrayList<String>
 
     override fun getItemPosition(`object`: Any): Int = PagerAdapter.POSITION_NONE
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return titles[position]
-    }
+    override fun getPageTitle(position: Int): CharSequence? = titles[position]
 
-    override fun getItemId(position: Int): Long {
-        return fragments[position].hashCode().toLong()
-    }
+    override fun getItemId(position: Int): Long = fragments[position].hashCode().toLong()
 
     fun addAll(titles: ArrayList<String>, fragments: ArrayList<Fragment>) {
         this.titles.addAll(titles)

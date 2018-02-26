@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayoutContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,11 +28,12 @@
     android:gravity="center_vertical"
     android:padding="8dp">
 
-    <ImageView
+    <com.afollestad.aesthetic.AestheticIconView
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:padding="8dp"
-        app:srcCompat="@drawable/ic_menu_rss" />
+        app:srcCompat="@drawable/ic_menu_rss"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textViewTag"
@@ -44,13 +46,16 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ImageView
+    <com.afollestad.aesthetic.AestheticIconView
         android:id="@+id/imageViewMenu"
         android:layout_width="42dp"
         android:layout_height="42dp"
+        android:layout_marginEnd="-7dp"
+        android:layout_marginRight="-7dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="8dp"
-        app:srcCompat="@drawable/ic_action_more" />
+        app:srcCompat="@drawable/ic_action_more"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -26,13 +26,15 @@ import kotlinx.android.synthetic.main.activity_set_pin_lock.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
 import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
 
 class SetPinLockActivity : BaseActivity(), View.OnClickListener {
 
     override fun isFullScreen(): Boolean = true
+    override fun getCircularRevealView(): View? = frameLayoutContainer
     private var step = STEP_ONE
     private var pinCode: String = ""
 
@@ -41,15 +43,15 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
             R.id.buttonLeft -> if (step == STEP_ONE) {
                 finish()
             } else if (step == STEP_TWO) {
-                pinLockView.resetPinLockView()
-                buttonRight.visibility = View.GONE
-                buttonLeft.setText(R.string.lock_wait_input)
+                pinLockView?.resetPinLockView()
+                buttonRight?.visibility = View.GONE
+                buttonLeft?.setText(R.string.lock_wait_input)
             }
             R.id.buttonRight -> if (step == STEP_ONE) {
                 step = STEP_TWO
-                pinLockView.resetPinLockView()
-                buttonRight.visibility = View.GONE
-                buttonLeft.setText(R.string.lock_wait_input)
+                pinLockView?.resetPinLockView()
+                buttonRight?.visibility = View.GONE
+                buttonLeft?.setText(R.string.lock_wait_input)
             } else if (step == STEP_TWO) {
                 SecurityHelper.savePin(this, pinCode)
                 SecurityHelper.setLock(this, SecurityHelper.LOCK_TYPE_PIN)
@@ -60,20 +62,20 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initEvent() {
-        pinLockView.setPinLockListener(object : PinLockListener {
+        pinLockView?.setPinLockListener(object : PinLockListener {
             override fun onComplete(pin: String) {
                 if (step == STEP_ONE) {
                     pinCode = pin
-                    buttonRight.setText(R.string.lock_continue)
-                    buttonRight.visibility = View.VISIBLE
+                    buttonRight?.setText(R.string.lock_continue)
+                    buttonRight?.visibility = View.VISIBLE
                 } else if (step == STEP_TWO) {
                     if (pinCode == pin) {
-                        buttonRight.setText(R.string.lock_finish)
-                        buttonRight.visibility = View.VISIBLE
+                        buttonRight?.setText(R.string.lock_finish)
+                        buttonRight?.visibility = View.VISIBLE
                     } else {
                         MessageBar.create(this@SetPinLockActivity, "前后不一致")
-                        pinLockView.resetPinLockView()
-                        buttonRight.visibility = View.GONE
+                        pinLockView?.resetPinLockView()
+                        buttonRight?.visibility = View.GONE
                     }
                 }
             }
@@ -83,22 +85,22 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
             }
 
             override fun onPinChange(pinLength: Int, intermediatePin: String) {
-                if (pinLength < pinLockView.pinLength) {
-                    buttonRight.visibility = View.GONE
+                if (pinLockView != null && pinLength < pinLockView.pinLength) {
+                    buttonRight?.visibility = View.GONE
                 }
                 if (pinLength == 0) {
                     if (step == STEP_ONE) {
-                        buttonLeft.setText(R.string.lock_cancel)
+                        buttonLeft?.setText(R.string.lock_cancel)
                     } else if (step == STEP_TWO) {
-                        buttonLeft.setText(R.string.lock_wait_input)
+                        buttonLeft?.setText(R.string.lock_wait_input)
                     }
                 } else {
                     if (STEP_ONE == step) {
-                        buttonLeft.setText(R.string.lock_cancel)
-                        buttonRight.setText(R.string.lock_continue)
+                        buttonLeft?.setText(R.string.lock_cancel)
+                        buttonRight?.setText(R.string.lock_continue)
                     } else if (STEP_TWO == step) {
-                        buttonLeft.setText(R.string.lock_reinput)
-                        buttonRight.setText(R.string.lock_finish)
+                        buttonLeft?.setText(R.string.lock_reinput)
+                        buttonRight?.setText(R.string.lock_finish)
                     }
                 }
             }
@@ -106,12 +108,12 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initView() {
-        indicatorDots.indicatorType = IndicatorDots.IndicatorType.FILL_WITH_ANIMATION
-        pinLockView.attachIndicatorDots(indicatorDots)
-        buttonRight.visibility = View.GONE
-        buttonLeft.setText(R.string.lock_cancel)
-        buttonLeft.setOnClickListener(this)
-        buttonRight.setOnClickListener(this)
+        indicatorDots?.indicatorType = IndicatorDots.IndicatorType.FILL_WITH_ANIMATION
+        pinLockView?.attachIndicatorDots(indicatorDots)
+        buttonRight?.visibility = View.GONE
+        buttonLeft?.setText(R.string.lock_cancel)
+        buttonLeft?.setOnClickListener(this)
+        buttonRight?.setOnClickListener(this)
     }
 
     override fun getContentViewId(): Int = R.layout.activity_set_pin_lock
@@ -123,9 +125,9 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
         } else if (step == STEP_TWO) {
             step = STEP_ONE
             pinCode = ""
-            pinLockView.resetPinLockView()
-            buttonRight.visibility = View.GONE
-            buttonLeft.setText(R.string.lock_cancel)
+            pinLockView?.resetPinLockView()
+            buttonRight?.visibility = View.GONE
+            buttonLeft?.setText(R.string.lock_cancel)
         }
     }
 
@@ -142,7 +144,7 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
     }
 
     companion object {
-        private val STEP_ONE = 1
-        private val STEP_TWO = 2
+        private const val STEP_ONE = 1
+        private const val STEP_TWO = 2
     }
 }

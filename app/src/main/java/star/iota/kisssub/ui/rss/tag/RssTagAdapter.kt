@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -29,8 +29,7 @@ class RssTagAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var list: ArrayList<RssTag> = ArrayList()
     override fun getItemCount(): Int = list.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder
-            = RssTagViewHolder(LayoutInflater.from(parent.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = RssTagViewHolder(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_rss_tag, parent, false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {

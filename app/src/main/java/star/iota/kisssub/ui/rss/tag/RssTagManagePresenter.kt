@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 
 
-class RssTagManagePresenter(private val view: RssTagManageContract.View) : RssTagManageContract.Presenter {
+class RssTagManagePresenter(private val view: RssTagManageContract.View) : RssTagManageContract.Presenter() {
     override fun get(helper: AppDatabaseHelper) {
         compositeDisposable.add(
                 Single.just(helper)

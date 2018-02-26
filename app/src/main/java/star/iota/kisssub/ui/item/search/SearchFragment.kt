@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -22,21 +22,29 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import com.github.ikidou.fragmentBackHandler.FragmentBackHandler
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-import com.lcodecore.tkrefreshlayout.footer.BallPulseView
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_search.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.item.ItemAdapter
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.widget.MessageBar
 
-class SearchFragment : BaseFragment(), SearchContract.View {
+class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler {
+
+    override fun onBackPressed() =
+            if (recyclerViewFilters.visibility == View.GONE) {
+                false
+            } else {
+                recyclerViewFilters.visibility = View.GONE
+                true
+            }
+
     override fun success(result: SearchBean) {
         end(false)
         recordAdapter.addAll(result.records!!)
@@ -56,9 +64,9 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     }
 
     companion object {
-        val TITLE = "title"
-        val URL = "url"
-        val SUFFIX = "suffix"
+        const val TITLE = "title"
+        const val URL = "url"
+        const val SUFFIX = "suffix"
         fun newInstance(title: String, keywords: String, suffix: String): SearchFragment {
             val fragment = SearchFragment()
             val bundle = Bundle()
@@ -84,10 +92,10 @@ class SearchFragment : BaseFragment(), SearchContract.View {
         isLoading = false
         if (isRefresh) {
             page = 2
-            refreshLayout.finishRefreshing()
+            refreshLayout?.finishRefresh()
         } else {
             if (!error) page++
-            refreshLayout.finishLoadmore()
+            refreshLayout?.finishLoadmore()
         }
     }
 
@@ -105,26 +113,26 @@ class SearchFragment : BaseFragment(), SearchContract.View {
 
     private lateinit var filterAdapter: FilterAdapter
     private fun initFilter() {
-        imageViewArrow.setColorFilter(ThemeHelper.getAccentColor(context!!))
-        linearLayoutFilter.setOnClickListener {
+        imageViewArrow?.setColorFilter(ThemeHelper.getAccentColor(context!!))
+        linearLayoutFilter?.setOnClickListener {
             val color = ThemeHelper.getAccentColor(context!!)
-            if (recyclerViewFilters.visibility == View.VISIBLE) {
-                recyclerViewFilters.visibility = View.GONE
-                imageViewArrow.setImageResource(R.drawable.ic_arrow_down)
-                imageViewArrow.setColorFilter(color)
+            if (recyclerViewFilters?.visibility == View.VISIBLE) {
+                recyclerViewFilters?.visibility = View.GONE
+                imageViewArrow?.setImageResource(R.drawable.ic_arrow_down)
+                imageViewArrow?.setColorFilter(color)
             } else {
-                recyclerViewFilters.visibility = View.VISIBLE
-                imageViewArrow.setImageResource(R.drawable.ic_arrow_up)
-                imageViewArrow.setColorFilter(color)
+                recyclerViewFilters?.visibility = View.VISIBLE
+                imageViewArrow?.setImageResource(R.drawable.ic_arrow_up)
+                imageViewArrow?.setColorFilter(color)
             }
         }
         val layoutManager = FlexboxLayoutManager(context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
-        recyclerViewFilters.layoutManager = layoutManager
-//        recyclerView.itemAnimator = FadeInUpAnimator()
+        recyclerViewFilters?.layoutManager = layoutManager
+        recyclerView?.itemAnimator = LandingAnimator()
         filterAdapter = FilterAdapter()
-        recyclerViewFilters.adapter = filterAdapter
+        recyclerViewFilters?.adapter = filterAdapter
     }
 
     private lateinit var url: String
@@ -148,32 +156,24 @@ class SearchFragment : BaseFragment(), SearchContract.View {
     private var isLoading = false
     private var isRefresh = false
     private fun initRefreshLayout() {
-        val footer = BallPulseView(context!!)
-        footer.setNormalColor(ThemeHelper.getAccentColor(context!!))
-        footer.setAnimatingColor(ThemeHelper.getAccentColor(context!!))
-        refreshLayout.setBottomView(footer)
-        refreshLayout.startRefresh()
-        refreshLayout.setAutoLoadMore(true)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onLoadMore(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isRefresh = false
-                    isLoading = true
-                    filterAdapter.clear()
-                    presenter.get(url + page + suffix)
-                }
+        refreshLayout?.autoRefresh()
+        refreshLayout?.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isRefresh = true
+                isLoading = true
+                recordAdapter.clear()
+                filterAdapter.clear()
+                presenter.get(url + "1" + suffix)
             }
-
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isRefresh = true
-                    isLoading = true
-                    recordAdapter.clear()
-                    filterAdapter.clear()
-                    presenter.get(url + "1" + suffix)
-                }
+        }
+        refreshLayout?.setOnLoadmoreListener {
+            if (!checkIsLoading()) {
+                isRefresh = false
+                isLoading = true
+                filterAdapter.clear()
+                presenter.get(url + page + suffix)
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean = if (isLoading) {
@@ -185,10 +185,10 @@ class SearchFragment : BaseFragment(), SearchContract.View {
 
     private lateinit var recordAdapter: ItemAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = FadeInUpAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.itemAnimator = LandingAnimator()
         recordAdapter = ItemAdapter()
-        recyclerView.adapter = recordAdapter
+        recyclerView?.adapter = recordAdapter
     }
 
     override fun onDestroy() {

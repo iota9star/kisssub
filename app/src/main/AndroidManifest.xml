@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -35,6 +34,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3313e98754f18b0efde9664af36d96a47254b0e3" />
+
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,7 +49,7 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:launchMode="singleTask">
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -55,9 +58,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.lock.SetPinLockActivity" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:launchMode="singleTask" />
+        <activity android:name=".ui.settings.SettingsActivity" />
         <activity android:name=".ui.selector.PhotoSelectorActivity" />
         <activity android:name=".ui.selector.PhotoSelectorPreviewActivity" />
         <activity android:name=".ui.about.AboutActivity" />

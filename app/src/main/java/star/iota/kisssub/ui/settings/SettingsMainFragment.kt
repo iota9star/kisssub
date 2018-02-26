@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -23,9 +23,10 @@ import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.ImageView
 import com.afollestad.aesthetic.Aesthetic
-import com.liuguangqiang.cookie.OnActionClickListener
+import com.afollestad.aesthetic.AestheticMessage
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
@@ -33,28 +34,27 @@ import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.addFragmentToActivity
-import star.iota.kisssub.ui.lock.SecurityHelper
+import star.iota.kisssub.helper.OfficialHelper
+import star.iota.kisssub.helper.SecurityHelper
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.lock.SetPinLockActivity
-import star.iota.kisssub.utils.DisplayUtils
 import star.iota.kisssub.widget.MessageBar
 
-class SettingsMainFragment : BaseFragment(), View.OnClickListener {
+class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     companion object {
-        fun newInstance(): SettingsMainFragment {
-            return SettingsMainFragment()
-        }
+        fun newInstance() = SettingsMainFragment()
     }
 
     override fun doSome() {
         initEvent()
         initSwitchCompat()
-        DisplayUtils.tintImageView(linearLayoutContainer, ThemeHelper.getAccentColor(context!!))
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
     override fun getContainerViewId(): Int = R.layout.fragment_settings_main
+    override fun isShowCircularReveal() = false
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -72,12 +72,41 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
+    override fun onCheckedChanged(button: CompoundButton?, isChecked: Boolean) {
+        when (button?.id) {
+            R.id.switchCompatNightly -> {
+                if (isChecked) {
+                    Aesthetic.get()
+                            .activityTheme(R.style.AppThemeDark)
+                            .isDark(true)
+                            .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
+                            .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
+                            .apply()
+                } else {
+                    Aesthetic.get()
+                            .activityTheme(R.style.AppTheme)
+                            .isDark(false)
+                            .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
+                            .textColorSecondary(ThemeHelper.getSecondaryTextColor(context!!))
+                            .apply()
+                }
+                EventBus.getDefault().post(ChangeContentBackgroundEvent())
+            }
+            R.id.switchCompatAcceptOfficialContentBackground -> {
+                OfficialHelper.acceptOfficialContentBackground(context!!, isChecked)
+            }
+            R.id.switchCompatAcceptOfficialDynamicBackground -> {
+                OfficialHelper.acceptOfficialDynamicBackground(context!!, isChecked)
+            }
+        }
+    }
+
     private fun initEvent() {
-        linearLayoutPinLock.setOnClickListener(this)
-        linearLayoutFingerprintLock.setOnClickListener(this)
-        textViewDynamicBackground.setOnClickListener(this)
-        textViewContentBackground.setOnClickListener(this)
-        linearLayoutThemeColor.setOnClickListener(this)
+        linearLayoutPinLock?.setOnClickListener(this)
+        linearLayoutFingerprintLock?.setOnClickListener(this)
+        textViewDynamicBackground?.setOnClickListener(this)
+        textViewContentBackground?.setOnClickListener(this)
+        linearLayoutThemeColor?.setOnClickListener(this)
     }
 
 
@@ -113,7 +142,7 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
             MessageBar.create(context!!,
                     "您可能还没有设置指纹，是否前往设置",
                     "嗯",
-                    OnActionClickListener {
+                    AestheticMessage.OnActionClickListener {
                         startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS))
                     })
             return
@@ -133,25 +162,16 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun initSwitchCompat() {
-        switchCompatNightly.isChecked = ThemeHelper.isDark(context!!)
-        switchCompatNightly.setOnCheckedChangeListener { _, isChecked ->
-            ThemeHelper.isDark(context!!, isChecked)
-            if (isChecked) {
-                Aesthetic.get()
-                        .activityTheme(R.style.AppThemeDark)
-                        .isDark(true)
-                        .textColorPrimary(ThemeHelper.getPrimaryTextColorDark(context!!))
-                        .textColorSecondary(ThemeHelper.getSecondaryTextColorDark(context!!))
-                        .apply()
-            } else {
-                Aesthetic.get()
-                        .activityTheme(R.style.AppTheme)
-                        .isDark(false)
-                        .textColorPrimary(ThemeHelper.getPrimaryTextColor(context!!))
-                        .textColorSecondary(ThemeHelper.getSecondaryTextColor(context!!))
-                        .apply()
-            }
-            EventBus.getDefault().post(ChangeContentBackgroundEvent())
-        }
+        Aesthetic.get()
+                .isDark
+                .take(1)
+                .subscribe {
+                    switchCompatNightly?.isChecked = it
+                }
+        switchCompatNightly?.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialContentBackground?.isChecked = OfficialHelper.acceptOfficialContentBackground(context!!)
+        switchCompatAcceptOfficialContentBackground?.setOnCheckedChangeListener(this)
+        switchCompatAcceptOfficialDynamicBackground?.isChecked = OfficialHelper.acceptOfficialDynamicBackground(context!!)
+        switchCompatAcceptOfficialDynamicBackground?.setOnCheckedChangeListener(this)
     }
 }

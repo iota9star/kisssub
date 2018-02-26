@@ -1,6 +1,6 @@
 <!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -18,4 +18,6 @@
 
 <resources>
     <dimen name="v256dp">256dp</dimen>
+    <dimen name="v96dp">96dp</dimen>
+    <dimen name="v4dp">4dp</dimen>
 </resources>

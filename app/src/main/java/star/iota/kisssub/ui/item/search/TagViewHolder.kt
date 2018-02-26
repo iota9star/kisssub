@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -24,12 +24,13 @@ import kotlinx.android.synthetic.main.item_filter_tag.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
+import star.iota.kisssub.helper.SearchHelper
 
 class TagViewHolder(itemView: View) : BaseViewHolder<FilterBean>(itemView) {
     override fun bindView(bean: FilterBean) {
-        itemView.apply {
-            textViewTag.text = bean.title
-            textViewTag.setOnClickListener {
+        itemView?.apply {
+            textViewTag?.text = bean.title
+            textViewTag?.setOnClickListener {
                 if (!bean.url.isNullOrBlank()) {
                     (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newFilterInstance(bean.url!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }

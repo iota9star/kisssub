@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 
-class CollectionPresenter(private val view: CollectionContract.View) : CollectionContract.Presenter {
+class CollectionPresenter(private val view: CollectionContract.View) : CollectionContract.Presenter() {
     override fun get(helper: AppDatabaseHelper) {
         compositeDisposable.add(
                 Single.just(helper)
@@ -38,7 +38,9 @@ class CollectionPresenter(private val view: CollectionContract.View) : Collectio
                             } else {
                                 view.success(it as ArrayList<Record>)
                             }
-                        }, { view.error(it?.message) })
+                        }, {
+                            view.error(it?.message)
+                        })
         )
     }
 

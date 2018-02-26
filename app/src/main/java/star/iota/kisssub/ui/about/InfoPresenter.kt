@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 
-class InfoPresenter(private val view: InfoContract.View) : InfoContract.Presenter {
+class InfoPresenter(private val view: InfoContract.View) : InfoContract.Presenter() {
     override fun get(url: String) {
         compositeDisposable.add(
                 OkGo.get<String>(url)

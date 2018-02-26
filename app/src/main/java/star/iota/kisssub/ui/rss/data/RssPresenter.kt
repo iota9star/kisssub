@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -28,15 +28,15 @@ import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
 import star.iota.kisssub.room.Record
 
-class RssPresenter(private val view: RssContract.View) : RssContract.Presenter {
+class RssPresenter(private val view: RssContract.View) : RssContract.Presenter() {
     override fun get(url: String) {
+        addCookie(url)
         compositeDisposable.add(
                 OkGo.get<String>(url)
                         .converter(StringConvert())
                         .adapt(ObservableResponse<String>())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.computation())
                         .map { deal(it) }
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             if (it == null || it.isEmpty()) {
@@ -57,10 +57,11 @@ class RssPresenter(private val view: RssContract.View) : RssContract.Presenter {
             val bean = Record()
             bean.date = it?.select("pubdate")?.text()?.replace("+0800", "")
             bean.category = it?.select("category")?.text()
-            bean.title = it?.select("title")?.text()?.replace("<![CDATA[", "")?.replace("]]>", "")
+            val title = it?.select("title")?.text()?.replace("<![CDATA[", "")?.replace("]]>", "")
+            bean.title = ("/" + title?.replace(Regex("]\\s*\\[|\\[|]|】\\s*【|】|【"), "/") + "/").replace(Regex("/\\s*/+"), "/")
             val torrent = it?.select("enclosure")?.attr("url")
             val hash = torrent?.substring(torrent.lastIndexOf("hash=") + 4, torrent.length)
-            bean.magnet = "magnet:?xt=urn:btih:${hash}&tr=http://open.acgtracker.com:1096/announce"
+            bean.magnet = "magnet:?xt=urn:btih:$hash&tr=http://open.acgtracker.com:1096/announce"
             bean.url = it?.select("guid")?.text()
             bean.sub = it?.select("author")?.text()
             val desc = it?.select("description")?.html()?.replace("<![CDATA[", "")?.replace("]]>", "")?.replace("&gt;", ">")?.replace("&lt;", "<")

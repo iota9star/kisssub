@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -28,19 +28,21 @@ import star.iota.kisssub.glide.GlideApp
 
 
 class PhotoFragment : BaseFragment() {
+
     override fun getBackgroundView(): ImageView = imageViewContentBackground
     override fun getMaskView(): View = viewMask
     override fun getContainerViewId(): Int = R.layout.fragment_photo_selector_preview
+    override fun isShowCircularReveal() = false
 
     override fun doSome() {
-        photoView.tag = null
+        photoView?.tag = null
         GlideApp.with(this)
                 .load(arguments!!.getString(PHOTO_PATH, ""))
                 .into(photoView)
     }
 
     companion object {
-        private val PHOTO_PATH = "photo_paths"
+        private const val PHOTO_PATH = "photo_paths"
         fun newInstance(path: String): PhotoFragment {
             val fragment = PhotoFragment()
             val bundle = Bundle()

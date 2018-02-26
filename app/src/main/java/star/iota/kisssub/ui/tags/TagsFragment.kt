@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import android.widget.ImageView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
@@ -49,14 +47,12 @@ class TagsFragment : BaseFragment(), TagsContract.View {
     }
 
     companion object {
-        fun newInstance(): TagsFragment {
-            return TagsFragment()
-        }
+        fun newInstance() = TagsFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -78,17 +74,15 @@ class TagsFragment : BaseFragment(), TagsContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(KisssubUrl.TAGS)
-                }
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(KisssubUrl.TAGS)
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean {
@@ -104,10 +98,9 @@ class TagsFragment : BaseFragment(), TagsContract.View {
         val layoutManager = FlexboxLayoutManager(context)
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
-        recyclerView.layoutManager = layoutManager
-//        recyclerView.itemAnimator = LandingAnimator()
+        recyclerView?.layoutManager = layoutManager
         adapter = TagsAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

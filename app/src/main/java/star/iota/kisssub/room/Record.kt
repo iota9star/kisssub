@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -37,8 +37,7 @@ class Record {
     var magnet: String? = null
 
     companion object {
-        val NO_IMAGE = 0
-        val WITH_IMAGE = 1
-        val FAN = 2
+        const val NO_IMAGE = 0
+        const val WITH_IMAGE = 1
     }
 }

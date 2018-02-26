@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package star.iota.kisssub.room
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 
-@Database(entities = arrayOf(Record::class, RssTag::class), version = 1)
+@Database(entities = [(Record::class), (RssTag::class)], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
     abstract fun rssTagDao(): RssTagDao

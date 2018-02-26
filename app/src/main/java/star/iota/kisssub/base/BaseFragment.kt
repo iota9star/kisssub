@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.base
 
+import CircularReveal
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -26,13 +27,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.afollestad.aesthetic.Aesthetic
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.ext.exit
 import star.iota.kisssub.glide.GlideApp
-import star.iota.kisssub.ui.settings.ThemeHelper
+import star.iota.kisssub.helper.ThemeHelper
+
 
 abstract class BaseFragment : Fragment(), View.OnTouchListener {
 
@@ -44,17 +47,26 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
     private var preTitle: String? = null
 
     protected fun setToolbarTitle(title: CharSequence?) {
-        (this.activity!! as BaseActivity).supportActionBar?.title = title
+        (this.activity!! as BaseActivity).getToolbar()?.title = title
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-        preTitle = (this.activity!! as BaseActivity).supportActionBar?.title?.toString()
+        preTitle = (this.activity!! as BaseActivity).getToolbar()?.title?.toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getContainerViewId(), container, false)
+        val view = inflater.inflate(getContainerViewId(), container, false)
+        if (isShowCircularReveal()) {
+            view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+                override fun onLayoutChange(v: View, left: Int, top: Int, right: Int, bottom: Int, oldLeft: Int, oldTop: Int, oldRight: Int, oldBottom: Int) {
+                    v.removeOnLayoutChangeListener(this)
+                    CircularReveal.create(view)
+                }
+            })
+        }
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,9 +75,9 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         setContentBackground()
     }
 
-    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
-        return true
-    }
+    open fun isShowCircularReveal() = true
+
+    override fun onTouch(p0: View?, p1: MotionEvent?): Boolean = true
 
     private fun setContentBackground() {
         val bg = getBackgroundView()
@@ -74,12 +86,16 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         GlideApp.with(this)
                 .load(ThemeHelper.getContentBanner(context!!))
                 .into(bg)
-        mask.alpha = ThemeHelper.getContentMaskAlpha(context!!)
-        if (ThemeHelper.isDark(context!!)) {
-            mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(context!!))
-        } else {
-            mask.setBackgroundColor(ThemeHelper.getContentMaskColor(context!!))
-        }
+        Aesthetic.get()
+                .isDark
+                .take(1)
+                .subscribe {
+                    if (it) {
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(context!!))
+                    } else {
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColor(context!!))
+                    }
+                }
     }
 
     abstract fun getBackgroundView(): ImageView?

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -35,12 +35,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_photo_selector.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
-
+import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.adapter.DirAdapter
 import star.iota.kisssub.ui.selector.adapter.SelectorPhotoAdapter
 import star.iota.kisssub.ui.selector.bean.FolderBean
-import star.iota.kisssub.ui.settings.ThemeHelper
-
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,6 +46,7 @@ import kotlin.collections.ArrayList
 
 class PhotoSelectorActivity : BaseActivity() {
     override fun getContentViewId(): Int = R.layout.activity_photo_selector
+    override fun getCircularRevealView(): View? = coordinatorLayout
 
     override fun doSome() {
         initToolbar()
@@ -57,16 +56,16 @@ class PhotoSelectorActivity : BaseActivity() {
     }
 
     private fun initToolbar() {
-        toolbar.title = "请选择图片"
-        toolbar.setNavigationOnClickListener {
+        toolbar?.title = "请选择图片"
+        toolbar?.setNavigationOnClickListener {
             onBackPressed()
         }
-        toolbar.inflateMenu(R.menu.menu_photo_selector)
-        toolbar.menu.findItem(R.id.menu_refresh_photos).setOnMenuItemClickListener {
+        toolbar?.inflateMenu(R.menu.menu_photo_selector)
+        toolbar?.menu?.findItem(R.id.menu_refresh_photos)?.setOnMenuItemClickListener {
             findPhotoDirs()
             true
         }
-        toolbar.menu.findItem(R.id.menu_clear_selected_photos).setOnMenuItemClickListener {
+        toolbar?.menu?.findItem(R.id.menu_clear_selected_photos)?.setOnMenuItemClickListener {
             val selectedPhotosSize = selectorPhotoAdapter.getSelectedPhotoSize()
             if (selectedPhotosSize > 0) {
                 selectorPhotoAdapter.clearSelectedPhotos()
@@ -190,7 +189,7 @@ class PhotoSelectorActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { dirs ->
-                            progressDialog!!.dismiss()
+                            progressDialog?.dismiss()
                             if (dirs.isEmpty()) return@subscribe
                             bindFolders(dirs)
                             bindPhotos(dirs[0].dir!!)
@@ -218,24 +217,24 @@ class PhotoSelectorActivity : BaseActivity() {
     private fun initViews() {
         val layoutManager = GridLayoutManager(this, 3)
         selectorPhotoAdapter = SelectorPhotoAdapter(this, photoSizeLimit)
-        recyclerViewPhotos.layoutManager = layoutManager
-        recyclerViewPhotos.adapter = selectorPhotoAdapter
+        recyclerViewPhotos?.layoutManager = layoutManager
+        recyclerViewPhotos?.adapter = selectorPhotoAdapter
         selectorPhotoAdapter.setOnPhotoSelected(object : SelectorPhotoAdapter.OnPhotoSelected {
             override fun selected(size: Int) {
                 checkSelectedPhotosSize(size)
             }
         })
         dirAdapter = DirAdapter()
-        recyclerViewDirs.setHasFixedSize(true)
-        recyclerViewDirs.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        recyclerViewDirs.adapter = dirAdapter
+        recyclerViewDirs?.setHasFixedSize(true)
+        recyclerViewDirs?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        recyclerViewDirs?.adapter = dirAdapter
         dirAdapter.setOnDirSelectedListener(object : DirAdapter.OnDirSelectedListener {
             override fun selected(folder: FolderBean) {
                 bindPhotos(folder.dir!!)
                 exchangeBehavior()
             }
         })
-        buttonOK.setOnClickListener {
+        buttonOK?.setOnClickListener {
             val selectedPhotos = selectorPhotoAdapter.getSelectedPhotos()
             var intent: Intent? = null
             try {
@@ -249,8 +248,8 @@ class PhotoSelectorActivity : BaseActivity() {
             finish()
         }
 
-        imageButtonPreview.setColorFilter(ThemeHelper.getAccentColor(this))
-        imageButtonPreview.setOnClickListener {
+        imageButtonPreview?.setColorFilter(ThemeHelper.getAccentColor(this))
+        imageButtonPreview?.setOnClickListener {
             val photos = selectorPhotoAdapter.getSelectedPhotos()
             if (photos.isNotEmpty()) {
                 val intent = Intent(this@PhotoSelectorActivity, PhotoSelectorPreviewActivity::class.java)
@@ -264,7 +263,7 @@ class PhotoSelectorActivity : BaseActivity() {
 
         behavior = BottomSheetBehavior.from(linearLayoutBottomSheet)
         behavior.isHideable = false
-        linearLayoutInfo.setOnClickListener { exchangeBehavior() }
+        linearLayoutInfo?.setOnClickListener { exchangeBehavior() }
     }
 
     override fun onBackPressed() {
@@ -280,9 +279,9 @@ class PhotoSelectorActivity : BaseActivity() {
 
     private fun bindFolders(folders: ArrayList<FolderBean>) {
         if (folders.size > 3) {
-            val lp = recyclerViewDirs.layoutParams
-            lp.height = resources.getDimensionPixelSize(R.dimen.v256dp)
-            recyclerViewDirs.layoutParams = lp
+            val lp = recyclerViewDirs?.layoutParams
+            lp?.height = resources.getDimensionPixelSize(R.dimen.v256dp)
+            recyclerViewDirs?.layoutParams = lp
         }
         dirAdapter.update(folders)
     }
@@ -302,17 +301,17 @@ class PhotoSelectorActivity : BaseActivity() {
         if (selectorPhotoAdapter.getSelectedPhotoSize() > 0) {
             buttonOK.visibility = View.VISIBLE
         }
-        textViewPhotoCount.text = String.format("%s张", photos.size.toString())
-        textViewPhotoDir.text = dir.name
+        textViewPhotoCount?.text = String.format("%s张", photos.size.toString())
+        textViewPhotoDir?.text = dir.name
     }
 
     private fun checkSelectedPhotosSize(size: Int) = if (size == 0) {
         toolbar?.title = "请选择图片"
-        buttonOK.visibility = View.GONE
+        buttonOK?.visibility = View.GONE
     } else {
         if (photoSizeLimit == Int.MAX_VALUE) toolbar?.title = "已选中 $size 张"
         else toolbar?.title = "已选中 $size/$photoSizeLimit 张"
-        buttonOK.visibility = View.VISIBLE
+        buttonOK?.visibility = View.VISIBLE
     }
 
     private fun exchangeBehavior() = if (behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -322,13 +321,13 @@ class PhotoSelectorActivity : BaseActivity() {
     }
 
     companion object {
-        val REQUEST_CODE = 100
-        val RESULT_CODE_FOR_BACK = REQUEST_CODE + 1
-        val RESULT_CODE_FOR_OK = RESULT_CODE_FOR_BACK + 1
-        val LIMIT_SELECT_PHOTO_COUNT: String = "limit_select_photo_count"
-        val SOURCE_ACTIVITY: String = "source_activity"
-        val FIRST_PHOTO_INDEX: String = "first_photo_index"
-        val PHOTOS_CAN_BE_REMOVE: String = "photos_can_be_remove"
-        val SELECTED_STRING_ARRAY_LIST_PHOTOS: String = "selected_string_array_list_photos"
+        const val REQUEST_CODE = 100
+        const val RESULT_CODE_FOR_BACK = REQUEST_CODE + 1
+        const val RESULT_CODE_FOR_OK = RESULT_CODE_FOR_BACK + 1
+        const val LIMIT_SELECT_PHOTO_COUNT: String = "limit_select_photo_count"
+        const val SOURCE_ACTIVITY: String = "source_activity"
+        const val FIRST_PHOTO_INDEX: String = "first_photo_index"
+        const val PHOTOS_CAN_BE_REMOVE: String = "photos_can_be_remove"
+        const val SELECTED_STRING_ARRAY_LIST_PHOTOS: String = "selected_string_array_list_photos"
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:textColor="?colorAccent"
-            android:textSize="48sp"
+            android:textSize="36sp"
             android:textStyle="italic|bold" />
 
         <LinearLayout
@@ -56,7 +56,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:textColor="?colorAccent"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView

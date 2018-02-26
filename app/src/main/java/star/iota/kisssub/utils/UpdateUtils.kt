@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 package star.iota.kisssub.utils
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -30,6 +31,7 @@ import star.iota.kisssub.ui.about.InfoBean
 import star.iota.kisssub.widget.MessageBar
 
 object UpdateUtils {
+    @SuppressLint("InflateParams")
     fun show(context: Context, info: InfoBean, isCheck: Boolean) {
         if (info.type == InfoBean.TYPE_INFO) {
             if (!isCheck) {

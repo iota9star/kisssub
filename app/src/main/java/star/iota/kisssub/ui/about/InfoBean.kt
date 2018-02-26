@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -35,9 +35,14 @@ class InfoBean(
         @SerializedName("changeLog")
         val changeLog: String?,
 
+        @SerializedName("dynamic")
+        val dynamic: String?,
+
+        @SerializedName("content")
+        val content: String?,
+
         @SerializedName("url")
         val url: String?,
-
         @SerializedName("star")
         val star: Int,
 
@@ -45,7 +50,7 @@ class InfoBean(
         val msg: String?
 ) {
     companion object {
-        val TYPE_UPDATE = 0
-        val TYPE_INFO = 1
+        const val TYPE_UPDATE = 0
+        const val TYPE_INFO = 1
     }
 }

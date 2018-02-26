@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ interface RssTagManageContract {
         fun noData()
     }
 
-    interface Presenter : BasePresenter {
-        fun get(helper: AppDatabaseHelper)
-        fun add(helper: AppDatabaseHelper, rssTag: RssTag)
+    abstract class Presenter : BasePresenter() {
+        abstract fun get(helper: AppDatabaseHelper)
+        abstract fun add(helper: AppDatabaseHelper, rssTag: RssTag)
     }
 }

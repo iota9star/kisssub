@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ interface SearchContract {
         fun noData()
     }
 
-    interface Presenter : BasePresenter {
-        fun get(url: String)
+    abstract class Presenter : BasePresenter() {
+        abstract fun get(url: String)
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import star.iota.kisssub.ui.rss.data.RssFragment
 import star.iota.kisssub.ui.rss.tag.RssTagManageContract
 import star.iota.kisssub.ui.rss.tag.RssTagManageFragment
 import star.iota.kisssub.ui.rss.tag.RssTagManagePresenter
-import star.iota.kisssub.ui.settings.ThemeHelper
 
 class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     override fun success(tags: ArrayList<RssTag>) {
@@ -45,22 +44,20 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
             }
         }
         pagerAdapter.addAll(titles, fragments)
-        viewPager.offscreenPageLimit = pagerAdapter.count
+        viewPager?.offscreenPageLimit = pagerAdapter.count
     }
 
     override fun success(rssTag: RssTag) {
     }
 
     override fun error(e: String?) {
-        println("run here rss tag fragment error")
     }
 
     override fun noData() {
-        println("run here rss tag fragment nodata")
     }
 
     companion object {
-        fun newInstance(): RssTagFragment = RssTagFragment()
+        fun newInstance() = RssTagFragment()
     }
 
     override fun getContainerViewId(): Int = R.layout.fragment_rss
@@ -81,12 +78,7 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initActionView() {
-        if (ThemeHelper.isDark(context!!)) {
-            imageViewAdd.setColorFilter(ThemeHelper.getSecondaryTextColorDark(context!!))
-        } else {
-            imageViewAdd.setColorFilter(ThemeHelper.getSecondaryTextColor(context!!))
-        }
-        imageViewAdd.setOnClickListener {
+        imageViewAdd?.setOnClickListener {
             (activity!! as AppCompatActivity).addFragmentToActivity(RssTagManageFragment.newInstance(), R.id.frameLayoutContainer)
         }
     }
@@ -100,9 +92,9 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initViewPager() {
-        tabLayout.setupWithViewPager(viewPager)
-        viewPager.adapter = pagerAdapter
-        viewPager.offscreenPageLimit = pagerAdapter.count
+        tabLayout?.setupWithViewPager(viewPager)
+        viewPager?.adapter = pagerAdapter
+        viewPager?.offscreenPageLimit = pagerAdapter.count
     }
 
     override fun getBackgroundView(): ImageView? = null

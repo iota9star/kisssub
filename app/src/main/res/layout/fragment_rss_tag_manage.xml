@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -31,14 +32,15 @@
             android:id="@+id/imageViewContentBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
 
         <View
             android:id="@+id/viewMask"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -49,34 +51,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
-        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:windowBackground"
-        android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
             android:text="@string/add_rss_tag"
             android:textColor="?android:textColorSecondary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <ImageView
+        <com.afollestad.aesthetic.AestheticIconView
             android:id="@+id/imageViewAdd"
-            android:layout_width="48dp"
+            android:layout_width="44dp"
             android:layout_height="48dp"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             android:padding="8dp"
-            app:srcCompat="@drawable/ic_action_add" />
+            app:srcCompat="@drawable/ic_action_add"
+            tools:ignore="ContentDescription" />
     </LinearLayout>
 </LinearLayout>

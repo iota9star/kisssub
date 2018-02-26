@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@
 
 package star.iota.kisssub.ui.rss.tag
 
+import android.annotation.SuppressLint
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_rss_tag_manage.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -34,7 +34,6 @@ import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
-import star.iota.kisssub.ui.settings.ThemeHelper
 import star.iota.kisssub.utils.ToastUtils
 import star.iota.kisssub.widget.MessageBar
 
@@ -57,16 +56,16 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     override fun noData() {
         end()
-        ToastUtils.short(context!!, "没有获得数据")
+        ToastUtils.short(context!!, "您还没有添加订阅关键字")
     }
 
     companion object {
-        fun newInstance(): RssTagManageFragment = RssTagManageFragment()
+        fun newInstance() = RssTagManageFragment()
     }
 
     private fun end() {
         isLoading = false
-        refreshLayout.finishRefreshing()
+        refreshLayout?.finishRefresh()
     }
 
     override fun getBackgroundView(): ImageView = imageViewContentBackground
@@ -82,7 +81,6 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
     }
 
     private fun initActionView() {
-        imageViewAdd.setColorFilter(ThemeHelper.getAccentColor(context!!))
         imageViewAdd.setOnClickListener {
             showAddDialog()
         }
@@ -93,11 +91,12 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
         when (event.type) {
             ChangeAdapterEvent.DELETE -> adapter.remove(event.pos)
             ChangeAdapterEvent.MODIFY -> {
-                if (!isLoading) refreshLayout.startRefresh()
+                if (!isLoading) refreshLayout?.autoRefresh()
             }
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showAddDialog() {
         val view = LayoutInflater.from(context!!).inflate(R.layout.dialog_add_rss_tag, null)
         val editText = view.findViewById<TextInputEditText>(R.id.textInputEditTextRssTag)
@@ -132,17 +131,15 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private var isLoading = false
     private fun initRefreshLayout() {
-        refreshLayout.startRefresh()
-        refreshLayout.setEnableLoadmore(false)
-        refreshLayout.setOnRefreshListener(object : RefreshListenerAdapter() {
-            override fun onRefresh(refreshLayout: TwinklingRefreshLayout?) {
-                if (!checkIsLoading()) {
-                    isLoading = true
-                    adapter.clear()
-                    presenter.get(AppDatabaseHelper.getInstance(context!!))
-                }
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.setOnRefreshListener {
+            if (!checkIsLoading()) {
+                isLoading = true
+                adapter.clear()
+                presenter.get(AppDatabaseHelper.getInstance(context!!))
             }
-        })
+        }
     }
 
     private fun checkIsLoading(): Boolean = if (isLoading) {
@@ -154,10 +151,10 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     private lateinit var adapter: RssTagAdapter
     private fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-//        recyclerView.itemAnimator = FadeInUpAnimator()
+        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.itemAnimator = LandingAnimator()
         adapter = RssTagAdapter()
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {

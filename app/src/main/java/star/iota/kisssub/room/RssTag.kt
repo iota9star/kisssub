@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ class RssTag {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
     var tag: String? = null
-    override fun toString(): String {
-        return "RssTag(id=$id, tag=$tag)"
-    }
+    override fun toString(): String = "RssTag(id=$id, tag=$tag)"
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
-  ~  *    Copyright 2017. iota9star
+  ~  *    Copyright 2018. iota9star
   ~  *
   ~  *    Licensed under the Apache License, Version 2.0 (the "License");
   ~  *    you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
-                <ImageView
+                <com.afollestad.aesthetic.AestheticIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
@@ -107,7 +107,7 @@
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
-                <ImageView
+                <com.afollestad.aesthetic.AestheticIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
@@ -160,12 +160,11 @@
                     android:textColor="?android:textColorPrimary"
                     android:textSize="16sp" />
 
-                <ImageView
-                    android:id="@+id/imageViewPoint"
+                <com.afollestad.aesthetic.AestheticIconView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/ic_item_theme_checked"
+                    app:srcCompat="@drawable/ic_item_theme_uncheck"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
@@ -196,6 +195,42 @@
                 android:paddingRight="16dp"
                 android:paddingTop="12dp"
                 android:text="@string/settings_theme_content_background"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_more"
+                android:textColor="?colorAccent"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchCompatAcceptOfficialDynamicBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_accept_official_dynamic_background"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/switchCompatAcceptOfficialContentBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="96dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:text="@string/settings_accept_official_content_background"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="16sp" />
         </LinearLayout>

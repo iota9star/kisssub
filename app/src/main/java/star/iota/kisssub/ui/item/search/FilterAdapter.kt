@@ -1,6 +1,6 @@
 /*
  *
- *  *    Copyright 2017. iota9star
+ *  *    Copyright 2018. iota9star
  *  *
  *  *    Licensed under the Apache License, Version 2.0 (the "License");
  *  *    you may not use this file except in compliance with the License.
@@ -30,8 +30,7 @@ class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemCount(): Int = list.size
     override fun getItemViewType(position: Int): Int = list[position].type
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder?
-            = when (viewType) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? = when (viewType) {
         FilterBean.HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_filter_header, parent, false))
         FilterBean.TAG -> TagViewHolder(LayoutInflater.from(parent.context)
