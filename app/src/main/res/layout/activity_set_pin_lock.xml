@@ -97,16 +97,22 @@
                 <Button
                     android:id="@+id/buttonLeft"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_margin="8dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground" />
 
                 <Button
                     android:id="@+id/buttonRight"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_margin="8dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground" />
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>

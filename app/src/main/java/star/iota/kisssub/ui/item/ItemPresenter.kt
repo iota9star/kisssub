@@ -18,41 +18,16 @@
 
 package star.iota.kisssub.ui.item
 
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.convert.StringConvert
 import com.lzy.okgo.model.Response
-import com.lzy.okrx2.adapter.ObservableResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
 import star.iota.kisssub.KisssubUrl
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringPresenter
 import star.iota.kisssub.room.Record
 
 
-class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presenter() {
-    override fun get(url: String) {
-        addCookie(url)
-        compositeDisposable.add(
-                OkGo.get<String>(url)
-                        .converter(StringConvert())
-                        .adapt(ObservableResponse<String>())
-                        .map { deal(it) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (it == null || it.isEmpty()) {
-                                view.noData()
-                            } else {
-                                view.success(it)
-                            }
-                        }, {
-                            view.error(it?.message)
-                        })
-        )
-    }
-
-    private fun deal(resp: Response<String>): ArrayList<Record>? {
+class ItemPresenter(view: StringContract.View<ArrayList<Record>>) : StringPresenter<ArrayList<Record>>(view) {
+    override fun deal(resp: Response<String>): ArrayList<Record>? {
         val records = Jsoup.parse(resp.body())?.select("#data_list > tr")
         val rs = ArrayList<Record>()
         records?.forEach {
@@ -71,14 +46,5 @@ class ItemPresenter(private val view: ItemContract.View) : ItemContract.Presente
             rs.add(bean)
         }
         return rs
-    }
-
-
-    companion object {
-        private val compositeDisposable = CompositeDisposable()
-    }
-
-    override fun unsubscribe() {
-        compositeDisposable.clear()
     }
 }

@@ -29,8 +29,7 @@ import java.io.InputStream
 
 @GlideModule
 class OkHttpLibraryGlideModule : LibraryGlideModule() {
-    override fun registerComponents(context: Context, glide: Glide,
-                                    registry: Registry) {
+    override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(App.makeOkHttpClient(context)))
     }
 }

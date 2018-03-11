@@ -20,19 +20,17 @@ package star.iota.kisssub.ext
 
 import android.os.SystemClock
 import android.support.annotation.IdRes
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
-import star.iota.kisssub.widget.MessageBar
-import java.util.*
+import star.iota.kisssub.widget.M
 
 fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment?, @IdRes fragmentContainer: Int) {
     if (fragment == null) return
     supportFragmentManager.beginTransaction()
             .replace(fragmentContainer, fragment)
-            .commit()
+            .commitAllowingStateLoss()
 }
 
 fun AppCompatActivity.addFragmentToActivity(fragment: Fragment?, @IdRes fragmentContainer: Int) {
@@ -55,8 +53,9 @@ fun AppCompatActivity.exit() {
     } else {
         System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
         mHints[mHints.size - 1] = SystemClock.uptimeMillis()
-        val faces = MessageBar.FACES
-        Snackbar.make(findViewById(android.R.id.content), "期待下一次与你相遇", Snackbar.LENGTH_SHORT).setAction(faces[Random().nextInt(faces.size)]) { System.exit(0) }.show()
+        M.create(this, "期待下一次与你相遇", View.OnClickListener {
+            System.exit(0)
+        })
         if (SystemClock.uptimeMillis() - mHints[0] <= 1600) {
             System.exit(0)
         }

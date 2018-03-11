@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
 
-class CollectionPresenter(private val view: CollectionContract.View) : CollectionContract.Presenter() {
+class CollectionPresenter(private val view: CollectionContract.View) : CollectionContract.Presenter {
     override fun get(helper: AppDatabaseHelper) {
         compositeDisposable.add(
                 Single.just(helper)

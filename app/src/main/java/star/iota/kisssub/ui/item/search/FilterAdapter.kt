@@ -18,39 +18,20 @@
 
 package star.iota.kisssub.ui.item.search
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import star.iota.kisssub.R
+import star.iota.kisssub.base.BaseAdapter
 import star.iota.kisssub.base.BaseViewHolder
+import star.iota.kisssub.utils.ViewContextUtils
 
 
-class FilterAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var list: ArrayList<FilterBean> = ArrayList()
-    override fun getItemCount(): Int = list.size
-    override fun getItemViewType(position: Int): Int = list[position].type
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder? = when (viewType) {
-        FilterBean.HEADER -> HeaderViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_filter_header, parent, false))
-        FilterBean.TAG -> TagViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_filter_tag, parent, false))
-        else -> null
+class FilterAdapter : BaseAdapter<FilterBean>() {
+    override fun getViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<FilterBean> = if (viewType == FilterBean.HEADER) {
+        HeaderViewHolder(LayoutInflater.from(ViewContextUtils.getAppCompatActivity(parent)).inflate(R.layout.item_filter_header, parent, false))
+    } else {
+        TagViewHolder(LayoutInflater.from(ViewContextUtils.getAppCompatActivity(parent)).inflate(R.layout.item_filter_tag, parent, false))
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as BaseViewHolder<FilterBean>).bindView(list[position])
-    }
-
-    fun addAll(list: ArrayList<FilterBean>) {
-        val size = this.list.size
-        this.list.addAll(list)
-        notifyItemRangeInserted(size, list.size)
-    }
-
-    fun clear() {
-        val size = list.size
-        list.clear()
-        notifyItemRangeRemoved(0, size)
-    }
+    override fun getItemViewType(position: Int): Int = getDataList()[position].type
 }

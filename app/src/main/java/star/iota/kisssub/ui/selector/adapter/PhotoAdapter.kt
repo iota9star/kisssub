@@ -23,7 +23,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import kotlinx.android.synthetic.main.item_photo_selector_preview_photo.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.glide.GlideApp
 
@@ -48,24 +48,20 @@ class PhotoAdapter(val context: Context, private val photos: ArrayList<String>) 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val filePath = photos[position]
-        if (holder.image != null) {
-            GlideApp.with(context)
+        holder.itemView?.apply {
+            GlideApp.with(this)
                     .load(filePath)
                     .error(R.mipmap.ic_launcher)
                     .placeholder(R.mipmap.ic_launcher)
                     .fallback(R.mipmap.ic_launcher)
-                    .into(holder.image)
-            holder.image.setOnClickListener {
+                    .into(image_view_photo)
+            image_view_photo.setOnClickListener {
                 onPhotoSelected?.selected(position)
             }
         }
-
     }
 
     override fun getItemCount(): Int = photos.size
 
-    class ViewHolder(
-            itemView: View,
-            val image: ImageView? = itemView.findViewById(R.id.image_view_photo)
-    ) : RecyclerView.ViewHolder(itemView)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

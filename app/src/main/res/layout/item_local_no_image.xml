@@ -30,8 +30,9 @@
         android:id="@+id/textViewCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="bottom"
         android:alpha="0.36"
+        android:layout_marginBottom="-8dp"
         android:gravity="end"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -53,8 +54,9 @@
 
             <TextView
                 android:id="@+id/textViewSub"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -65,9 +67,10 @@
             <Button
                 android:id="@+id/buttonDownload"
                 android:layout_width="48dp"
-                android:layout_height="42dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_height="36dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/action_download"
                 android:textSize="10sp" />
         </LinearLayout>

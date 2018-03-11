@@ -19,37 +19,47 @@
 package star.iota.kisssub.ui.item
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.R
-import star.iota.kisssub.base.BaseFragment
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringListFragment
+import star.iota.kisssub.base.StringPresenter
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.widget.MessageBar
 
-class ItemFragment : BaseFragment(), ItemContract.View {
-    override fun success(items: ArrayList<Record>) {
-        end(false)
-        adapter.addAll(items)
+class ItemFragment : StringListFragment<StringPresenter<ArrayList<Record>>, ArrayList<Record>, Record>(), StringContract.View<ArrayList<Record>> {
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
+    override fun getContainerViewId(): Int = R.layout.fragment_default
+    override fun getRefreshLayout(): SmartRefreshLayout? = refreshLayout
+
+    override fun getRecyclerView(): RecyclerView? = recyclerView
+
+    private val baseAdapter: BaseAdapter<Record> by lazy {
+        ItemAdapter()
     }
 
-    override fun error(e: String?) {
-        end(true)
-        MessageBar.create(context!!, e)
+    override fun getAdapter(): BaseAdapter<Record> = baseAdapter
+
+    override fun setupRefreshLayout(refreshLayout: SmartRefreshLayout?) {
+        refreshLayout?.autoRefresh()
     }
 
-    override fun noData() {
-        end(true)
-        MessageBar.create(context!!, "没有获得数据")
+    override fun success(result: ArrayList<Record>) {
+        super.success(result)
+        baseAdapter.addAll(result)
+    }
+
+    override fun getStringPresenter(): StringPresenter<ArrayList<Record>> = ItemPresenter(this)
+
+    override fun doOther() {
     }
 
     companion object {
-        const val TITLE = "title"
-        const val URL = "url"
-        const val SUFFIX = "suffix"
-
         fun newInstance(title: String, url: String): ItemFragment {
             val fragment = ItemFragment()
             val bundle = Bundle()
@@ -61,82 +71,13 @@ class ItemFragment : BaseFragment(), ItemContract.View {
         }
     }
 
-    private fun end(error: Boolean) {
-        isLoading = false
-        if (isRefresh) {
-            page = 2
+    override fun loadDataEnd() {
+        if (isRefresh()) {
+            setPage(2)
             refreshLayout?.finishRefresh()
         } else {
-            if (!error) page++
-            refreshLayout?.finishLoadmore()
+            pagePlus()
+            refreshLayout?.finishLoadMore()
         }
     }
-
-    override fun getBackgroundView(): ImageView = imageViewContentBackground
-    override fun getMaskView(): View = viewMask
-    override fun getContainerViewId(): Int = R.layout.fragment_default
-
-    override fun doSome() {
-        initBase()
-        initPresenter()
-        initRecyclerView()
-        initRefreshLayout()
-    }
-
-    private lateinit var url: String
-    private lateinit var suffix: String
-    private var page = 1
-
-    private fun initBase() {
-        setToolbarTitle(arguments!!.getString(TITLE, getString(R.string.app_name)))
-        url = arguments!!.getString(URL)
-        suffix = arguments!!.getString(SUFFIX, "")
-    }
-
-    private lateinit var presenter: ItemPresenter
-    private fun initPresenter() {
-        presenter = ItemPresenter(this)
-    }
-
-    private var isLoading = false
-    private var isRefresh = false
-    private fun initRefreshLayout() {
-        refreshLayout?.autoRefresh()
-        refreshLayout?.setOnRefreshListener {
-            if (!checkIsLoading()) {
-                isRefresh = true
-                isLoading = true
-                adapter.clear()
-                presenter.get(url + "1" + suffix)
-            }
-        }
-        refreshLayout?.setOnLoadmoreListener {
-            if (!checkIsLoading()) {
-                isRefresh = false
-                isLoading = true
-                presenter.get(url + page + suffix)
-            }
-        }
-    }
-
-    private fun checkIsLoading(): Boolean = if (isLoading) {
-        MessageBar.create(context!!, "数据正在加载中，请等待...")
-        true
-    } else {
-        false
-    }
-
-    private lateinit var adapter: ItemAdapter
-    private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView?.itemAnimator = LandingAnimator()
-        adapter = ItemAdapter()
-        recyclerView?.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unsubscribe()
-    }
-
 }

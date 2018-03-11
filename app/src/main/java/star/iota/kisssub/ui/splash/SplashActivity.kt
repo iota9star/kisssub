@@ -23,7 +23,9 @@ import android.graphics.drawable.GradientDrawable
 import android.os.CountDownTimer
 import com.afollestad.aesthetic.Aesthetic
 import com.afollestad.aesthetic.NavigationViewMode
+import com.afollestad.aesthetic.Rx
 import com.afollestad.aesthetic.TabLayoutIndicatorMode
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_splash.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
@@ -65,8 +67,8 @@ class SplashActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         countDownTimer.cancel()
+        super.onDestroy()
     }
 
     override fun doSome() {
@@ -76,21 +78,21 @@ class SplashActivity : BaseActivity() {
                     .textColorPrimaryRes(R.color.text_color_primary)
                     .textColorSecondaryRes(R.color.text_color_secondary)
                     .colorPrimaryRes(R.color.white)
-                    .colorAccentRes(R.color.pink)
+                    .colorAccentRes(R.color.blue)
                     .navigationViewMode(NavigationViewMode.SELECTED_ACCENT)
                     .tabLayoutIndicatorMode(TabLayoutIndicatorMode.ACCENT)
-                    .colorStatusBarAuto()
+                    .colorStatusBarAuto(ThemeHelper.getStatusBarColorDepth(this))
                     .colorNavigationBarAuto()
                     .apply()
         }
         Aesthetic.get()
                 .colorWindowBackground()
                 .take(1)
-                .subscribe {
+                .subscribe(Consumer<Int> {
                     val colors = intArrayOf(0x00000000, it)
                     val mask = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
                     viewMask?.background = mask
-                }
+                }, Rx.onErrorLogAndRethrow())
         GlideApp.with(this)
                 .load(ThemeHelper.getDynamicBanner(this))
                 .into(kenBurnsView)

@@ -30,7 +30,7 @@ import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 class CollectionFragment : BaseFragment(), CollectionContract.View {
     override fun success(items: ArrayList<Record>) {
@@ -40,12 +40,12 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     override fun error(e: String?) {
         end()
-        MessageBar.create(context!!, e)
+        M.create(activity().applicationContext, e)
     }
 
     override fun noData() {
         end()
-        MessageBar.create(context!!, "您还没有收藏哦")
+        M.create(activity().applicationContext, "您还没有收藏哦")
     }
 
     companion object {
@@ -63,20 +63,16 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
     override fun getMaskView(): View = viewMask
     override fun doSome() {
         setToolbarTitle(context!!.getString(R.string.menu_favorite))
-        initPresenter()
         initRecyclerView()
         initRefreshLayout()
     }
 
-    private lateinit var presenter: CollectionPresenter
-    private fun initPresenter() {
-        presenter = CollectionPresenter(this)
-    }
+    private val presenter: CollectionPresenter by lazy { CollectionPresenter(this) }
 
     private var isLoading = false
     private fun initRefreshLayout() {
         refreshLayout?.autoRefresh()
-        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.isEnableLoadMore = false
         refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
@@ -88,17 +84,16 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
 
     private fun checkIsLoading(): Boolean {
         if (isLoading) {
-            MessageBar.create(context!!, "数据正在加载中，请等待...")
+            M.create(activity().applicationContext, "数据正在加载中，请等待...")
             return true
         }
         return false
     }
 
-    private lateinit var adapter: CollectionAdapter
+    private val adapter: CollectionAdapter by lazy { CollectionAdapter() }
     private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = LinearLayoutManager(activity(), LinearLayoutManager.VERTICAL, false)
         recyclerView?.itemAnimator = LandingAnimator()
-        adapter = CollectionAdapter()
         recyclerView?.adapter = adapter
     }
 
@@ -111,8 +106,8 @@ class CollectionFragment : BaseFragment(), CollectionContract.View {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         presenter.unsubscribe()
+        super.onDestroy()
     }
 
 }

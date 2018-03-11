@@ -57,11 +57,12 @@
             android:id="@+id/textViewCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="bottom"
             android:alpha="0.36"
+            android:layout_marginBottom="-8dp"
             android:gravity="end"
             android:textColor="?colorAccent"
-            android:textSize="48sp"
+            android:textSize="36sp"
             android:textStyle="italic|bold" />
 
         <LinearLayout
@@ -89,7 +90,10 @@
                 <Button
                     android:id="@+id/buttonDownload"
                     android:layout_width="48dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="36dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:text="@string/action_download"
                     android:textSize="12sp" />
             </LinearLayout>

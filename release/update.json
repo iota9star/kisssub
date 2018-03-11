@@ -1,12 +1,12 @@
 {
   "type": 0,
-  "versionCode": 10,
+  "versionCode": 12,
   "versionName": "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！",
-  "date": "2018-02-13",
-  "changeLog": "1. 优化逻辑体验\n2. 一些界面的调整\n3. 修复一些细节上的问题",
+  "date": "2018-03-11",
+  "changeLog": "1.重构代码\n\n2.性能优化\n\n3.bug修复",
   "star": 5,
   "dynamic": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/r4uZknity6GZmHi5wQSGxlwypQ4JC4k3Q4GPMvFKvY0!/r/dG0BAAAAAAAA",
   "content": "http://r.photo.store.qq.com/psb?/V12tx9ch3NyzR3/r4uZknity6GZmHi5wQSGxlwypQ4JC4k3Q4GPMvFKvY0!/r/dG0BAAAAAAAA",
-  "msg": "破解迅雷限制法\n\n以管理员身份运行记事本等文本编辑器打开Hosts文件，添加以下记录到文件末端：\n\n127.0.0.1 hub5btmain.sandai.net\n127.0.0.1 hub5emu.sandai.net\n127.0.0.1 upgrade.xl9.xunlei.com\n\n保存后即可绕过迅雷限制",
+  "msg": "今天天气不错喔",
   "url": "https://raw.githubusercontent.com/kisssub/kisssub-app-android/master/release/app-release_signed_7zip_aligned.apk"
 }

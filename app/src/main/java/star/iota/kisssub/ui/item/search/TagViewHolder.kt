@@ -18,21 +18,22 @@
 
 package star.iota.kisssub.ui.item.search
 
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.item_filter_tag.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.helper.SearchHelper
+import star.iota.kisssub.utils.ViewContextUtils
 
 class TagViewHolder(itemView: View) : BaseViewHolder<FilterBean>(itemView) {
     override fun bindView(bean: FilterBean) {
         itemView?.apply {
             textViewTag?.text = bean.title
             textViewTag?.setOnClickListener {
-                if (!bean.url.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newFilterInstance(bean.url!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                val url = bean.url
+                if (url != null) {
+                    ViewContextUtils.getAppCompatActivity(this)?.addFragmentToActivity(SearchFragment.newFilterInstance(url, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
         }

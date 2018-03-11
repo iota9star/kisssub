@@ -65,11 +65,11 @@ public class AestheticNavigationView extends NavigationView {
                 new int[]{unselectedIconColor, selectedColor});
         final ColorStateList textSl = new ColorStateList(new int[][]{new int[]{-android.R.attr.state_checked}, new int[]{android.R.attr.state_checked}},
                 new int[]{unselectedTextColor, selectedColor});
-        setItemTextColor(textSl);
-        setItemIconTintList(iconSl);
-
         StateListDrawable bgDrawable = new StateListDrawable();
         bgDrawable.addState(new int[]{android.R.attr.state_checked}, new ColorDrawable(selectedItemBgColor));
+
+        setItemTextColor(textSl);
+        setItemIconTintList(iconSl);
         setItemBackground(bgDrawable);
     }
 
@@ -106,11 +106,11 @@ public class AestheticNavigationView extends NavigationView {
 
     @Override
     protected void onDetachedFromWindow() {
-        if (modeSubscription != null) {
-            modeSubscription.dispose();
-        }
         if (colorSubscription != null) {
             colorSubscription.dispose();
+        }
+        if (modeSubscription != null) {
+            modeSubscription.dispose();
         }
         super.onDetachedFromWindow();
     }

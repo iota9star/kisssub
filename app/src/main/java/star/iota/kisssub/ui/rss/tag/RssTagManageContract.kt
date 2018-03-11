@@ -30,8 +30,8 @@ interface RssTagManageContract {
         fun noData()
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(helper: AppDatabaseHelper)
-        abstract fun add(helper: AppDatabaseHelper, rssTag: RssTag)
+    interface Presenter : BasePresenter {
+        fun get(helper: AppDatabaseHelper)
+        fun add(helper: AppDatabaseHelper, rssTag: RssTag)
     }
 }

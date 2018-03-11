@@ -21,7 +21,6 @@ package star.iota.kisssub.base
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
-
-abstract class BaseViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    abstract fun bindView(bean: T)
+abstract class BaseViewHolder<in E>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    abstract fun bindView(bean: E)
 }

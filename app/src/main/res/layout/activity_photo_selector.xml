@@ -98,15 +98,22 @@
                     android:id="@+id/imageButtonPreview"
                     android:layout_width="64dp"
                     android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:srcCompat="@drawable/ic_menu_preview"
                     tools:ignore="ContentDescription" />
 
                 <Button
                     android:id="@+id/buttonOK"
                     android:layout_width="64dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_height="42dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:text="@string/ok"
                     android:visibility="gone" />
             </LinearLayout>

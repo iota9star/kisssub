@@ -15,21 +15,23 @@
  *  *    limitations under the License.
  *
  */
+package star.iota.kisssub.utils
 
-package star.iota.kisssub.ui.tags
+import android.content.ContextWrapper
+import android.support.v7.app.AppCompatActivity
+import android.view.View
 
-import star.iota.kisssub.base.BasePresenter
 
-
-interface TagsContract {
-
-    interface View {
-        fun success(items: ArrayList<String>)
-        fun error(e: String?)
-        fun noData()
-    }
-
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(url: String)
+object ViewContextUtils {
+    fun getAppCompatActivity(view: View): AppCompatActivity? {
+        var context = view.context
+        while (context is ContextWrapper) {
+            if (context is AppCompatActivity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
     }
 }
+

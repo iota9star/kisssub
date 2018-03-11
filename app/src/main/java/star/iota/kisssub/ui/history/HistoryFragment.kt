@@ -18,93 +18,54 @@
 
 package star.iota.kisssub.ui.history
 
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
-import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.StringListFragment
+import star.iota.kisssub.base.StringPresenter
 
 
-class HistoryFragment : BaseFragment(), HistoryContract.View {
-    override fun success(items: ArrayList<HistoryBean>) {
-        end()
-        if (items.isNotEmpty())
-            items.removeAt(0)
-        adapter.addAll(items)
+class HistoryFragment : StringListFragment<StringPresenter<ArrayList<HistoryBean>>, ArrayList<HistoryBean>, HistoryBean>() {
+
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
+    override fun getContainerViewId(): Int = R.layout.fragment_default
+    override fun getRefreshLayout(): SmartRefreshLayout? = refreshLayout
+    override fun getRecyclerView(): RecyclerView? = recyclerView
+    override fun getAdapter(): BaseAdapter<HistoryBean> = baseAdapter
+    override fun getStringPresenter(): StringPresenter<ArrayList<HistoryBean>> = HistoryPresenter(this)
+    override fun isStableUrl() = true
+    override fun getStableUrl() = KisssubUrl.PLAY
+
+    private val baseAdapter: BaseAdapter<HistoryBean> by lazy { HistoryAdapter() }
+
+    override fun setupRefreshLayout(refreshLayout: SmartRefreshLayout?) {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadMore = false
     }
 
-    override fun error(e: String?) {
-        end()
-        MessageBar.create(context!!, e)
+    override fun initTitle() {
+        setToolbarTitle(getString(R.string.menu_history))
     }
 
-    override fun noData() {
-        end()
-        MessageBar.create(context!!, "没有获得数据")
+    override fun success(result: ArrayList<HistoryBean>) {
+        super.success(result)
+        if (result.isNotEmpty()) {
+            result.removeAt(0)
+        }
+        baseAdapter.addAll(result)
     }
 
     companion object {
         fun newInstance() = HistoryFragment()
     }
 
-    private fun end() {
-        isLoading = false
+    override fun loadDataEnd() {
         refreshLayout?.finishRefresh()
     }
-
-    override fun getBackgroundView(): ImageView = imageViewContentBackground
-    override fun getMaskView(): View = viewMask
-
-    override fun getContainerViewId(): Int = R.layout.fragment_default
-
-    override fun doSome() {
-        setToolbarTitle(context!!.getString(R.string.menu_history))
-        initPresenter()
-        initRecyclerView()
-        initRefreshLayout()
-    }
-
-    private lateinit var presenter: HistoryPresenter
-    private fun initPresenter() {
-        presenter = HistoryPresenter(this)
-    }
-
-    private var isLoading = false
-    private fun initRefreshLayout() {
-        refreshLayout?.autoRefresh()
-        refreshLayout?.isEnableLoadmore = false
-        refreshLayout?.setOnRefreshListener {
-            if (!checkIsLoading()) {
-                isLoading = true
-                adapter.clear()
-                presenter.get(KisssubUrl.PLAY)
-            }
-        }
-    }
-
-    private fun checkIsLoading(): Boolean {
-        if (isLoading) {
-            MessageBar.create(context!!, "数据正在加载中，请等待...")
-            return true
-        }
-        return false
-    }
-
-    private lateinit var adapter: HistoryAdapter
-    private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView?.itemAnimator = LandingAnimator()
-        adapter = HistoryAdapter()
-        recyclerView?.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unsubscribe()
-    }
-
 }

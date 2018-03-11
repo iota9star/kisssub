@@ -99,22 +99,31 @@
                     <Button
                         android:id="@+id/buttonMagnet"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="42dp"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:text="@string/details_magnet" />
 
                     <Button
                         android:id="@+id/buttonTorrent"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="42dp"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:text="@string/details_torrent" />
 
                     <Button
                         android:id="@+id/buttonShare"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="42dp"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
                         android:text="@string/details_share_link" />
                 </LinearLayout>
 

@@ -52,9 +52,12 @@
                 <Button
                     android:id="@+id/buttonRemove"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="42dp"
                     android:layout_weight="1"
+                    android:clickable="true"
                     android:ellipsize="end"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:maxLines="1"
                     android:text="@string/remove_photo_from_preview"
                     android:textColor="?android:textColorSecondary"

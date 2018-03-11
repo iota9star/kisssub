@@ -28,7 +28,7 @@ import okhttp3.HttpUrl
 import star.iota.kisssub.KisssubUrl
 
 
-class GodModePresenter(private val view: GodModeContract.View) : GodModeContract.Presenter() {
+class GodModePresenter(private val view: GodModeContract.View) : GodModeContract.Presenter {
     override fun get(url: String, code: String) {
         compositeDisposable.add(
                 OkGo.post<String>(url)

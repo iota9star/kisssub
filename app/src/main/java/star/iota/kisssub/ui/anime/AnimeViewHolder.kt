@@ -18,7 +18,6 @@
 
 package star.iota.kisssub.ui.anime
 
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.item_anime.view.*
 import star.iota.kisssub.R
@@ -28,21 +27,23 @@ import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.SearchHelper
 import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.utils.ViewContextUtils
 
 class AnimeViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
 
     override fun bindView(bean: Record) {
         itemView?.apply {
-            GlideApp.with(itemView)
+            GlideApp.with(this)
                     .load(bean.cover)
                     .error(R.mipmap.ic_launcher)
                     .placeholder(R.mipmap.ic_launcher)
                     .fallback(R.mipmap.ic_launcher)
                     .into(imageViewCover)
-            textViewTitle?.text = bean.title
+            val title = bean.title
+            textViewTitle?.text = title
             linearLayoutContainer?.setOnClickListener {
-                if (!bean.title.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.title!!, bean.title!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                if (title != null) {
+                    ViewContextUtils.getAppCompatActivity(this)?.addFragmentToActivity(SearchFragment.newInstance(title, title, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
         }

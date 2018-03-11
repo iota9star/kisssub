@@ -24,7 +24,10 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import android.widget.SeekBar
 import com.afollestad.aesthetic.Aesthetic
+import com.afollestad.aesthetic.NavigationViewMode
+import com.afollestad.aesthetic.TabLayoutIndicatorMode
 import com.afollestad.materialdialogs.color.ColorChooserDialog
 import kotlinx.android.synthetic.main.fragment_settings_theme_color.*
 import star.iota.kisssub.R
@@ -41,7 +44,7 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
                 ThemeHelper.setPrimaryColor(context!!, selectedColor)
                 Aesthetic.get()
                         .colorPrimary(selectedColor)
-                        .colorStatusBarAuto()
+                        .colorStatusBarAuto(ThemeHelper.getStatusBarColorDepth(context!!))
                         .colorNavigationBarAuto()
                         .apply()
                 adapter.removeSelectedStatus()
@@ -51,8 +54,9 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
                 ThemeHelper.setAccentColor(context!!, selectedColor)
                 Aesthetic.get()
                         .colorAccent(selectedColor)
-                        .colorStatusBarAuto()
                         .colorNavigationBarAuto()
+                        .navigationViewMode(NavigationViewMode.SELECTED_ACCENT)
+                        .tabLayoutIndicatorMode(TabLayoutIndicatorMode.ACCENT)
                         .apply()
             }
             ThemeHelper.THEME_PRIMARY_TEXT_COLOR -> {
@@ -174,7 +178,7 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
     override fun doSome() {
         setToolbarTitle(arguments!!.getString(TITLE))
         initEvent()
-        bindColor()
+        bindViews()
         initRecyclerView()
     }
 
@@ -194,7 +198,7 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
                 ThemeHelper.setPrimaryColor(context!!, color)
                 Aesthetic.get()
                         .colorPrimary(color)
-                        .colorStatusBarAuto()
+                        .colorStatusBarAuto(ThemeHelper.getStatusBarColorDepth(context!!))
                         .colorNavigationBarAuto()
                         .apply()
             }
@@ -208,15 +212,32 @@ class SettingsThemeColorFragment : BaseFragment(), View.OnClickListener, ColorCh
         linearLayoutPrimaryTextColorDark?.setOnClickListener(this)
         linearLayoutSecondaryTextColor?.setOnClickListener(this)
         linearLayoutSecondaryTextColorDark?.setOnClickListener(this)
+        seekBarStatusBarColorDepth?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                val depth = progress / 100.0f
+                Aesthetic.get()
+                        .colorStatusBarAuto(depth)
+                        .apply()
+                textViewDepth?.text = String.format("%.2f", depth)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                ThemeHelper.setStatusBarColorDepth(seekBar.context, seekBar.progress / 100.0f)
+            }
+        })
     }
 
-    private fun bindColor() {
+    private fun bindViews() {
         imageViewAccentColor?.setColorFilter(ThemeHelper.getAccentColor(context!!))
         imageViewPrimaryColor?.setColorFilter(ThemeHelper.getPrimaryColor(context!!))
         imageViewPrimaryTextColor?.setColorFilter(ThemeHelper.getPrimaryTextColor(context!!))
         imageViewPrimaryTextColorDark?.setColorFilter(ThemeHelper.getPrimaryTextColorDark(context!!))
         imageViewSecondaryTextColor?.setColorFilter(ThemeHelper.getSecondaryTextColor(context!!))
         imageViewSecondaryTextColorDark?.setColorFilter(ThemeHelper.getSecondaryTextColorDark(context!!))
+        seekBarStatusBarColorDepth?.progress = (ThemeHelper.getStatusBarColorDepth(context!!) * 100).toInt()
     }
 
     private fun getThemes(): ArrayList<ThemeBean> {

@@ -32,7 +32,7 @@ import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.helper.SecurityHelper
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.main.MainActivity
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 class PinLockFragment : BaseFragment() {
     override fun getBackgroundView(): ImageView? = null
@@ -65,7 +65,7 @@ class PinLockFragment : BaseFragment() {
             }
 
             override fun onNotMatch(i: Int) {
-                MessageBar.create(context!!, "指纹识别失败，你还有" + i + "次机会")
+                M.create(activity().applicationContext, "指纹识别失败，你还有" + i + "次机会")
             }
 
             override fun onFailed(b: Boolean) {
@@ -73,20 +73,20 @@ class PinLockFragment : BaseFragment() {
             }
 
             override fun onStartFailedByDeviceLocked() {
-                activity!!.finish()
+                activity().finish()
             }
         })
 
     }
 
     private fun welcome() {
-        startActivity(Intent(context!!, MainActivity::class.java))
+        startActivity(Intent(activity(), MainActivity::class.java))
         activity!!.finish()
     }
 
     private fun verifySuccess() {
         timer.start()
-        MessageBar.create(context!!, "验证成功，即将前往主页面")
+        M.create(activity(), "验证成功，即将前往主页面")
     }
 
     override fun onDestroy() {
@@ -106,9 +106,9 @@ class PinLockFragment : BaseFragment() {
                     errorTimes++
                     if (errorTimes == 3) {
                         errorTimes = 0
-                        activity!!.finish()
+                        activity().finish()
                     }
-                    MessageBar.create(context!!, "解锁失败，你还有" + (3 - errorTimes) + "次输入机会")
+                    M.create(activity().applicationContext, "解锁失败，你还有" + (3 - errorTimes) + "次输入机会")
                 }
             }
 
@@ -123,7 +123,7 @@ class PinLockFragment : BaseFragment() {
     }
 
     private fun initView() {
-        pinLockView?.textColor = ThemeHelper.getAccentColor(context!!)
+        pinLockView?.textColor = ThemeHelper.getAccentColor(activity())
         indicatorDots?.indicatorType = IndicatorDots.IndicatorType.FILL_WITH_ANIMATION
         pinLockView?.attachIndicatorDots(indicatorDots)
     }

@@ -23,8 +23,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.item_photo_selector_photo.view.*
 import star.iota.kisssub.R
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
@@ -58,46 +58,45 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val filePath = dirPath + "/" + photos[position]
-        holder.mask?.visibility = View.GONE
-        holder.selected?.visibility = View.GONE
-        holder.selected?.setColorFilter(ThemeHelper.getAccentColor(context))
-        if (holder.image != null) {
-            GlideApp.with(context)
+        holder.itemView?.apply {
+            GlideApp.with(this)
                     .load(filePath)
                     .error(R.mipmap.ic_launcher)
                     .placeholder(R.mipmap.ic_launcher)
                     .fallback(R.mipmap.ic_launcher)
-                    .into(holder.image)
-        }
-        holder.image?.setOnClickListener {
-            if (selectedPhotos.contains(filePath)) {
-                selectedPhotos.remove(filePath)
-                holder.mask?.visibility = View.GONE
-                holder.selected?.visibility = View.GONE
-            } else {
-                if (selectedPhotos.size >= limit) {
-                    Toast.makeText(
-                            context,
-                            "您最多选择" + limit + "张图片",
-                            Toast.LENGTH_SHORT)
-                            .show()
+                    .into(image_view_photo)
+            image_view_photo_mask?.visibility = View.GONE
+            image_view_select_button?.visibility = View.GONE
+            image_view_select_button?.setColorFilter(ThemeHelper.getAccentColor(context))
+            image_view_photo?.setOnClickListener {
+                if (selectedPhotos.contains(filePath)) {
+                    selectedPhotos.remove(filePath)
+                    image_view_photo_mask?.visibility = View.GONE
+                    image_view_select_button?.visibility = View.GONE
                 } else {
-                    selectedPhotos.add(filePath)
-                    holder.mask?.visibility = View.VISIBLE
-                    holder.selected?.visibility = View.VISIBLE
+                    if (selectedPhotos.size >= limit) {
+                        Toast.makeText(
+                                context,
+                                "您最多选择" + limit + "张图片",
+                                Toast.LENGTH_SHORT)
+                                .show()
+                    } else {
+                        selectedPhotos.add(filePath)
+                        image_view_photo_mask?.visibility = View.VISIBLE
+                        image_view_select_button?.visibility = View.VISIBLE
+                    }
                 }
+                onPhotoSelected?.selected(selectedPhotos.size)
+            }
+            if (selectedPhotos.contains(filePath)) {
+                image_view_photo_mask?.visibility = View.VISIBLE
+                image_view_select_button?.visibility = View.VISIBLE
+            } else {
+                image_view_photo_mask?.visibility = View.GONE
+                image_view_select_button?.visibility = View.GONE
             }
             onPhotoSelected?.selected(selectedPhotos.size)
         }
-        if (selectedPhotos.contains(filePath)) {
-            holder.mask?.visibility = View.VISIBLE
-            holder.selected?.visibility = View.VISIBLE
-        } else {
-            holder.mask?.visibility = View.GONE
-            holder.selected?.visibility = View.GONE
-        }
-        onPhotoSelected?.selected(selectedPhotos.size)
-
     }
 
     fun clearSelectedPhotos() {
@@ -117,12 +116,7 @@ class SelectorPhotoAdapter(val context: Context, private val limit: Int) : Recyc
 
     override fun getItemCount(): Int = photos.size
 
-    class ViewHolder(
-            itemView: View,
-            val image: ImageView? = itemView.findViewById(R.id.image_view_photo),
-            val mask: ImageView? = itemView.findViewById(R.id.image_view_photo_mask),
-            val selected: ImageView? = itemView.findViewById(R.id.image_view_select_button)
-    ) : RecyclerView.ViewHolder(itemView)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     companion object {
         private val selectedPhotos = HashSet<String>()

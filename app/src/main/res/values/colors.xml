@@ -17,6 +17,8 @@
   -->
 
 <resources>
+    <color name="transparent">#00000000</color>
+
     <color name="red">#d32f2f</color>
     <color name="pink">#e71e63</color>
     <color name="purple">#9b27af</color>

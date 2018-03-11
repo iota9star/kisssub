@@ -35,7 +35,7 @@ import star.iota.kisssub.eventbus.ChangeDynamicBackgroundEvent
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
-import star.iota.kisssub.utils.ToastUtils
+import star.iota.kisssub.widget.M
 
 class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
 
@@ -66,7 +66,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
             R.id.buttonPreview -> {
                 val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
-                    ToastUtils.short(context!!, "路径不能为空")
+                    M.create(context!!, "路径不能为空")
                 } else {
                     loadImage(path)
                 }
@@ -74,7 +74,7 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
             R.id.buttonSetting -> {
                 val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
-                    ToastUtils.short(context!!, "路径不能为空")
+                    M.create(context!!, "路径不能为空")
                 } else {
                     ThemeHelper.setDynamicBanner(context!!, path)
                     EventBus.getDefault().post(ChangeDynamicBackgroundEvent())
@@ -99,11 +99,11 @@ class SettingsDynamicBackgroundFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun loadImage(path: String) {
-        GlideApp.with(context!!)
+        GlideApp.with(activity())
                 .load(path)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        ToastUtils.short(context!!, "加载错误，请重新选择")
+                        M.create(activity().applicationContext, "加载错误，请重新选择")
                         return true
                     }
 

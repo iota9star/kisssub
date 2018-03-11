@@ -18,18 +18,27 @@
 
 package star.iota.kisssub.ui.rss.data
 
-import star.iota.kisssub.base.BasePresenter
-import star.iota.kisssub.room.Record
+import star.iota.kisssub.base.StringListFragment
+import star.iota.kisssub.base.StringPresenter
 
-interface RssContract {
+abstract class LazyLoadFragment<out P : StringPresenter<T>, T, E> : StringListFragment<P, T, E>() {
 
-    interface View {
-        fun success(items: ArrayList<Record>)
-        fun error(e: String?)
-        fun noData()
+    private var visible: Boolean = false
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (userVisibleHint) {
+            visible = true
+            onVisible()
+        } else {
+            visible = false
+            onInvisible()
+        }
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(url: String)
-    }
+    protected open fun isShow(): Boolean = visible
+
+    protected open fun onVisible() {}
+
+    protected open fun onInvisible() {}
 }

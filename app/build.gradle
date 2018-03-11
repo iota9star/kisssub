@@ -22,6 +22,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'io.fabric'
 
 android {
@@ -31,11 +33,10 @@ android {
         applicationId "star.iota.kisssub"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 10
+        versionCode 12
         versionName "ｸﾞｯ!(๑•̀ㅂ•́)و✧ 頑張って！"
         vectorDrawables.useSupportLibrary = true
         resConfigs "zh"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
@@ -50,41 +51,43 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-}
-kapt {
-    generateStubs = true
-}
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(path: ':aesthetic')
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+}
+
+dependencies {
+    implementation project(path: ':aesthetic')
+
+    //noinspection GradleDependency
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:latest.release'
+
+    //noinspection GradleDependency
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:latest.release'
 
     //support libs
     //noinspection GradleDependency
-    implementation 'com.android.support:appcompat-v7:27.0.2'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
 
     //noinspection GradleDependency
-    implementation 'com.android.support:design:27.0.2'
+    implementation 'com.android.support:design:27.1.0'
 
     //noinspection GradleDependency
-    implementation 'com.android.support:recyclerview-v7:27.0.2'
+    implementation 'com.android.support:recyclerview-v7:27.1.0'
 
     //noinspection GradleDependency
-    implementation 'com.android.support:cardview-v7:27.0.2'
+    implementation 'com.android.support:cardview-v7:27.1.0'
 
     //noinspection GradleDependency
-    implementation 'com.android.support:palette-v7:27.0.2'
+    implementation 'com.android.support:palette-v7:27.1.0'
 
     //noinspection GradleDependency
     implementation 'com.android.support:multidex:latest.release'
 
     // kotlin
+
+    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
+    //noinspection GradleDependency
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     //noinspection GradleDependency
@@ -95,15 +98,13 @@ dependencies {
     // Architecture Components
     //noinspection GradleDependency
     implementation 'android.arch.persistence.room:runtime:latest.release'
-
     //noinspection GradleDependency
     kapt 'android.arch.persistence.room:compiler:latest.release'
-
     //noinspection GradleDependency
     testImplementation 'android.arch.persistence.room:testing:latest.release'
 
     //noinspection GradleDependency
-    implementation "android.arch.lifecycle:common-java8:latest.release"
+    implementation 'android.arch.lifecycle:common-java8:latest.release'
 
     // okio
     //noinspection GradleDependency
@@ -122,7 +123,6 @@ dependencies {
     // glide
     //noinspection GradleDependency
     implementation 'com.github.bumptech.glide:glide:latest.release'
-
     //noinspection GradleDependency
     kapt 'com.github.bumptech.glide:compiler:latest.release'
 
@@ -145,6 +145,7 @@ dependencies {
     // material-dialogs
     //noinspection GradleDependency
     implementation 'com.afollestad.material-dialogs:core:latest.release'
+
     //noinspection GradleDependency
     implementation 'com.afollestad.material-dialogs:commons:latest.release'
 
@@ -196,13 +197,10 @@ dependencies {
 
     // SmartRefreshLayout
     //noinspection GradleDependency
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
-    //noinspection GradleDependency
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:latest.release'
 
-    // swipe layout
     //noinspection GradleDependency
-    implementation "com.daimajia.swipelayout:library:latest.release"
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:latest.release'
 
     // Circular Reveal
     //noinspection GradleDependency

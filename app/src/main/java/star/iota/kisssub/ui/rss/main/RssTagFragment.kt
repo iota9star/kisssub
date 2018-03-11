@@ -19,7 +19,6 @@
 package star.iota.kisssub.ui.rss.main
 
 import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_rss.*
@@ -32,15 +31,17 @@ import star.iota.kisssub.ui.rss.data.RssFragment
 import star.iota.kisssub.ui.rss.tag.RssTagManageContract
 import star.iota.kisssub.ui.rss.tag.RssTagManageFragment
 import star.iota.kisssub.ui.rss.tag.RssTagManagePresenter
+import star.iota.kisssub.utils.ViewContextUtils
 
 class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     override fun success(tags: ArrayList<RssTag>) {
         val titles = ArrayList<String>()
         val fragments = ArrayList<Fragment>()
         tags.forEach {
-            if (!it.tag.isNullOrBlank()) {
-                titles.add(it.tag!!)
-                fragments.add(RssFragment.newInstance(it.tag!!))
+            val tag = it.tag
+            if (tag != null) {
+                titles.add(tag)
+                fragments.add(RssFragment.newInstance(tag))
             }
         }
         pagerAdapter.addAll(titles, fragments)
@@ -71,15 +72,14 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
         initPresenter()
     }
 
-    private lateinit var presenter: RssTagManagePresenter
+    private val presenter: RssTagManagePresenter by lazy { RssTagManagePresenter(this) }
     private fun initPresenter() {
-        presenter = RssTagManagePresenter(this)
-        presenter.get(AppDatabaseHelper.getInstance(context!!))
+        presenter.get(AppDatabaseHelper.getInstance(activity()))
     }
 
     private fun initActionView() {
         imageViewAdd?.setOnClickListener {
-            (activity!! as AppCompatActivity).addFragmentToActivity(RssTagManageFragment.newInstance(), R.id.frameLayoutContainer)
+            ViewContextUtils.getAppCompatActivity(imageViewAdd)?.addFragmentToActivity(RssTagManageFragment.newInstance(), R.id.frameLayoutContainer)
         }
     }
 
@@ -102,8 +102,8 @@ class RssTagFragment : BaseFragment(), RssTagManageContract.View {
     override fun getMaskView(): View? = null
 
     override fun onDestroy() {
-        super.onDestroy()
         presenter.unsubscribe()
+        super.onDestroy()
     }
 
 }

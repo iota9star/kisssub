@@ -18,41 +18,17 @@
 
 package star.iota.kisssub.ui.item.search
 
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.convert.StringConvert
 import com.lzy.okgo.model.Response
-import com.lzy.okrx2.adapter.ObservableResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
 import star.iota.kisssub.KisssubUrl
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringPresenter
 import star.iota.kisssub.room.Record
 
 
-class SearchPresenter(private val view: SearchContract.View) : SearchContract.Presenter() {
-    override fun get(url: String) {
-        addCookie(url)
-        compositeDisposable.add(
-                OkGo.get<String>(url)
-                        .converter(StringConvert())
-                        .adapt(ObservableResponse<String>())
-                        .map { deal(it) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (it?.records == null || it.records!!.isEmpty()) {
-                                view.noData()
-                            } else {
-                                view.success(it)
-                            }
-                        }, {
-                            view.error(it?.message)
-                        })
-        )
-    }
+class SearchPresenter(view: StringContract.View<SearchBean>) : StringPresenter<SearchBean>(view) {
 
-    private fun deal(resp: Response<String>): SearchBean? {
+    override fun deal(resp: Response<String>): SearchBean? {
         val doc = Jsoup.parse(resp.body())
         val records = doc?.select("#data_list > tr")
         val rs = ArrayList<Record>()
@@ -92,14 +68,5 @@ class SearchPresenter(private val view: SearchContract.View) : SearchContract.Pr
         data.records = rs
         data.filters = fs
         return data
-    }
-
-
-    companion object {
-        private val compositeDisposable = CompositeDisposable()
-    }
-
-    override fun unsubscribe() {
-        compositeDisposable.clear()
     }
 }

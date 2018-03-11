@@ -19,38 +19,45 @@
 package star.iota.kisssub.ui.rss.data
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_default.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.StringPresenter
 import star.iota.kisssub.room.Record
-import star.iota.kisssub.ui.rss.main.LazyLoadFragment
-import star.iota.kisssub.utils.ToastUtils
 
 
-class RssFragment : LazyLoadFragment(), RssContract.View {
-    override fun success(items: ArrayList<Record>) {
-        end()
-        adapter.addAll(items)
+class RssFragment : LazyLoadFragment<StringPresenter<ArrayList<Record>>, ArrayList<Record>, Record>() {
+    override fun getRefreshLayout(): SmartRefreshLayout? = refreshLayout
+
+    override fun getRecyclerView(): RecyclerView? = recyclerView
+
+    override fun getAdapter(): BaseAdapter<Record> = baseAdapter
+
+    override fun setupRefreshLayout(refreshLayout: SmartRefreshLayout?) {
+        if (isShow() || active) {
+            refreshLayout?.autoRefresh()
+        }
+        refreshLayout?.isEnableLoadMore = false
     }
 
-    override fun error(e: String?) {
-        end()
-        ToastUtils.short(context!!, e)
-    }
+    override fun getStringPresenter(): StringPresenter<ArrayList<Record>> = RssPresenter(this)
 
-    override fun noData() {
-        end()
-        ToastUtils.short(context!!, "没有获得数据")
+    override fun isStableUrl() = true
+    override fun getStableUrl() = (arguments?.getString(URL, "")
+            ?: "") + (arguments?.getString(SUFFIX, "") ?: "")
+
+    override fun success(result: ArrayList<Record>) {
+        super.success(result)
+        baseAdapter.addAll(result)
     }
 
     companion object {
         const val ACTIVE = "active"
-        const val URL = "url"
-        const val SUFFIX = "suffix"
         fun newInstance(param: String?): RssFragment {
             return newInstance(param, false)
         }
@@ -71,9 +78,8 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
         }
     }
 
-    private fun end() {
+    override fun loadDataEnd() {
         isLoaded = true
-        isLoading = false
         refreshLayout?.finishRefresh()
     }
 
@@ -81,72 +87,15 @@ class RssFragment : LazyLoadFragment(), RssContract.View {
     override fun getMaskView(): View = viewMask
     override fun isShowCircularReveal() = false
     override fun getContainerViewId(): Int = R.layout.fragment_default
-
-    override fun doSome() {
-        isInitialized = true
-        initBase()
-        initPresenter()
-        initRecyclerView()
-        initRefreshLayout()
+    private val active: Boolean  by lazy {
+        arguments?.getBoolean(ACTIVE, false) ?: false
     }
-
-    private lateinit var url: String
-    private lateinit var suffix: String
-    private var active: Boolean = false
-
-    private fun initBase() {
-        url = arguments!!.getString(URL)
-        suffix = arguments!!.getString(SUFFIX, "")
-        active = arguments!!.getBoolean(ACTIVE, false)
-    }
-
-    private lateinit var presenter: RssPresenter
-    private fun initPresenter() {
-        presenter = RssPresenter(this)
-    }
-
-    private var isInitialized: Boolean = false
     private var isLoaded: Boolean = false
-
     override fun onVisible() {
-        if (isInitialized && !isLoaded) {
+        if (!isLoaded) {
             refreshLayout?.autoRefresh()
         }
     }
 
-    private var isLoading = false
-    private fun initRefreshLayout() {
-        if (isShow() || active) {
-            refreshLayout?.autoRefresh()
-        }
-        refreshLayout?.isEnableLoadmore = false
-        refreshLayout?.setOnRefreshListener {
-            if (!isLoading()) {
-                isLoading = true
-                adapter.clear()
-                presenter.get(url + suffix)
-            }
-        }
-    }
-
-    private fun isLoading(): Boolean = if (isLoading) {
-        ToastUtils.short(context!!, "数据正在加载中，请等待...")
-        true
-    } else {
-        false
-    }
-
-    private lateinit var adapter: RssAdapter
-    private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView?.itemAnimator = LandingAnimator()
-        adapter = RssAdapter()
-        recyclerView?.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unsubscribe()
-    }
-
+    private val baseAdapter: RssAdapter by lazy { RssAdapter() }
 }

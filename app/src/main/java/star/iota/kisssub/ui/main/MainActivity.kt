@@ -31,7 +31,6 @@ import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.afollestad.aesthetic.Aesthetic
-import com.afollestad.aesthetic.AestheticMessage
 import com.github.ikidou.fragmentBackHandler.BackHandlerHelper
 import com.tbruyelle.rxpermissions2.RxPermissions
 import kotlinx.android.synthetic.main.activity_main_content.*
@@ -66,7 +65,7 @@ import star.iota.kisssub.ui.settings.SettingsActivity
 import star.iota.kisssub.ui.subs.SubsFragment
 import star.iota.kisssub.ui.tags.TagsFragment
 import star.iota.kisssub.utils.UpdateUtils
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 import star.iota.kisssub.widget.ken.KenBurnsView
 
 
@@ -93,19 +92,14 @@ class MainActivity : BaseActivity(), InfoContract.View {
 
     override fun getContentViewId(): Int = R.layout.activity_main_drawer
 
-    private lateinit var presenter: InfoPresenter
+    private val presenter: InfoPresenter by lazy { InfoPresenter(this) }
     override fun doSome() {
         initToolbar()
         initDrawer()
         initNavigationView()
         setFirstFragment()
         checkPermission()
-        initPresenter()
         EventBus.getDefault().register(this)
-    }
-
-    private fun initPresenter() {
-        presenter = InfoPresenter(this)
         presenter.get(KisssubUrl.UPDATE_URL)
     }
 
@@ -119,8 +113,8 @@ class MainActivity : BaseActivity(), InfoContract.View {
         val searchView = menu?.findItem(R.id.menu_search)?.actionView as SearchView
         searchView.queryHint = "请输入关键字..."
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        val pan = menu?.findItem(R.id.menu_pan)
-        val collection = menu?.findItem(R.id.menu_collection)
+        val pan = menu.findItem(R.id.menu_pan)
+        val collection = menu.findItem(R.id.menu_collection)
         pan?.isChecked = SearchHelper.getPan(this)
         collection?.isChecked = SearchHelper.getCollection(this)
         pan?.setOnMenuItemClickListener {
@@ -136,16 +130,17 @@ class MainActivity : BaseActivity(), InfoContract.View {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         EventBus.getDefault().unregister(this)
         presenter.unsubscribe()
+        super.onDestroy()
     }
 
     private fun checkPermission() {
-        RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        RxPermissions(this)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .subscribe({
                     if (!it) {
-                        MessageBar.create(this@MainActivity, "您拒绝了读取文件权限，请前往设置手动授予权限", "好的", AestheticMessage.OnActionClickListener {
+                        M.create(this@MainActivity, "您拒绝读取文件权限，请点击颜文字前往设置授权", View.OnClickListener {
                             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                             val uri = Uri.fromParts("package", packageName, null)
                             intent.data = uri

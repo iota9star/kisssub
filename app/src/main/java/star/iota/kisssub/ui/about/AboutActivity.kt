@@ -34,17 +34,17 @@ import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.UpdateUtils
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, GodModeContract.View {
     override fun other(e: String?) {
-        MessageBar.create(this, e)
+        M.create(this.applicationContext, e)
         endGodMode()
     }
 
     override fun isActivated(activate: Boolean) {
         if (activate) {
-            MessageBar.create(this, "成功激活上帝模式")
+            M.create(this.applicationContext, "成功激活上帝模式")
             linearLayoutGodModeContainer?.visibility = View.GONE
             textViewAppName?.text = (getString(R.string.kisssub) + " - GOD")
         } else {
@@ -71,7 +71,7 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
 
     override fun noData() {
         endUpdate()
-        MessageBar.create(this, "没有获得版本信息")
+        M.create(this, "没有获得版本信息")
     }
 
     private fun endUpdate() {
@@ -89,35 +89,39 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
                 SendUtils.open(this, getString(R.string.about_kisssub_url))
             }
             R.id.linearLayoutGrade -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + this.packageName)))
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + this.packageName)))
+                } catch (e: Exception) {
+                    M.create(this.applicationContext, "您可能没有安装应用商店：${e.message}")
+                }
             }
             R.id.linearLayoutCheckUpdate -> {
                 if (!updateIsLoading) {
                     updateIsLoading = true
                     progressBarUpdate?.visibility = View.VISIBLE
-                    updatePresenter.get(KisssubUrl.UPDATE_URL)
+                    updatePresenter?.get(KisssubUrl.UPDATE_URL)
                 } else {
-                    MessageBar.create(this, "正在加载版本信息中，请等待")
+                    M.create(this.applicationContext, "正在加载版本信息中，请等待")
                 }
             }
             R.id.linearLayoutGodMode -> {
                 System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
                 mHints[mHints.size - 1] = SystemClock.uptimeMillis()
                 if (SystemClock.uptimeMillis() - mHints[0] <= 2400) {
-                    linearLayoutGodModeContainer.visibility = View.VISIBLE
+                    linearLayoutGodModeContainer?.visibility = View.VISIBLE
                 }
             }
             R.id.buttonGodMode -> {
-                val code = textInputEditTextCode.text.toString().trim()
+                val code = textInputEditTextCode?.text.toString().trim()
                 if (code.isBlank()) {
-                    MessageBar.create(this, "请输入神秘代码")
+                    M.create(this, "请输入神秘代码")
                 } else {
                     if (!godModeIsLoading) {
                         godModeIsLoading = true
                         progressBarGodMode?.visibility = View.VISIBLE
-                        godModePresenter.get(KisssubUrl.GOD_MODE, code)
+                        godModePresenter?.get(KisssubUrl.GOD_MODE, code)
                     } else {
-                        MessageBar.create(this, "正在加载中，请等待")
+                        M.create(this, "正在加载中，请等待")
                     }
                 }
             }
@@ -134,17 +138,16 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
     }
 
     override fun onDestroy() {
+        updatePresenter?.unsubscribe()
+        godModePresenter?.unsubscribe()
         super.onDestroy()
-        updatePresenter.unsubscribe()
-        godModePresenter.unsubscribe()
     }
 
     private var updateIsLoading = false
-    private lateinit var updatePresenter: InfoPresenter
-    private lateinit var godModePresenter: GodModePresenter
+    private val updatePresenter: InfoPresenter? by lazy { InfoPresenter(this) }
+    private val godModePresenter: GodModePresenter? by lazy { GodModePresenter(this) }
     override fun doSome() {
         isGodMode()
-        initPresenter()
         initEvent()
         GlideApp.with(this)
                 .load(ThemeHelper.getDynamicBanner(this))
@@ -178,11 +181,6 @@ class AboutActivity : BaseActivity(), View.OnClickListener, InfoContract.View, G
         if (cookies.toString().contains(Regex(pattern))) {
             textViewAppName?.text = (getString(R.string.kisssub) + " - GOD")
         }
-    }
-
-    private fun initPresenter() {
-        updatePresenter = InfoPresenter(this)
-        godModePresenter = GodModePresenter(this)
     }
 
     companion object {

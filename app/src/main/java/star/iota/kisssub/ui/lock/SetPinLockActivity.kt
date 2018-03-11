@@ -28,7 +28,7 @@ import star.iota.kisssub.base.BaseActivity
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.SecurityHelper
 import star.iota.kisssub.helper.ThemeHelper
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 
 class SetPinLockActivity : BaseActivity(), View.OnClickListener {
@@ -73,7 +73,7 @@ class SetPinLockActivity : BaseActivity(), View.OnClickListener {
                         buttonRight?.setText(R.string.lock_finish)
                         buttonRight?.visibility = View.VISIBLE
                     } else {
-                        MessageBar.create(this@SetPinLockActivity, "前后不一致")
+                        M.create(this@SetPinLockActivity, "前后不一致")
                         pinLockView?.resetPinLockView()
                         buttonRight?.visibility = View.GONE
                     }

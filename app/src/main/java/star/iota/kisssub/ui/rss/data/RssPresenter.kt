@@ -18,39 +18,14 @@
 
 package star.iota.kisssub.ui.rss.data
 
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.convert.StringConvert
 import com.lzy.okgo.model.Response
-import com.lzy.okrx2.adapter.ObservableResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringPresenter
 import star.iota.kisssub.room.Record
 
-class RssPresenter(private val view: RssContract.View) : RssContract.Presenter() {
-    override fun get(url: String) {
-        addCookie(url)
-        compositeDisposable.add(
-                OkGo.get<String>(url)
-                        .converter(StringConvert())
-                        .adapt(ObservableResponse<String>())
-                        .map { deal(it) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (it == null || it.isEmpty()) {
-                                view.noData()
-                            } else {
-                                view.success(it)
-                            }
-                        }, {
-                            view.error(it?.message)
-                        })
-        )
-    }
-
-    private fun deal(resp: Response<String>): ArrayList<Record> {
+class RssPresenter(view: StringContract.View<ArrayList<Record>>) : StringPresenter<ArrayList<Record>>(view) {
+    override fun deal(resp: Response<String>): ArrayList<Record> {
         val items = Jsoup.parse(resp.body())?.select("item")
         val list = ArrayList<Record>()
         items?.forEach {
@@ -75,14 +50,5 @@ class RssPresenter(private val view: RssContract.View) : RssContract.Presenter()
             list.add(bean)
         }
         return list
-    }
-
-
-    companion object {
-        private val compositeDisposable = CompositeDisposable()
-    }
-
-    override fun unsubscribe() {
-        compositeDisposable.clear()
     }
 }

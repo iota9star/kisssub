@@ -21,6 +21,7 @@ package star.iota.kisssub
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.support.multidex.MultiDex
 import com.afollestad.aesthetic.AestheticStoreHouseHeader
 import com.crashlytics.android.Crashlytics
@@ -64,17 +65,16 @@ class App : Application() {
         }
 
         init {
-            SmartRefreshLayout.setDefaultRefreshHeaderCreater { context, _ ->
-                val header = AestheticStoreHouseHeader(context)
-                header.initWithString(context.resources.getString(R.string.kisssub))
-                header.setLineWidth(8)
-                header.loadingAniDuration = 800
-                header.setDropHeight(context.resources.getDimensionPixelSize(R.dimen.v256dp))
-                header.setBackgroundColor(0x00000000)
-                header.setTextColor(ThemeHelper.getAccentColor(context))
-                header
+            SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ ->
+                AestheticStoreHouseHeader(context)
+                        .initWithString(context.resources.getString(R.string.kisssub))
+                        .setLineWidth(8)
+                        .setLoadingAniDuration(800)
+                        .setDropHeight(context.resources.getDimensionPixelSize(R.dimen.v256dp))
+                        .setHeaderBackgroundColor(Color.TRANSPARENT)
+                        .setTextColor(ThemeHelper.getAccentColor(context))
             }
-            SmartRefreshLayout.setDefaultRefreshFooterCreater { context, _ -> ClassicsFooter(context) }
+            SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ -> ClassicsFooter(context) }
         }
     }
 

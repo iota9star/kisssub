@@ -27,7 +27,7 @@ interface InfoContract {
         fun noData()
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(url: String)
+    interface Presenter : BasePresenter {
+        fun get(url: String)
     }
 }

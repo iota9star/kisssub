@@ -26,5 +26,6 @@
         <attr name="lineWidth" format="dimension" />
         <attr name="dropHeight" format="dimension" />
         <attr name="backgroundColor" format="color" />
+        <attr name="enableFadeAnimation" format="boolean" />
     </declare-styleable>
 </resources>
