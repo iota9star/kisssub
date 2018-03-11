@@ -19,7 +19,6 @@
 package star.iota.kisssub.ui.collection
 
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,39 +35,43 @@ import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.details.DetailsFragment
 import star.iota.kisssub.ui.rss.data.RssFragment
 import star.iota.kisssub.utils.SendUtils
-import star.iota.kisssub.utils.ToastUtils
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.utils.ViewContextUtils
+import star.iota.kisssub.widget.M
 
 class WithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
     override fun bindView(bean: Record) {
         itemView?.apply {
-            GlideApp.with(context)
+            val activity = ViewContextUtils.getAppCompatActivity(this)
+            GlideApp.with(this)
                     .load(bean.cover)
                     .error(R.mipmap.ic_launcher)
                     .placeholder(R.mipmap.ic_launcher)
                     .fallback(R.mipmap.ic_launcher)
                     .into(imageViewCover)
-            textViewTitle?.text = bean.title
+            val title = bean.title
+            textViewTitle?.text = title
             textViewCategory?.text = bean.category
-            textViewSub?.text = bean.sub
+            val sub = bean.sub
+            textViewSub?.text = sub
             textViewSub?.setOnClickListener {
-                if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(RssFragment.newInstance(bean.sub!!), R.id.frameLayoutContainer)
+                if (sub != null) {
+                    activity?.addFragmentToActivity(RssFragment.newInstance(sub), R.id.frameLayoutContainer)
                 }
             }
             textViewTitle?.setOnClickListener {
-                if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
+                val url = bean.url
+                if (title != null && url != null) {
+                    activity?.addFragmentToActivity(DetailsFragment.newInstance(title, url), R.id.frameLayoutContainer)
                 }
             }
             buttonDownload?.setOnClickListener {
-                SendUtils.copy(context!!, bean.title, bean.magnet)
-                SendUtils.open(context!!, bean.magnet)
-                MessageBar.create(context!!, "已复制到剪切板，并尝试打开本地应用")
+                SendUtils.copy(activity, title, bean.magnet)
+                SendUtils.open(activity, bean.magnet)
+                M.create(activity?.applicationContext, "已复制到剪切板，并尝试打开本地应用")
             }
             linearLayoutContainer?.setOnLongClickListener {
                 AlertDialog.Builder(context)
-                        .setTitle(bean.title)
+                        .setTitle(title)
                         .setIcon(R.mipmap.ic_launcher)
                         .setMessage("o(*≧▽≦)ツ\n从收藏移除？")
                         .setNegativeButton("移除", { _, _ ->
@@ -78,9 +81,9 @@ class WithImageViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribe({
                                         EventBus.getDefault().post(ChangeAdapterEvent(ChangeAdapterEvent.DELETE, adapterPosition))
-                                        ToastUtils.short(context, "移除成功")
+                                        M.create(activity?.applicationContext, "移除成功")
                                     }, {
-                                        MessageBar.create(context, "错误：${it?.message}")
+                                        M.create(activity?.applicationContext, "错误：${it?.message}")
                                     })
                         })
                         .show()

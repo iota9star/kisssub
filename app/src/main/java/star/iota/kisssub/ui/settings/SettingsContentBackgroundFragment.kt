@@ -32,7 +32,7 @@ import star.iota.kisssub.eventbus.ChangeContentBackgroundEvent
 import star.iota.kisssub.glide.GlideApp
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.selector.PhotoSelectorActivity
-import star.iota.kisssub.utils.ToastUtils
+import star.iota.kisssub.widget.M
 
 class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener, ColorChooserDialog.ColorCallback {
     override fun onColorSelection(dialog: ColorChooserDialog, selectedColor: Int) {
@@ -80,7 +80,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener, 
             R.id.buttonPreview -> {
                 val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
-                    ToastUtils.short(context!!, "路径不能为空")
+                    M.create(context!!, "路径不能为空")
                 } else {
                     GlideApp.with(this)
                             .load(path)
@@ -90,7 +90,7 @@ class SettingsContentBackgroundFragment : BaseFragment(), View.OnClickListener, 
             R.id.buttonSetting -> {
                 val path = textInputEditTextPath?.text.toString().trim()
                 if (path.isBlank()) {
-                    ToastUtils.short(context!!, "路径不能为空")
+                    M.create(context!!, "路径不能为空")
                 } else {
                     ThemeHelper.setContentBanner(context!!, path)
                     EventBus.getDefault().post(ChangeContentBackgroundEvent())

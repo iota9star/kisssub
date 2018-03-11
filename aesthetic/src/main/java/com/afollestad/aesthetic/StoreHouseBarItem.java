@@ -31,15 +31,18 @@ import java.util.Random;
  */
 public class StoreHouseBarItem extends Animation {
 
-    final PointF midPoint;
+    public PointF midPoint;
+    public float translationX;
+    public int index;
+
     private final Paint mPaint = new Paint();
-    private final PointF mCStartPoint;
-    private final PointF mCEndPoint;
-    float translationX;
     private float mFromAlpha = 1.0f;
     private float mToAlpha = 0.4f;
+    private PointF mCStartPoint;
+    private PointF mCEndPoint;
 
-    StoreHouseBarItem(PointF start, PointF end, int color, int lineWidth) {
+    public StoreHouseBarItem(int index, PointF start, PointF end, int color, int lineWidth) {
+        this.index = index;
         midPoint = new PointF((start.x + end.x) / 2, (start.y + end.y) / 2);
         mCStartPoint = new PointF(start.x - midPoint.x, start.y - midPoint.y);
         mCEndPoint = new PointF(end.x - midPoint.x, end.y - midPoint.y);
@@ -49,7 +52,7 @@ public class StoreHouseBarItem extends Animation {
         mPaint.setStyle(Paint.Style.STROKE);
     }
 
-    void setLineWidth(int width) {
+    public void setLineWidth(int width) {
         mPaint.setStrokeWidth(width);
     }
 
@@ -57,7 +60,7 @@ public class StoreHouseBarItem extends Animation {
         mPaint.setColor(color);
     }
 
-    void resetPosition(int horizontalRandomness) {
+    public void resetPosition(int horizontalRandomness) {
         Random random = new Random();
         translationX = -random.nextInt(horizontalRandomness) + horizontalRandomness;
     }
@@ -79,7 +82,7 @@ public class StoreHouseBarItem extends Animation {
         mPaint.setAlpha((int) (alpha * 255));
     }
 
-    void draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.drawLine(mCStartPoint.x, mCStartPoint.y, mCEndPoint.x, mCEndPoint.y, mPaint);
     }
 }

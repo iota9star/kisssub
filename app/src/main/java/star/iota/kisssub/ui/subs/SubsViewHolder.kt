@@ -18,7 +18,6 @@
 
 package star.iota.kisssub.ui.subs
 
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.item_sub.view.*
 import star.iota.kisssub.R
@@ -26,6 +25,7 @@ import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.ext.addFragmentToActivity
 import star.iota.kisssub.helper.SearchHelper
 import star.iota.kisssub.ui.item.search.SearchFragment
+import star.iota.kisssub.utils.ViewContextUtils
 
 class SubsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
 
@@ -33,7 +33,7 @@ class SubsViewHolder(itemView: View) : BaseViewHolder<String>(itemView) {
         itemView?.apply {
             textViewSub?.text = bean
             textViewSub?.setOnClickListener {
-                (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean, bean, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                ViewContextUtils.getAppCompatActivity(this)?.addFragmentToActivity(SearchFragment.newInstance(bean, bean, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
             }
         }
     }

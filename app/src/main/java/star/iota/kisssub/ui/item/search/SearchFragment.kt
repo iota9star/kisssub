@@ -19,54 +19,51 @@
 package star.iota.kisssub.ui.item.search
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.github.ikidou.fragmentBackHandler.FragmentBackHandler
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_search.*
 import star.iota.kisssub.KisssubUrl
 import star.iota.kisssub.R
-import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.helper.ThemeHelper
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.StringListFragment
+import star.iota.kisssub.base.StringPresenter
+import star.iota.kisssub.room.Record
 import star.iota.kisssub.ui.item.ItemAdapter
-import star.iota.kisssub.widget.MessageBar
 
-class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler {
+class SearchFragment : StringListFragment<StringPresenter<SearchBean>, SearchBean, Record>(), FragmentBackHandler {
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
+    override fun getContainerViewId(): Int = R.layout.fragment_search
+    override fun getRefreshLayout(): SmartRefreshLayout? = refreshLayout
+    override fun getRecyclerView(): RecyclerView? = recyclerView
+    override fun getAdapter(): BaseAdapter<Record> = recordAdapter
+    override fun setupRefreshLayout(refreshLayout: SmartRefreshLayout?) {
+        refreshLayout?.autoRefresh()
+    }
 
-    override fun onBackPressed() =
-            if (recyclerViewFilters.visibility == View.GONE) {
-                false
-            } else {
-                recyclerViewFilters.visibility = View.GONE
-                true
-            }
+    override fun getStringPresenter(): StringPresenter<SearchBean> = SearchPresenter(this)
+    override fun onBackPressed() = if (recyclerViewFilters.visibility == View.GONE) {
+        false
+    } else {
+        recyclerViewFilters.visibility = View.GONE
+        true
+    }
+
+    private val recordAdapter: ItemAdapter by lazy { ItemAdapter() }
 
     override fun success(result: SearchBean) {
-        end(false)
-        recordAdapter.addAll(result.records!!)
-        if (result.filters?.isNotEmpty()!!) {
-            filterAdapter.addAll(result.filters!!)
-        }
-    }
-
-    override fun error(e: String?) {
-        end(true)
-        MessageBar.create(context!!, e)
-    }
-
-    override fun noData() {
-        end(true)
-        MessageBar.create(context!!, "没有获得数据")
+        super.success(result)
+        recordAdapter.addAll(result.records)
+        filterAdapter.addAll(result.filters)
     }
 
     companion object {
-        const val TITLE = "title"
-        const val URL = "url"
-        const val SUFFIX = "suffix"
         fun newInstance(title: String, keywords: String, suffix: String): SearchFragment {
             val fragment = SearchFragment()
             val bundle = Bundle()
@@ -80,7 +77,7 @@ class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler 
         fun newFilterInstance(url: String, suffix: String): SearchFragment {
             val fragment = SearchFragment()
             val bundle = Bundle()
-            bundle.putString(URL, url + "&page=")
+            bundle.putString(URL, "$url&page=")
             bundle.putString(SUFFIX, suffix)
             bundle.putString(TITLE, null)
             fragment.arguments = bundle
@@ -88,112 +85,44 @@ class SearchFragment : BaseFragment(), SearchContract.View, FragmentBackHandler 
         }
     }
 
-    private fun end(error: Boolean) {
-        isLoading = false
-        if (isRefresh) {
-            page = 2
+    override fun loadDataEnd() {
+        if (isRefresh()) {
+            setPage(2)
             refreshLayout?.finishRefresh()
         } else {
-            if (!error) page++
-            refreshLayout?.finishLoadmore()
+            pagePlus()
+            refreshLayout?.finishLoadMore()
         }
     }
 
-    override fun getBackgroundView(): ImageView = imageViewContentBackground
-    override fun getMaskView(): View = viewMask
-    override fun getContainerViewId(): Int = R.layout.fragment_search
 
-    override fun doSome() {
-        initBase()
-        initPresenter()
-        initRecyclerView()
-        initRefreshLayout()
+    override fun doOther() {
         initFilter()
     }
 
-    private lateinit var filterAdapter: FilterAdapter
+    private val filterAdapter: FilterAdapter by lazy { FilterAdapter() }
     private fun initFilter() {
-        imageViewArrow?.setColorFilter(ThemeHelper.getAccentColor(context!!))
         linearLayoutFilter?.setOnClickListener {
-            val color = ThemeHelper.getAccentColor(context!!)
             if (recyclerViewFilters?.visibility == View.VISIBLE) {
                 recyclerViewFilters?.visibility = View.GONE
                 imageViewArrow?.setImageResource(R.drawable.ic_arrow_down)
-                imageViewArrow?.setColorFilter(color)
             } else {
                 recyclerViewFilters?.visibility = View.VISIBLE
                 imageViewArrow?.setImageResource(R.drawable.ic_arrow_up)
-                imageViewArrow?.setColorFilter(color)
             }
         }
-        val layoutManager = FlexboxLayoutManager(context)
+        val layoutManager = FlexboxLayoutManager(activity())
         layoutManager.flexDirection = FlexDirection.ROW
         layoutManager.justifyContent = JustifyContent.FLEX_START
         recyclerViewFilters?.layoutManager = layoutManager
-        recyclerView?.itemAnimator = LandingAnimator()
-        filterAdapter = FilterAdapter()
         recyclerViewFilters?.adapter = filterAdapter
     }
 
-    private lateinit var url: String
-    private lateinit var suffix: String
-    private var page = 1
-
-    private fun initBase() {
-        val title = arguments!!.getString(TITLE, null)
-        if (!title.isNullOrBlank()) {
-            setToolbarTitle(title)
-        }
-        url = arguments!!.getString(URL)
-        suffix = arguments!!.getString(SUFFIX, "")
+    override fun onLoadMore() {
+        filterAdapter.clear()
     }
 
-    private lateinit var presenter: SearchPresenter
-    private fun initPresenter() {
-        presenter = SearchPresenter(this)
+    override fun onRefresh() {
+        filterAdapter.clear()
     }
-
-    private var isLoading = false
-    private var isRefresh = false
-    private fun initRefreshLayout() {
-        refreshLayout?.autoRefresh()
-        refreshLayout?.setOnRefreshListener {
-            if (!checkIsLoading()) {
-                isRefresh = true
-                isLoading = true
-                recordAdapter.clear()
-                filterAdapter.clear()
-                presenter.get(url + "1" + suffix)
-            }
-        }
-        refreshLayout?.setOnLoadmoreListener {
-            if (!checkIsLoading()) {
-                isRefresh = false
-                isLoading = true
-                filterAdapter.clear()
-                presenter.get(url + page + suffix)
-            }
-        }
-    }
-
-    private fun checkIsLoading(): Boolean = if (isLoading) {
-        MessageBar.create(context!!, "数据正在加载中，请等待...")
-        true
-    } else {
-        false
-    }
-
-    private lateinit var recordAdapter: ItemAdapter
-    private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
-        recyclerView?.itemAnimator = LandingAnimator()
-        recordAdapter = ItemAdapter()
-        recyclerView?.adapter = recordAdapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unsubscribe()
-    }
-
 }

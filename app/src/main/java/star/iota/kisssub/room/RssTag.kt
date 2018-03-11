@@ -27,5 +27,4 @@ class RssTag {
     var id: Int = 0
     var tag: String? = null
     override fun toString(): String = "RssTag(id=$id, tag=$tag)"
-
 }

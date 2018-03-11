@@ -19,6 +19,7 @@
 package com.afollestad.aesthetic;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
@@ -48,10 +49,15 @@ final class AestheticSnackBarTextView extends AppCompatTextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        subscription = Aesthetic.get()
-                .snackbarTextColor()
+        subscription = Aesthetic.get().isDark()
                 .compose(Rx.distinctToMainThread())
-                .subscribe(ViewTextColorAction.create(this), onErrorLogAndRethrow());
+                .subscribe(isDark -> {
+                    if (isDark) {
+                        this.setTextColor(Color.WHITE);
+                    } else {
+                        this.setTextColor(Color.BLACK);
+                    }
+                }, onErrorLogAndRethrow());
     }
 
     @Override

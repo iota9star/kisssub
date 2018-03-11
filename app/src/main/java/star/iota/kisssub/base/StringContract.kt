@@ -15,19 +15,18 @@
  *  *    limitations under the License.
  *
  */
+package star.iota.kisssub.base
 
-package star.iota.kisssub.ui.subs
+interface StringContract {
 
-import star.iota.kisssub.base.BasePresenter
-
-interface SubsContract {
-    interface View {
-        fun success(items: ArrayList<String>)
+    interface View<in T> {
+        fun success(result: T)
         fun error(e: String?)
         fun noData()
+        fun isCache()
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(url: String)
+    interface Presenter : BasePresenter {
+        fun get(url: String)
     }
 }

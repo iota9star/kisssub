@@ -58,8 +58,8 @@ abstract class BaseActivity : AppCompatActivity() {
     open fun getCircularRevealView(): View? = null
 
     override fun onResume() {
-        Aesthetic.resume(this)
         super.onResume()
+        Aesthetic.resume(this)
     }
 
     override fun onPause() {

@@ -16,10 +16,7 @@
   ~  */
   -->
 
-<set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="560"
-    android:interpolator="@anim/interpolator_overshoot">
-    <translate
-        android:fromYDelta="-100%"
-        android:toYDelta="0%" />
-</set>
+<resources>
+    <dimen name="v4dp">4dp</dimen>
+    <dimen name="v8dp">8dp</dimen>
+</resources>

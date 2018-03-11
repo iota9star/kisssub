@@ -18,37 +18,7 @@
 
 package star.iota.kisssub.base
 
-import com.lzy.okgo.OkGo
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import okhttp3.Cookie
-import okhttp3.HttpUrl
-import star.iota.kisssub.KisssubUrl
 
-
-abstract class BasePresenter {
-    abstract fun unsubscribe()
-    protected open fun addCookie(url: String) {
-        Single.just(url)
-                .filter { it.contains(KisssubUrl.BASE) }
-                .map { u ->
-                    val cookieStore = OkGo.getInstance().cookieJar.cookieStore
-                    val godCookies = cookieStore.getCookie(HttpUrl.parse(KisssubUrl.GOD_MODE))
-                    if (godCookies != null && godCookies.size > 0) {
-                        godCookies.forEach {
-                            val godMode = "god_mode"
-                            if (it.name().contains(godMode)) {
-                                val httpUrl = getHttpUrl(u)
-                                val cookie = Cookie.Builder().name(godMode).value(it.value()).domain(httpUrl.host()).build()
-                                cookieStore.saveCookie(httpUrl, cookie)
-                            }
-                        }
-                    }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe()
-    }
-
-    private fun getHttpUrl(url: String) = HttpUrl.parse(url) ?: HttpUrl.parse(KisssubUrl.BASE)!!
+interface BasePresenter {
+    fun unsubscribe()
 }

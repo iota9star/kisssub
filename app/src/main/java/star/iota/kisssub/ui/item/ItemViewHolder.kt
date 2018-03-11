@@ -18,7 +18,6 @@
 
 package star.iota.kisssub.ui.item
 
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,45 +33,48 @@ import star.iota.kisssub.ui.details.DetailsFragment
 import star.iota.kisssub.ui.item.search.SearchFragment
 import star.iota.kisssub.utils.SendUtils
 import star.iota.kisssub.utils.ShareUtils
-import star.iota.kisssub.utils.ToastUtils
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.utils.ViewContextUtils
+import star.iota.kisssub.widget.M
 
 
 class ItemViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
-
     override fun bindView(bean: Record) {
         itemView?.apply {
-            textViewTitle?.text = bean.title
+            val title = bean.title
+            textViewTitle?.text = title
             textViewSize?.text = bean.size
             textViewDate?.text = bean.date
             textViewCategory?.text = bean.category
-            textViewSub?.text = bean.sub
+            val sub = bean.sub
+            textViewSub?.text = sub
+            val activity = ViewContextUtils.getAppCompatActivity(this)
             textViewSub?.setOnClickListener {
-                if (!bean.sub.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(SearchFragment.newInstance(bean.sub!!, bean.sub!!, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
+                if (sub != null) {
+                    activity?.addFragmentToActivity(SearchFragment.newInstance(sub, sub, SearchHelper.getParam(context)), R.id.frameLayoutContainer)
                 }
             }
+            val url = bean.url
             textViewTitle?.setOnClickListener {
-                if (!bean.title.isNullOrBlank() && !bean.url.isNullOrBlank()) {
-                    (context as AppCompatActivity).addFragmentToActivity(DetailsFragment.newInstance(bean.title!!, bean.url!!), R.id.frameLayoutContainer)
+                if (title != null && url != null) {
+                    activity?.addFragmentToActivity(DetailsFragment.newInstance(title, url), R.id.frameLayoutContainer)
                 }
             }
             textViewDownload?.setOnClickListener {
-                SendUtils.copy(context!!, bean.title, bean.magnet)
-                SendUtils.open(context!!, bean.magnet)
-                MessageBar.create(context!!, "已复制到剪切板，并尝试打开本地应用")
+                SendUtils.copy(activity, title, bean.magnet)
+                SendUtils.open(activity, bean.magnet)
+                M.create(activity?.applicationContext, "已复制到剪切板，并尝试打开本地应用")
             }
             textViewShare?.setOnClickListener {
-                val content = "\n标题：${bean.title}\n\n" +
+                val content = "\n标题：$title\n\n" +
                         "分类：${bean.category}\n\n" +
                         "文件大小：${bean.size}\n\n" +
                         "发布时间：${bean.date}\n\n" +
-                        "字幕组：${bean.sub}\n\n" +
+                        "字幕组：$sub\n\n" +
                         "磁链：${bean.magnet}\n\n" +
-                        "详情：${bean.url}\n"
-                ShareUtils.share(context, content)
-                SendUtils.copy(context!!, bean.title, bean.magnet)
-                ToastUtils.short(context, "磁链已复制到剪切板")
+                        "详情：$url\n"
+                ShareUtils.share(activity, content)
+                SendUtils.copy(activity, title, bean.magnet)
+                M.create(activity?.applicationContext, "磁链已复制到剪切板")
             }
             textViewCollection?.setOnClickListener {
                 Single.just(AppDatabaseHelper.getInstance(context))
@@ -80,8 +82,8 @@ class ItemViewHolder(itemView: View) : BaseViewHolder<Record>(itemView) {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            ToastUtils.short(context, "收藏：${bean.title} 成功")
-                        }, { ToastUtils.short(context, "错误：${it.message} ") })
+                            M.create(activity?.applicationContext, "收藏：$title 成功")
+                        }, { M.create(activity?.applicationContext, "错误：${it.message} ") })
             }
         }
     }

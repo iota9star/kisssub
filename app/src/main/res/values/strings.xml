@@ -133,5 +133,9 @@
     <string name="label_god_mode_hit">( *・ω・)✄·神·秘·代·码·( *・ω・)✄·</string>
     <string name="label_god_mode">上帝模式</string>
     <string name="settings_advance">高级</string>
+    <string name="label_wait_please">请稍等</string>
+    <string name="label_wait_for_find_photo">正在寻找图片，请耐心等待…</string>
+    <string name="settings_theme_color_status_bar">状态栏</string>
+    <string name="settings_theme_color_status_bar_depth">颜色深度</string>
 
 </resources>

@@ -19,19 +19,20 @@
 package star.iota.kisssub.ui.selector
 
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.Toast
+import com.afollestad.materialdialogs.MaterialDialog
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.activity_photo_selector.*
 import star.iota.kisssub.R
 import star.iota.kisssub.base.BaseActivity
@@ -45,8 +46,21 @@ import kotlin.collections.ArrayList
 
 
 class PhotoSelectorActivity : BaseActivity() {
+
+    private lateinit var behavior: BottomSheetBehavior<View>
+
+    private lateinit var selectorPhotoAdapter: SelectorPhotoAdapter
+    private lateinit var dirAdapter: DirAdapter
+    private var photoSizeLimit: Int = Int.MAX_VALUE
+    private var sourceActivity: String? = null
+    private var preSelectedPhotos: ArrayList<String>? = null
+
+    private var disposable: Disposable? = null
+
     override fun getContentViewId(): Int = R.layout.activity_photo_selector
     override fun getCircularRevealView(): View? = coordinatorLayout
+
+    private var progressDialog: MaterialDialog? = null
 
     override fun doSome() {
         initToolbar()
@@ -77,17 +91,6 @@ class PhotoSelectorActivity : BaseActivity() {
             true
         }
     }
-
-
-    private lateinit var behavior: BottomSheetBehavior<View>
-
-    private lateinit var selectorPhotoAdapter: SelectorPhotoAdapter
-    private lateinit var dirAdapter: DirAdapter
-    private var photoSizeLimit: Int = Int.MAX_VALUE
-    private var sourceActivity: String? = null
-    private var preSelectedPhotos: ArrayList<String>? = null
-
-    private var disposable: Disposable? = null
 
     private fun checkData() {
         preSelectedPhotos = intent.getStringArrayListExtra(SELECTED_STRING_ARRAY_LIST_PHOTOS)
@@ -122,14 +125,18 @@ class PhotoSelectorActivity : BaseActivity() {
         findPhotoDirs()
     }
 
-    private var progressDialog: ProgressDialog? = null
-
     private fun findPhotoDirs() {
         selectorPhotoAdapter.clearSelectedPhotos()
-        progressDialog = ProgressDialog.show(this, null, "正在加载中...")
+        progressDialog = MaterialDialog.Builder(this)
+                .iconRes(R.mipmap.ic_launcher)
+                .title(R.string.label_wait_please)
+                .content(R.string.label_wait_for_find_photo)
+                .progress(true, 0)
+                .progressIndeterminateStyle(true)
+                .show()
         disposable = Single.just(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                .map { uri ->
-                    this@PhotoSelectorActivity.contentResolver.query(uri, null,
+                .map {
+                    this@PhotoSelectorActivity.contentResolver.query(it, null,
                             MediaStore.Images.Media.MIME_TYPE + " = ? or "
                                     + MediaStore.Images.Media.MIME_TYPE + " = ? or "
                                     + MediaStore.Images.Media.MIME_TYPE + " = ? or "
@@ -139,13 +146,11 @@ class PhotoSelectorActivity : BaseActivity() {
                             arrayOf("image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp", "image/webp"),
                             MediaStore.Images.Media.DATE_MODIFIED)
                 }
-                .map { cursor ->
+                .map {
                     val folders = ArrayList<FolderBean>()
                     val dirPaths = HashSet<String>()
-                    while (cursor.moveToNext()) {
-                        val path = cursor.getString(
-                                cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-                        )
+                    while (it.moveToNext()) {
+                        val path = it.getString(it.getColumnIndex(MediaStore.Images.Media.DATA))
                         val parentFile = File(path).parentFile ?: continue
                         val dirPath = parentFile.absolutePath
                         val folderBean: FolderBean
@@ -173,8 +178,8 @@ class PhotoSelectorActivity : BaseActivity() {
                         folderBean.count = picSize
                         folders.add(folderBean)
                     }
-                    cursor.close()
-                    Collections.sort<FolderBean>(folders, { arg0, arg1 ->
+                    it.close()
+                    folders.sortWith(Comparator { arg0, arg1 ->
                         val a0 = arg0.count
                         val a1 = arg1.count
                         when {
@@ -188,37 +193,39 @@ class PhotoSelectorActivity : BaseActivity() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { dirs ->
+                        {
                             progressDialog?.dismiss()
-                            if (dirs.isEmpty()) return@subscribe
-                            bindFolders(dirs)
-                            bindPhotos(dirs[0].dir!!)
-                            if (preSelectedPhotos != null && preSelectedPhotos!!.size > 0) {
-                                selectorPhotoAdapter.resetSelectedPhotos(preSelectedPhotos!!)
-                                checkSelectedPhotosSize(preSelectedPhotos!!.size)
+                            if (it.isNotEmpty()) {
+                                bindFolders(it)
+                                bindPhotos(it[0].dir!!)
+                                if (preSelectedPhotos != null && preSelectedPhotos!!.size > 0) {
+                                    selectorPhotoAdapter.resetSelectedPhotos(preSelectedPhotos!!)
+                                    checkSelectedPhotosSize(preSelectedPhotos!!.size)
+                                }
                             }
                         },
-                        { error ->
-                            Toast.makeText(this@PhotoSelectorActivity, "发生错误：${error.message}", Toast.LENGTH_SHORT).show()
+                        {
+                            Toast.makeText(this@PhotoSelectorActivity, "发生错误：${it.message}", Toast.LENGTH_SHORT).show()
                         }
                 )
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        if (disposable != null && !disposable!!.isDisposed) {
+        if (disposable != null) {
             disposable?.dispose()
         }
         if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
+            progressDialog?.dismiss()
         }
+        super.onDestroy()
     }
 
     private fun initViews() {
-        val layoutManager = GridLayoutManager(this, 3)
+        val layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         selectorPhotoAdapter = SelectorPhotoAdapter(this, photoSizeLimit)
         recyclerViewPhotos?.layoutManager = layoutManager
         recyclerViewPhotos?.adapter = selectorPhotoAdapter
+        recyclerViewPhotos?.itemAnimator = LandingAnimator()
         selectorPhotoAdapter.setOnPhotoSelected(object : SelectorPhotoAdapter.OnPhotoSelected {
             override fun selected(size: Int) {
                 checkSelectedPhotosSize(size)

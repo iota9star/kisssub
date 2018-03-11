@@ -39,6 +39,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,9 +54,20 @@ import android.view.ViewGroup;
 @SuppressWarnings("WeakerAccess")
 public final class Util {
 
+
+    static final float MIN_CONTRAST_TITLE_TEXT = 3.0f;
+    static final float MIN_CONTRAST_BODY_TEXT = 4.5f;
+
     static void setInflaterFactory(@NonNull LayoutInflater inflater, @NonNull AppCompatActivity activity) {
         LayoutInflaterCompat.setFactory2(inflater, new InflationInterceptor(activity, inflater, activity.getDelegate()));
     }
+
+//    static void roundCornerWindow(AppCompatActivity activity, int radius) {
+//        activity.getWindow().setBackgroundDrawableResource(R.drawable.round_window);
+//        View decor = activity.getWindow().getDecorView();
+//        GradientDrawable gradientDrawable = (GradientDrawable) decor.getBackground();
+//        gradientDrawable.setColor(Color.RED);
+//    }
 
     /**
      * Taken from CollapsingToolbarLayout's CollapsingTextHelper class.
@@ -106,7 +118,7 @@ public final class Util {
         TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
         try {
             return a.getColor(0, fallback);
-        } catch (Throwable ignored) {
+        } catch (Exception ignored) {
             return fallback;
         } finally {
             a.recycle();
@@ -118,6 +130,8 @@ public final class Util {
         TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
         try {
             return a.getResourceId(0, fallback);
+        } catch (Exception ignored) {
+            return fallback;
         } finally {
             a.recycle();
         }
@@ -125,9 +139,13 @@ public final class Util {
 
     @IdRes
     public static int resolveResId(Context context, AttributeSet attrs, @AttrRes int attrId) {
-        TypedArray ta = context.obtainStyledAttributes(attrs, new int[]{attrId});
-        int result = ta.getResourceId(0, 0);
-        ta.recycle();
+        int result = 0;
+        try {
+            TypedArray ta = context.obtainStyledAttributes(attrs, new int[]{attrId});
+            result = ta.getResourceId(0, 0);
+            ta.recycle();
+        } catch (Exception ignored) {
+        }
         return result;
     }
 
@@ -189,8 +207,7 @@ public final class Util {
     //  }
 
     @ColorInt
-    public static int adjustAlpha(
-            @ColorInt int color, @SuppressWarnings("SameParameterValue") float factor) {
+    public static int adjustAlpha(@ColorInt int color, @SuppressWarnings("SameParameterValue") float factor) {
         int alpha = Math.round(Color.alpha(color) * factor);
         int red = Color.red(color);
         int green = Color.green(color);
@@ -217,6 +234,32 @@ public final class Util {
     @ColorInt
     public static int darkenColor(@ColorInt int color) {
         return shiftColor(color, 0.9f);
+    }
+
+    @ColorInt
+    public static int titleColor(@ColorInt int bgColor) {
+        final int alpha;
+        if (isColorLight(bgColor)) {
+            alpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, bgColor, MIN_CONTRAST_TITLE_TEXT);
+            if (alpha == -1) return Color.BLACK;
+        } else {
+            alpha = ColorUtils.calculateMinimumAlpha(Color.BLACK, bgColor, MIN_CONTRAST_TITLE_TEXT);
+            if (alpha == -1) return Color.WHITE;
+        }
+        return ColorUtils.setAlphaComponent(Color.BLACK, alpha);
+    }
+
+    @ColorInt
+    public static int bodyColor(@ColorInt int bgColor) {
+        final int alpha;
+        if (isColorLight(bgColor)) {
+            alpha = ColorUtils.calculateMinimumAlpha(Color.WHITE, bgColor, MIN_CONTRAST_BODY_TEXT);
+            if (alpha == -1) return shiftColor(Color.BLACK, 1.2f);
+        } else {
+            alpha = ColorUtils.calculateMinimumAlpha(Color.BLACK, bgColor, MIN_CONTRAST_BODY_TEXT);
+            if (alpha == -1) return shiftColor(Color.WHITE, 0.84f);
+        }
+        return ColorUtils.setAlphaComponent(Color.BLACK, alpha);
     }
 
     public static boolean isColorLight(@ColorInt int color) {
@@ -272,14 +315,13 @@ public final class Util {
         if (Build.VERSION.SDK_INT >= 26) {
             icon = getAppIcon(activity.getPackageManager(), activity.getPackageName());
         } else {
-            icon =
-                    ((BitmapDrawable) activity.getApplicationInfo().loadIcon(activity.getPackageManager()))
-                            .getBitmap();
+            icon = ((BitmapDrawable) activity.getApplicationInfo().loadIcon(activity.getPackageManager()))
+                    .getBitmap();
+
         }
         if (icon != null) {
             // Sets color of entry in the system recents page
-            ActivityManager.TaskDescription td =
-                    new ActivityManager.TaskDescription((String) activity.getTitle(), icon, color);
+            ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(activity.getTitle().toString(), icon, color);
             activity.setTaskDescription(td);
         }
     }

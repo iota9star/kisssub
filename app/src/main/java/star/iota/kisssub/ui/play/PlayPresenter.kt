@@ -18,39 +18,14 @@
 
 package star.iota.kisssub.ui.play
 
-import com.lzy.okgo.OkGo
-import com.lzy.okgo.convert.StringConvert
 import com.lzy.okgo.model.Response
-import com.lzy.okrx2.adapter.ObservableResponse
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.jsoup.Jsoup
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringPresenter
 
 
-class PlayPresenter(private val view: PlayContract.View) : PlayContract.Presenter() {
-    override fun get(url: String) {
-        addCookie(url)
-        compositeDisposable.add(
-                OkGo.get<String>(url)
-                        .converter(StringConvert())
-                        .adapt(ObservableResponse<String>())
-                        .map { deal(it) }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            if (it == null || it.isEmpty()) {
-                                view.noData()
-                            } else {
-                                view.success(it)
-                            }
-                        }, {
-                            view.error(it?.message)
-                        })
-        )
-    }
-
-    private fun deal(resp: Response<String>): ArrayList<FanBean> {
+class PlayPresenter(view: StringContract.View<ArrayList<FanBean>>) : StringPresenter<ArrayList<FanBean>>(view) {
+    override fun deal(resp: Response<String>): ArrayList<FanBean> {
         val elements = Jsoup.parse(resp.body())?.select("#bgm-table > dl")
         val items = ArrayList<FanBean>()
         elements?.forEach {
@@ -70,14 +45,5 @@ class PlayPresenter(private val view: PlayContract.View) : PlayContract.Presente
             }
         }
         return items
-    }
-
-
-    companion object {
-        private val compositeDisposable = CompositeDisposable()
-    }
-
-    override fun unsubscribe() {
-        compositeDisposable.clear()
     }
 }

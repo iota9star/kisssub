@@ -19,107 +19,62 @@
 package star.iota.kisssub.ui.play
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import jp.wasabeef.recyclerview.animators.LandingAnimator
+import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_recycler_view_p8.*
 import star.iota.kisssub.R
-import star.iota.kisssub.base.BaseFragment
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.StringContract
+import star.iota.kisssub.base.StringListFragment
+import star.iota.kisssub.base.StringPresenter
 
-class PlayFragment : BaseFragment(), PlayContract.View {
-    override fun success(items: ArrayList<FanBean>) {
-        end()
-        adapter.addAll(items)
+class PlayFragment : StringListFragment<StringPresenter<ArrayList<FanBean>>, ArrayList<FanBean>, FanBean>(), StringContract.View<ArrayList<FanBean>> {
+    override fun getRefreshLayout(): SmartRefreshLayout? = refreshLayout
+    override fun getRecyclerView(): RecyclerView? = recyclerView
+
+    override fun getBackgroundView(): ImageView = imageViewContentBackground
+    override fun getMaskView(): View = viewMask
+    override fun getContainerViewId(): Int = R.layout.fragment_recycler_view_p8
+    override fun getAdapter(): BaseAdapter<FanBean> = baseAdapter
+    override fun setupRefreshLayout(refreshLayout: SmartRefreshLayout?) {
+        refreshLayout?.autoRefresh()
+        refreshLayout?.isEnableLoadMore = false
     }
 
-    override fun error(e: String?) {
-        end()
-        MessageBar.create(context!!, e)
+    override fun getLayoutManger(): RecyclerView.LayoutManager {
+        val layoutManager = FlexboxLayoutManager(activity())
+        layoutManager.flexDirection = FlexDirection.ROW
+        layoutManager.justifyContent = JustifyContent.FLEX_START
+        return layoutManager
     }
 
-    override fun noData() {
-        end()
-        MessageBar.create(context!!, "没有获得数据")
+    override fun getStringPresenter(): StringPresenter<ArrayList<FanBean>> = PlayPresenter(this)
+
+    private val baseAdapter: PlayAdapter by lazy { PlayAdapter() }
+
+    override fun success(result: ArrayList<FanBean>) {
+        super.success(result)
+        baseAdapter.addAll(result)
     }
 
     companion object {
-        const val URL = "url"
-        const val TITLE = "title"
         fun newInstance(title: String, url: String): PlayFragment {
             val fragment = PlayFragment()
             val bundle = Bundle()
             bundle.putString(URL, url)
             bundle.putString(TITLE, title)
+            bundle.putBoolean(IS_STABLE_URL, true)
             fragment.arguments = bundle
             return fragment
         }
     }
 
-    private fun end() {
-        isLoading = false
+    override fun loadDataEnd() {
         refreshLayout?.finishRefresh()
-    }
-
-    override fun getBackgroundView(): ImageView = imageViewContentBackground
-    override fun getMaskView(): View = viewMask
-    override fun getContainerViewId(): Int = R.layout.fragment_recycler_view_p8
-
-    override fun doSome() {
-        initBase()
-        initPresenter()
-        initRecyclerView()
-        initRefreshLayout()
-    }
-
-    private lateinit var url: String
-    private fun initBase() {
-        setToolbarTitle(arguments!!.getString(TITLE))
-        url = arguments!!.getString(URL)
-    }
-
-    private lateinit var presenter: PlayPresenter
-    private fun initPresenter() {
-        presenter = PlayPresenter(this)
-    }
-
-    private var isLoading = false
-    private fun initRefreshLayout() {
-        refreshLayout?.autoRefresh()
-        refreshLayout?.isEnableLoadmore = false
-        refreshLayout?.setOnRefreshListener {
-            if (!checkIsLoading()) {
-                isLoading = true
-                adapter.clear()
-                presenter.get(url)
-            }
-        }
-    }
-
-    private fun checkIsLoading(): Boolean {
-        if (isLoading) {
-            MessageBar.create(context!!, "数据正在加载中，请等待...")
-            return true
-        }
-        return false
-    }
-
-    private lateinit var adapter: PlayAdapter
-    private fun initRecyclerView() {
-        val layoutManager = FlexboxLayoutManager(context)
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.FLEX_START
-        recyclerView?.layoutManager = layoutManager
-        recyclerView?.itemAnimator = LandingAnimator()
-        adapter = PlayAdapter()
-        recyclerView?.adapter = adapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.unsubscribe()
     }
 }

@@ -39,7 +39,6 @@ import star.iota.kisssub.helper.ThemeHelper
 
 abstract class BaseFragment : Fragment(), View.OnTouchListener {
 
-
     protected abstract fun getContainerViewId(): Int
 
     protected abstract fun doSome()
@@ -47,13 +46,15 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
     private var preTitle: String? = null
 
     protected fun setToolbarTitle(title: CharSequence?) {
-        (this.activity!! as BaseActivity).getToolbar()?.title = title
+        (activity() as BaseActivity).getToolbar()?.title = title
     }
+
+    protected fun activity() = activity!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-        preTitle = (this.activity!! as BaseActivity).getToolbar()?.title?.toString()
+        preTitle = (activity() as BaseActivity).getToolbar()?.title?.toString()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,16 +85,16 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
         val mask = getMaskView()
         if (bg == null || mask == null) return
         GlideApp.with(this)
-                .load(ThemeHelper.getContentBanner(context!!))
+                .load(ThemeHelper.getContentBanner(activity()))
                 .into(bg)
         Aesthetic.get()
                 .isDark
                 .take(1)
                 .subscribe {
                     if (it) {
-                        mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(context!!))
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColorDark(activity()))
                     } else {
-                        mask.setBackgroundColor(ThemeHelper.getContentMaskColor(context!!))
+                        mask.setBackgroundColor(ThemeHelper.getContentMaskColor(activity()))
                     }
                 }
     }
@@ -107,18 +108,18 @@ abstract class BaseFragment : Fragment(), View.OnTouchListener {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         if (preTitle != null) {
-            setToolbarTitle(preTitle!!)
+            setToolbarTitle(preTitle)
         }
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         EventBus.getDefault().unregister(this)
+        super.onDestroy()
     }
 
     protected fun finish() {
-        (activity!! as AppCompatActivity).exit()
+        (activity() as AppCompatActivity).exit()
     }
 }

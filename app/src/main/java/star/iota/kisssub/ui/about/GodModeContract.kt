@@ -26,7 +26,7 @@ interface GodModeContract {
         fun isActivated(activate: Boolean)
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(url: String, code: String)
+    interface Presenter : BasePresenter {
+        fun get(url: String, code: String)
     }
 }

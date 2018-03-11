@@ -26,6 +26,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
@@ -46,15 +47,10 @@ import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static com.afollestad.aesthetic.Rx.onErrorLogAndRethrow;
-import static com.afollestad.aesthetic.Util.isColorLight;
-import static com.afollestad.aesthetic.Util.resolveColor;
-import static com.afollestad.aesthetic.Util.setLightStatusBarCompat;
-import static com.afollestad.aesthetic.Util.setNavBarColorCompat;
-
 /**
  * @author Aidan Follestad (afollestad)
  */
+@SuppressLint({"CommitPrefEdits", "StaticFieldLeak"})
 public class Aesthetic {
 
     private static final String PREFS_NAME = "[aesthetic-prefs]";
@@ -68,22 +64,22 @@ public class Aesthetic {
     private static final String KEY_SECONDARY_TEXT_COLOR = "secondary_text";
     private static final String KEY_PRIMARY_TEXT_INVERSE_COLOR = "primary_text_inverse";
     private static final String KEY_SECONDARY_TEXT_INVERSE_COLOR = "secondary_text_inverse";
+    private static final String KEY_ROUND_CORNER_WINDOW = "key_round_corner_window";
     private static final String KEY_WINDOW_BG_COLOR = "window_bg_color";
     private static final String KEY_STATUS_BAR_COLOR = "status_bar_color_%s";
-    private static final String KEY_NAV_BAR_COLOR = "nav_bar_color_%S";
+    private static final String KEY_NAV_BAR_COLOR = "nav_bar_color_%s";
     private static final String KEY_LIGHT_STATUS_MODE = "light_status_mode";
     private static final String KEY_TAB_LAYOUT_BG_MODE = "tab_layout_bg_mode";
     private static final String KEY_TAB_LAYOUT_INDICATOR_MODE = "tab_layout_indicator_mode";
     private static final String KEY_NAV_VIEW_MODE = "nav_view_mode";
     private static final String KEY_BOTTOM_NAV_BG_MODE = "bottom_nav_bg_mode";
-    private static final String KEY_BOTTOM_NAV_ICONTEXT_MODE = "bottom_nav_icontext_mode";
+    private static final String KEY_BOTTOM_NAV_ICON_TEXT_MODE = "bottom_nav_icon_text_mode";
     private static final String KEY_CARD_VIEW_BG_COLOR = "card_view_bg_color";
     private static final String KEY_ICON_TITLE_ACTIVE_COLOR = "icon_title_active_color";
     private static final String KEY_ICON_TITLE_INACTIVE_COLOR = "icon_title_inactive_color";
     private static final String KEY_SNACKBAR_TEXT = "snackbar_text_color";
     private static final String KEY_SNACKBAR_ACTION_TEXT = "snackbar_action_text_color";
 
-    @SuppressLint("StaticFieldLeak")
     private static Aesthetic instance;
 
     private final ArrayMap<String, List<ViewObservablePair>> backgroundSubscriberViews;
@@ -96,7 +92,6 @@ public class Aesthetic {
     private AppCompatActivity context;
     private boolean isResumed;
 
-    @SuppressLint("CommitPrefEdits")
     private Aesthetic(AppCompatActivity context) {
         this.context = context;
         prefs = context.getApplicationContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -197,7 +192,7 @@ public class Aesthetic {
         instance.defaultSubscriptions.add(
                 instance.colorPrimary()
                         .compose(Rx.distinctToMainThread())
-                        .subscribe(color -> Util.setTaskDescriptionColor(instance.context, color), onErrorLogAndRethrow()));
+                        .subscribe(color -> Util.setTaskDescriptionColor(instance.context, color), Rx.onErrorLogAndRethrow()));
         instance.defaultSubscriptions.add(
                 instance.activityTheme()
                         .compose(Rx.distinctToMainThread())
@@ -207,19 +202,23 @@ public class Aesthetic {
                             }
                             instance.lastActivityThemes.put(instance.context.getClass().getName(), themeId);
                             instance.context.recreate();
-                        }, onErrorLogAndRethrow()));
+                        }, Rx.onErrorLogAndRethrow()));
         instance.defaultSubscriptions.add(
                 Observable.combineLatest(instance.colorStatusBar(), instance.lightStatusBarMode(), Pair::create)
                         .compose(Rx.distinctToMainThread())
-                        .subscribe(result -> instance.invalidateStatusBar(), onErrorLogAndRethrow()));
+                        .subscribe(result -> instance.invalidateStatusBar(), Rx.onErrorLogAndRethrow()));
         instance.defaultSubscriptions.add(
                 instance.colorNavigationBar()
                         .compose(Rx.distinctToMainThread())
-                        .subscribe(color -> setNavBarColorCompat(instance.context, color), onErrorLogAndRethrow()));
+                        .subscribe(color -> Util.setNavBarColorCompat(instance.context, color), Rx.onErrorLogAndRethrow()));
         instance.defaultSubscriptions.add(
                 instance.colorWindowBackground()
                         .compose(Rx.distinctToMainThread())
-                        .subscribe(color -> instance.context.getWindow().setBackgroundDrawable(new ColorDrawable(color)), onErrorLogAndRethrow()));
+                        .subscribe(color -> instance.context.getWindow().setBackgroundDrawable(new ColorDrawable(color)), Rx.onErrorLogAndRethrow()));
+//        instance.defaultSubscriptions.add(
+//                instance.roundCornerWindow()
+//                        .compose(Rx.distinctToMainThread())
+//                        .subscribe(radius -> Util.roundCornerWindow(instance.context, radius), Rx.onErrorLogAndRethrow()));
         if (MaterialDialogsUtil.shouldSupport()) {
             instance.defaultSubscriptions.add(MaterialDialogsUtil.observe(instance));
         }
@@ -268,11 +267,11 @@ public class Aesthetic {
 
     private void invalidateStatusBar() {
         String key = String.format(KEY_STATUS_BAR_COLOR, key(context));
-        final int color = prefs.getInt(key, resolveColor(context, R.attr.colorPrimaryDark));
+        final int color = prefs.getInt(key, Util.resolveColor(context, R.attr.colorPrimaryDark));
         ViewGroup rootView = Util.getRootView(context);
         if (rootView instanceof DrawerLayout) {
             // Color is set to DrawerLayout, Activity gets transparent status bar
-            setLightStatusBarCompat(context, false);
+            Util.setLightStatusBarCompat(context, false);
             Util.setStatusBarColorCompat(context, ContextCompat.getColor(context, android.R.color.transparent));
             ((DrawerLayout) rootView).setStatusBarBackgroundColor(color);
         } else {
@@ -281,13 +280,13 @@ public class Aesthetic {
         final int mode = prefs.getInt(KEY_LIGHT_STATUS_MODE, AutoSwitchMode.AUTO);
         switch (mode) {
             case AutoSwitchMode.OFF:
-                setLightStatusBarCompat(context, false);
+                Util.setLightStatusBarCompat(context, false);
                 break;
             case AutoSwitchMode.ON:
-                setLightStatusBarCompat(context, true);
+                Util.setLightStatusBarCompat(context, true);
                 break;
             default:
-                setLightStatusBarCompat(context, isColorLight(color));
+                Util.setLightStatusBarCompat(context, Util.isColorLight(color));
                 break;
         }
     }
@@ -332,7 +331,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> colorPrimary() {
-        return rxPrefs.getInteger(KEY_PRIMARY_COLOR, resolveColor(context, R.attr.colorPrimary))
+        return rxPrefs.getInteger(KEY_PRIMARY_COLOR, Util.resolveColor(context, R.attr.colorPrimary))
                 .asObservable();
     }
 
@@ -350,7 +349,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> colorPrimaryDark() {
-        return rxPrefs.getInteger(KEY_PRIMARY_DARK_COLOR, resolveColor(context, R.attr.colorPrimaryDark))
+        return rxPrefs.getInteger(KEY_PRIMARY_DARK_COLOR, Util.resolveColor(context, R.attr.colorPrimaryDark))
                 .asObservable();
     }
 
@@ -367,7 +366,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> colorAccent() {
-        return rxPrefs.getInteger(KEY_ACCENT_COLOR, resolveColor(context, R.attr.colorAccent))
+        return rxPrefs.getInteger(KEY_ACCENT_COLOR, Util.resolveColor(context, R.attr.colorAccent))
                 .asObservable();
     }
 
@@ -384,7 +383,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> textColorPrimary() {
-        return rxPrefs.getInteger(KEY_PRIMARY_TEXT_COLOR, resolveColor(context, android.R.attr.textColorPrimary))
+        return rxPrefs.getInteger(KEY_PRIMARY_TEXT_COLOR, Util.resolveColor(context, android.R.attr.textColorPrimary))
                 .asObservable();
     }
 
@@ -401,7 +400,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> textColorSecondary() {
-        return rxPrefs.getInteger(KEY_SECONDARY_TEXT_COLOR, resolveColor(context, android.R.attr.textColorSecondary))
+        return rxPrefs.getInteger(KEY_SECONDARY_TEXT_COLOR, Util.resolveColor(context, android.R.attr.textColorSecondary))
                 .asObservable();
     }
 
@@ -418,7 +417,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> textColorPrimaryInverse() {
-        return rxPrefs.getInteger(KEY_PRIMARY_TEXT_INVERSE_COLOR, resolveColor(context, android.R.attr.textColorPrimaryInverse))
+        return rxPrefs.getInteger(KEY_PRIMARY_TEXT_INVERSE_COLOR, Util.resolveColor(context, android.R.attr.textColorPrimaryInverse))
                 .asObservable();
     }
 
@@ -435,7 +434,19 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> textColorSecondaryInverse() {
-        return rxPrefs.getInteger(KEY_SECONDARY_TEXT_INVERSE_COLOR, resolveColor(context, android.R.attr.textColorSecondaryInverse))
+        return rxPrefs.getInteger(KEY_SECONDARY_TEXT_INVERSE_COLOR, Util.resolveColor(context, android.R.attr.textColorSecondaryInverse))
+                .asObservable();
+    }
+
+    @CheckResult
+    public Aesthetic roundCornerWindow(int radius) {
+        editor.putInt(KEY_ROUND_CORNER_WINDOW, radius);
+        return this;
+    }
+
+    @CheckResult
+    public Observable<Integer> roundCornerWindow() {
+        return rxPrefs.getInteger(KEY_ROUND_CORNER_WINDOW, 0)
                 .asObservable();
     }
 
@@ -452,7 +463,7 @@ public class Aesthetic {
 
     @CheckResult
     public Observable<Integer> colorWindowBackground() {
-        return rxPrefs.getInteger(KEY_WINDOW_BG_COLOR, resolveColor(context, android.R.attr.windowBackground))
+        return rxPrefs.getInteger(KEY_WINDOW_BG_COLOR, Util.resolveColor(context, android.R.attr.windowBackground))
                 .asObservable();
     }
 
@@ -469,9 +480,16 @@ public class Aesthetic {
     }
 
     @CheckResult
+    public Aesthetic colorStatusBarAuto(@FloatRange(from = 0.0f, to = 2.0f) float darken) {
+        String key = String.format(KEY_STATUS_BAR_COLOR, key(context));
+        editor.putInt(key, Util.shiftColor(prefs.getInt(KEY_PRIMARY_COLOR, Util.resolveColor(context, R.attr.colorPrimary)), darken));
+        return this;
+    }
+
+    @CheckResult
     public Aesthetic colorStatusBarAuto() {
         String key = String.format(KEY_STATUS_BAR_COLOR, key(context));
-        editor.putInt(key, Util.darkenColor(prefs.getInt(KEY_PRIMARY_COLOR, resolveColor(context, R.attr.colorPrimary))));
+        editor.putInt(key, Util.darkenColor(prefs.getInt(KEY_PRIMARY_COLOR, Util.resolveColor(context, R.attr.colorPrimary))));
         return this;
     }
 
@@ -498,9 +516,9 @@ public class Aesthetic {
 
     @CheckResult
     public Aesthetic colorNavigationBarAuto() {
-        int color = prefs.getInt(KEY_PRIMARY_COLOR, resolveColor(context, R.attr.colorPrimary));
+        int color = prefs.getInt(KEY_PRIMARY_COLOR, Util.resolveColor(context, R.attr.colorPrimary));
         String key = String.format(KEY_NAV_BAR_COLOR, key(context));
-        editor.putInt(key, isColorLight(color) ? Color.BLACK : color);
+        editor.putInt(key, Util.isColorLight(color) ? Color.BLACK : color);
         return this;
     }
 
@@ -570,13 +588,13 @@ public class Aesthetic {
 
     @CheckResult
     public Aesthetic bottomNavigationIconTextMode(@BottomNavIconTextMode int mode) {
-        editor.putInt(KEY_BOTTOM_NAV_ICONTEXT_MODE, mode).commit();
+        editor.putInt(KEY_BOTTOM_NAV_ICON_TEXT_MODE, mode).commit();
         return this;
     }
 
     @CheckResult
     public Observable<Integer> bottomNavigationIconTextMode() {
-        return rxPrefs.getInteger(KEY_BOTTOM_NAV_ICONTEXT_MODE, BottomNavIconTextMode.SELECTED_ACCENT)
+        return rxPrefs.getInteger(KEY_BOTTOM_NAV_ICON_TEXT_MODE, BottomNavIconTextMode.SELECTED_ACCENT)
                 .asObservable();
     }
 
@@ -605,7 +623,7 @@ public class Aesthetic {
         }
         return backgroundObservable.flatMap(
                 primaryColor -> {
-                    final boolean isDark = !isColorLight(primaryColor);
+                    final boolean isDark = !Util.isColorLight(primaryColor);
                     return Observable.zip(
                             rxPrefs.getInteger(KEY_ICON_TITLE_ACTIVE_COLOR, ContextCompat.getColor(context, isDark ? R.color.ate_icon_dark : R.color.ate_icon_light))
                                     .asObservable(),

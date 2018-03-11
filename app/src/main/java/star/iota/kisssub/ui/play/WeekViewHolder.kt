@@ -28,5 +28,4 @@ class WeekViewHolder(itemView: View) : BaseViewHolder<FanBean>(itemView) {
             textViewWeek?.text = bean.title
         }
     }
-
 }

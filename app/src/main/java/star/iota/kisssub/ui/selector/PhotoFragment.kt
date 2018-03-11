@@ -37,7 +37,7 @@ class PhotoFragment : BaseFragment() {
     override fun doSome() {
         photoView?.tag = null
         GlideApp.with(this)
-                .load(arguments!!.getString(PHOTO_PATH, ""))
+                .load(arguments?.getString(PHOTO_PATH, ""))
                 .into(photoView)
     }
 

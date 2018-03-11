@@ -28,7 +28,7 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import star.iota.kisssub.R
 import star.iota.kisssub.ui.about.InfoBean
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 object UpdateUtils {
     @SuppressLint("InflateParams")
@@ -47,7 +47,7 @@ object UpdateUtils {
         }
         if (info.versionCode <= context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_CONFIGURATIONS).versionCode) {
             if (isCheck) {
-                MessageBar.create(context, "当前已是最新版，无需更新")
+                M.create(context, "当前已是最新版，无需更新")
             }
         } else {
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_update, null)
@@ -67,7 +67,11 @@ object UpdateUtils {
                         SendUtils.open(context, info.url)
                     })
                     .setPositiveButton("应用市场下载", { _, _ ->
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.packageName)))
+                        try {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + context.packageName)))
+                        } catch (e: Exception) {
+                            M.create(context, "您可能没有安装应用商店：${e.message}")
+                        }
                     })
                     .show()
         }

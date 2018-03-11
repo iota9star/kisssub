@@ -25,8 +25,7 @@ import android.widget.RelativeLayout
 
 class SquareRelativeLayout : RelativeLayout {
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int)
-            : super(context, attrs, defStyle)
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
@@ -35,12 +34,9 @@ class SquareRelativeLayout : RelativeLayout {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val wms: Int
         val hms: Int = widthMeasureSpec
-        setMeasuredDimension(View.getDefaultSize(0, widthMeasureSpec),
-                View.getDefaultSize(0, heightMeasureSpec))
-
+        setMeasuredDimension(View.getDefaultSize(0, widthMeasureSpec), View.getDefaultSize(0, heightMeasureSpec))
         val childWidthSize = measuredWidth
-        wms = View.MeasureSpec.makeMeasureSpec(
-                childWidthSize, View.MeasureSpec.EXACTLY)
+        wms = View.MeasureSpec.makeMeasureSpec(childWidthSize, View.MeasureSpec.EXACTLY)
         super.onMeasure(wms, hms)
     }
 }

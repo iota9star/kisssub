@@ -21,12 +21,10 @@ package star.iota.kisssub.ui.settings
 import android.content.Intent
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import com.afollestad.aesthetic.Aesthetic
-import com.afollestad.aesthetic.AestheticMessage
 import com.wei.android.lib.fingerprintidentify.FingerprintIdentify
 import kotlinx.android.synthetic.main.fragment_settings_main.*
 import org.greenrobot.eventbus.EventBus
@@ -38,7 +36,8 @@ import star.iota.kisssub.helper.OfficialHelper
 import star.iota.kisssub.helper.SecurityHelper
 import star.iota.kisssub.helper.ThemeHelper
 import star.iota.kisssub.ui.lock.SetPinLockActivity
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.utils.ViewContextUtils
+import star.iota.kisssub.widget.M
 
 class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -59,15 +58,15 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.linearLayoutThemeColor -> {
-                (activity!! as AppCompatActivity).addFragmentToActivity(SettingsThemeColorFragment.newInstance(getString(R.string.settings_theme_custom_color)), R.id.frameLayoutContainer)
+                ViewContextUtils.getAppCompatActivity(viewMask)?.addFragmentToActivity(SettingsThemeColorFragment.newInstance(getString(R.string.settings_theme_custom_color)), R.id.frameLayoutContainer)
             }
             R.id.linearLayoutPinLock -> showPinLockSetting()
             R.id.linearLayoutFingerprintLock -> showFingerprintSetting()
             R.id.textViewDynamicBackground -> {
-                (activity!! as AppCompatActivity).addFragmentToActivity(SettingsDynamicBackgroundFragment.newInstance(getString(R.string.settings_theme_dynamic_background)), R.id.frameLayoutContainer)
+                ViewContextUtils.getAppCompatActivity(viewMask)?.addFragmentToActivity(SettingsDynamicBackgroundFragment.newInstance(getString(R.string.settings_theme_dynamic_background)), R.id.frameLayoutContainer)
             }
             R.id.textViewContentBackground -> {
-                (activity!! as AppCompatActivity).addFragmentToActivity(SettingsContentBackgroundFragment.newInstance(getString(R.string.settings_theme_content_background)), R.id.frameLayoutContainer)
+                ViewContextUtils.getAppCompatActivity(viewMask)?.addFragmentToActivity(SettingsContentBackgroundFragment.newInstance(getString(R.string.settings_theme_content_background)), R.id.frameLayoutContainer)
             }
         }
     }
@@ -130,19 +129,18 @@ class SettingsMainFragment : BaseFragment(), View.OnClickListener, CompoundButto
 
     private fun showFingerprintSetting() {
         if (SecurityHelper.isLock(context!!) == SecurityHelper.LOCK_TYPE_NONE) {
-            MessageBar.create(context!!, "请先设置至少一种解锁方式")
+            M.create(context!!, "请先设置至少一种解锁方式")
             return
         }
         val fingerprintIdentify = FingerprintIdentify(context!!)
         if (!fingerprintIdentify.isHardwareEnable) {
-            MessageBar.create(context!!, "您的设备可能不支持指纹解锁")
+            M.create(context!!, "您的设备可能不支持指纹解锁")
             return
         }
         if (!fingerprintIdentify.isRegisteredFingerprint) {
-            MessageBar.create(context!!,
+            M.create(activity(),
                     "您可能还没有设置指纹，是否前往设置",
-                    "嗯",
-                    AestheticMessage.OnActionClickListener {
+                    View.OnClickListener {
                         startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS))
                     })
             return

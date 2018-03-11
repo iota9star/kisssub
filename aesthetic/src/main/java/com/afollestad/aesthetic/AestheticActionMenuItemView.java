@@ -61,7 +61,6 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
 
     @Override
     public void setIcon(final Drawable icon) {
-        super.setIcon(icon);
 
         // We need to retrieve the color again here.
         // For some reason, without this, a transparent color is used and the icon disappears
@@ -71,6 +70,7 @@ final class AestheticActionMenuItemView extends ActionMenuItemView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .take(1)
                 .subscribe(colors -> invalidateColors(colors, icon), onErrorLogAndRethrow());
+        super.setIcon(icon);
     }
 
     public void setIcon(final Drawable icon, ColorStateList colors) {

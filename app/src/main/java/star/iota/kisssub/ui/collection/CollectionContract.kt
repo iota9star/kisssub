@@ -29,7 +29,7 @@ interface CollectionContract {
         fun noData()
     }
 
-    abstract class Presenter : BasePresenter() {
-        abstract fun get(helper: AppDatabaseHelper)
+    interface Presenter : BasePresenter {
+        fun get(helper: AppDatabaseHelper)
     }
 }

@@ -50,15 +50,15 @@ final class InflationInterceptor implements LayoutInflater.Factory2 {
     private final Method onCreateViewMethod;
     private final Method createViewMethod;
     private final Field constructorArgsField;
-    private final AppCompatActivity keyContext;
+    private final AppCompatActivity activity;
     @NonNull
     private final LayoutInflater layoutInflater;
     @Nullable
     private final AppCompatDelegate delegate;
     private int[] ATTRS_THEME;
 
-    InflationInterceptor(@Nullable AppCompatActivity keyContext, @NonNull LayoutInflater inflater, @Nullable AppCompatDelegate delegate) {
-        this.keyContext = keyContext;
+    InflationInterceptor(@Nullable AppCompatActivity activity, @NonNull LayoutInflater inflater, @Nullable AppCompatDelegate delegate) {
+        this.activity = activity;
         layoutInflater = inflater;
         this.delegate = delegate;
         try {
@@ -234,63 +234,56 @@ final class InflationInterceptor implements LayoutInflater.Factory2 {
             viewBackgroundRes = resolveResId(context, attrs, android.R.attr.background);
         }
 
+        if (view == null && delegate != null && attrs != null) {
+            view = delegate.createView(parent, name, context, attrs);
+        }
         if (view == null) {
-            // First, check if the AppCompatDelegate will give us a view, usually (maybe always) null.
-            if (delegate != null) {
-                view = delegate.createView(parent, name, context, attrs);
-                if (view == null) {
-                    view = keyContext.onCreateView(parent, name, context, attrs);
-                } else {
-                    view = null;
+            view = activity.onCreateView(parent, name, context, attrs);
+        }
+
+        if (isBlackListedForApply(name)) {
+            return view;
+        }
+
+        // Mimic code of LayoutInflater using reflection tricks (this would normally be run when this factory returns null).
+        // We need to intercept the default behavior rather than allowing the LayoutInflater to handle it after this method returns.
+        if (view == null) {
+            try {
+                Context viewContext = layoutInflater.getContext();
+                // Apply a theme wrapper, if requested.
+                if (ATTRS_THEME != null) {
+                    final TypedArray ta = viewContext.obtainStyledAttributes(attrs, ATTRS_THEME);
+                    final int themeResId = ta.getResourceId(0, 0);
+                    if (themeResId != 0) {
+                        //noinspection RestrictedApi
+                        viewContext = new ContextThemeWrapper(viewContext, themeResId);
+                    }
+                    ta.recycle();
                 }
-            } else {
-                view = null;
-            }
-
-            if (isBlackListedForApply(name)) {
-                return view;
-            }
-
-            // Mimic code of LayoutInflater using reflection tricks (this would normally be run when this factory returns null).
-            // We need to intercept the default behavior rather than allowing the LayoutInflater to handle it after this method returns.
-            if (view == null) {
+                Object[] constructorArgs;
                 try {
-                    Context viewContext = layoutInflater.getContext();
-                    // Apply a theme wrapper, if requested.
-                    if (ATTRS_THEME != null) {
-                        final TypedArray ta = viewContext.obtainStyledAttributes(attrs, ATTRS_THEME);
-                        final int themeResId = ta.getResourceId(0, 0);
-                        if (themeResId != 0) {
-                            //noinspection RestrictedApi
-                            viewContext = new ContextThemeWrapper(viewContext, themeResId);
-                        }
-                        ta.recycle();
-                    }
-                    Object[] constructorArgs;
-                    try {
-                        constructorArgs = (Object[]) constructorArgsField.get(layoutInflater);
-                    } catch (IllegalAccessException e) {
-                        throw new IllegalStateException(
-                                "Failed to retrieve the mConstructorArgsField field.", e);
-                    }
-
-                    final Object lastContext = constructorArgs[0];
-                    constructorArgs[0] = viewContext;
-                    try {
-                        if (-1 == name.indexOf('.')) {
-                            view = (View) onCreateViewMethod.invoke(layoutInflater, parent, name, attrs);
-                        } else {
-                            view = (View) createViewMethod.invoke(layoutInflater, name, null, attrs);
-                        }
-                    } catch (Exception e) {
-                        log("Failed to inflate %s: %s", name, e.getMessage());
-                        e.printStackTrace();
-                    } finally {
-                        constructorArgs[0] = lastContext;
-                    }
-                } catch (Throwable t) {
-                    throw new RuntimeException(String.format("An error occurred while inflating View %s: %s", name, t.getMessage()), t);
+                    constructorArgs = (Object[]) constructorArgsField.get(layoutInflater);
+                } catch (IllegalAccessException e) {
+                    throw new IllegalStateException(
+                            "Failed to retrieve the mConstructorArgsField field.", e);
                 }
+
+                final Object lastContext = constructorArgs[0];
+                constructorArgs[0] = viewContext;
+                try {
+                    if (-1 == name.indexOf('.')) {
+                        view = (View) onCreateViewMethod.invoke(layoutInflater, parent, name, attrs);
+                    } else {
+                        view = (View) createViewMethod.invoke(layoutInflater, name, null, attrs);
+                    }
+                } catch (Exception e) {
+                    log("Failed to inflate %s: %s", name, e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    constructorArgs[0] = lastContext;
+                }
+            } catch (Throwable t) {
+                throw new RuntimeException(String.format("An error occurred while inflating View %s: %s", name, t.getMessage()), t);
             }
         }
 

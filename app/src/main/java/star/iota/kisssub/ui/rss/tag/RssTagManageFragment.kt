@@ -34,13 +34,12 @@ import star.iota.kisssub.base.BaseFragment
 import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
-import star.iota.kisssub.utils.ToastUtils
-import star.iota.kisssub.widget.MessageBar
+import star.iota.kisssub.widget.M
 
 class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     override fun success(rssTag: RssTag) {
-        ToastUtils.short(context!!, "添加成功")
+        M.create(activity().applicationContext, "添加成功")
         adapter.add(rssTag)
     }
 
@@ -51,12 +50,12 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     override fun error(e: String?) {
         end()
-        ToastUtils.short(context!!, e)
+        M.create(activity().applicationContext, e)
     }
 
     override fun noData() {
         end()
-        ToastUtils.short(context!!, "您还没有添加订阅关键字")
+        M.create(activity().applicationContext, "您还没有添加订阅关键字")
     }
 
     companion object {
@@ -74,7 +73,6 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     override fun doSome() {
         setToolbarTitle("订阅管理")
-        initPresenter()
         initRecyclerView()
         initRefreshLayout()
         initActionView()
@@ -98,9 +96,9 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
 
     @SuppressLint("InflateParams")
     private fun showAddDialog() {
-        val view = LayoutInflater.from(context!!).inflate(R.layout.dialog_add_rss_tag, null)
+        val view = LayoutInflater.from(activity()).inflate(R.layout.dialog_add_rss_tag, null)
         val editText = view.findViewById<TextInputEditText>(R.id.textInputEditTextRssTag)
-        val dialog = AlertDialog.Builder(context!!)
+        val dialog = AlertDialog.Builder(activity())
                 .setIcon(R.mipmap.ic_launcher)
                 .setTitle("添加订阅")
                 .setView(view)
@@ -117,49 +115,45 @@ class RssTagManageFragment : BaseFragment(), RssTagManageContract.View {
             } else {
                 val rssTag = RssTag()
                 rssTag.tag = tag
-                presenter.add(AppDatabaseHelper.getInstance(context!!), rssTag)
+                presenter.add(AppDatabaseHelper.getInstance(activity().applicationContext), rssTag)
                 dialog.dismiss()
             }
         }
     }
 
 
-    private lateinit var presenter: RssTagManagePresenter
-    private fun initPresenter() {
-        presenter = RssTagManagePresenter(this)
+    private val presenter: RssTagManagePresenter by lazy {
+        RssTagManagePresenter(this)
     }
-
     private var isLoading = false
     private fun initRefreshLayout() {
         refreshLayout?.autoRefresh()
-        refreshLayout?.isEnableLoadmore = false
+        refreshLayout?.isEnableLoadMore = false
         refreshLayout?.setOnRefreshListener {
             if (!checkIsLoading()) {
                 isLoading = true
                 adapter.clear()
-                presenter.get(AppDatabaseHelper.getInstance(context!!))
+                presenter.get(AppDatabaseHelper.getInstance(activity().applicationContext))
             }
         }
     }
 
     private fun checkIsLoading(): Boolean = if (isLoading) {
-        MessageBar.create(context!!, "数据正在加载中，请等待...")
+        M.create(activity().applicationContext, "数据正在加载中，请等待...")
         true
     } else {
         false
     }
 
-    private lateinit var adapter: RssTagAdapter
+    private val adapter: RssTagAdapter by lazy { RssTagAdapter() }
     private fun initRecyclerView() {
-        recyclerView?.layoutManager = LinearLayoutManager(context!!, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = LinearLayoutManager(activity(), LinearLayoutManager.VERTICAL, false)
         recyclerView?.itemAnimator = LandingAnimator()
-        adapter = RssTagAdapter()
         recyclerView?.adapter = adapter
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         presenter.unsubscribe()
+        super.onDestroy()
     }
-
 }

@@ -18,43 +18,14 @@
 
 package star.iota.kisssub.ui.rss.tag
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import star.iota.kisssub.R
+import star.iota.kisssub.base.BaseAdapter
+import star.iota.kisssub.base.BaseViewHolder
 import star.iota.kisssub.room.RssTag
 
 
-class RssTagAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var list: ArrayList<RssTag> = ArrayList()
-    override fun getItemCount(): Int = list.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = RssTagViewHolder(LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_rss_tag, parent, false))
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
-        (holder as RssTagViewHolder).bindView(list[position])
-    }
-
-    fun addAll(list: ArrayList<RssTag>) {
-        val size = this.list.size
-        this.list.addAll(list)
-        notifyItemRangeInserted(size, list.size)
-    }
-
-    fun add(rssTag: RssTag) {
-        list.add(0, rssTag)
-        notifyItemInserted(0)
-    }
-
-    fun remove(position: Int) {
-        list.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    fun clear() {
-        val size = list.size
-        list.clear()
-        notifyItemRangeRemoved(0, size)
-    }
+class RssTagAdapter : BaseAdapter<RssTag>() {
+    override fun getViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<RssTag> = RssTagViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_rss_tag, parent, false))
 }

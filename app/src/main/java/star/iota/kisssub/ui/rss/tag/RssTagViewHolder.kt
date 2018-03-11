@@ -37,7 +37,8 @@ import star.iota.kisssub.eventbus.ChangeAdapterEvent
 import star.iota.kisssub.room.AppDatabaseHelper
 import star.iota.kisssub.room.RssTag
 import star.iota.kisssub.utils.DisplayUtils
-import star.iota.kisssub.utils.ToastUtils
+import star.iota.kisssub.utils.ViewContextUtils
+import star.iota.kisssub.widget.M
 
 
 class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
@@ -46,12 +47,13 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
         itemView?.apply {
             textViewTag?.text = bean.tag
             imageViewMenu?.setOnClickListener {
-                showMenu(context!!, bean, imageViewMenu)
+                showMenu(bean, imageViewMenu)
             }
         }
     }
 
-    private fun showMenu(context: Context, bean: RssTag, view: View) {
+    private fun showMenu(bean: RssTag, view: View) {
+        val context = ViewContextUtils.getAppCompatActivity(view) ?: return
         val listPopupWindow = ListPopupWindow(context)
         listPopupWindow.setAdapter(ArrayAdapter<String>(context, android.R.layout.simple_list_item_1,
                 arrayOf("修改", "删除")))
@@ -64,10 +66,10 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            ToastUtils.short(context, "删除成功")
+                            M.create(context, "删除成功")
                             EventBus.getDefault().post(ChangeAdapterEvent(ChangeAdapterEvent.DELETE, adapterPosition))
                         }, {
-                            ToastUtils.short(context, "删除失败：${it?.message}")
+                            M.create(context, "删除失败：${it?.message}")
                         })
             }
             listPopupWindow.dismiss()
@@ -104,11 +106,11 @@ class RssTagViewHolder(itemView: View) : BaseViewHolder<RssTag>(itemView) {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            ToastUtils.short(context, "修改成功")
+                            M.create(context, "修改成功")
                             EventBus.getDefault().post(ChangeAdapterEvent(ChangeAdapterEvent.MODIFY, -1))
                             dialog.dismiss()
                         }, {
-                            ToastUtils.short(context, "修改失败：${it?.message}")
+                            M.create(context, "修改失败：${it?.message}")
                         })
 
             }

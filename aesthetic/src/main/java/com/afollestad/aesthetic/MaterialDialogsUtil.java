@@ -94,12 +94,10 @@ final class MaterialDialogsUtil {
                 instance.isDark(),
                 Params::create)
                 .distinctUntilChanged()
-                .subscribe(
-                        MaterialDialogsUtil::theme);
+                .subscribe(MaterialDialogsUtil::theme);
     }
 
     static class Params {
-
         final int primaryTextColor;
         final int secondaryTextColor;
         final int accentColor;
